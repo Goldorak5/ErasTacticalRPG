@@ -14,7 +14,6 @@ public class PlayerMovement : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
- 
     void Update()
     {
         moveH = Input.GetAxisRaw("Horizontal") * moveSpeed;
