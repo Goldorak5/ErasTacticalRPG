@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PaoloCharacter : MonoBehaviour
 {
-
+    public int health;
+    public int maxHealth;
     public int characterMovement;
     public int dexterity;
     public OverlayTile activeTile;
