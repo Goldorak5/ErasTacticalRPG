@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 50
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -106,32 +106,6 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: WebGL
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Windows Store Apps
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
@@ -139,27 +113,19 @@ TextureImporter:
       name: Paolo_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 64
-        height: 64
+        x: 44
+        y: 26
+        width: 38
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
-      physicsShape:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
+      outline: []
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a54ef9432a6bf9c41afcbaa25d6a784a
-      internalID: -2051001656
+      spriteID: 80d1f876de238104aa652c7b819066e3
+      internalID: -20846985
       vertices: []
       indices: 
       edges: []
@@ -168,27 +134,19 @@ TextureImporter:
       name: Paolo_1
       rect:
         serializedVersion: 2
-        x: 64
-        y: 0
-        width: 64
-        height: 64
+        x: 170
+        y: 26
+        width: 38
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
-      physicsShape:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
+      outline: []
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 259dfb46bede44a47a4e33e0cac1c334
-      internalID: 1012752974
+      spriteID: e5c6f0abec87dd447a16bb14f403b79a
+      internalID: 724540748
       vertices: []
       indices: 
       edges: []
@@ -197,27 +155,19 @@ TextureImporter:
       name: Paolo_2
       rect:
         serializedVersion: 2
-        x: 128
-        y: 0
-        width: 64
-        height: 64
+        x: 300
+        y: 26
+        width: 38
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
-      physicsShape:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
+      outline: []
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0ffab2e1499ee7243ad7cdcc99036064
-      internalID: -380390254
+      spriteID: b3f92a47bf2c0644f854569552d02b07
+      internalID: -816461478
       vertices: []
       indices: 
       edges: []
@@ -226,27 +176,19 @@ TextureImporter:
       name: Paolo_3
       rect:
         serializedVersion: 2
-        x: 192
-        y: 0
-        width: 64
-        height: 64
+        x: 426
+        y: 26
+        width: 38
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
-      physicsShape:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
+      outline: []
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 246fa700fb7418c449f183caa9b0818a
-      internalID: 1708605995
+      spriteID: 0842a065704a3a840bb74e4dceab1afe
+      internalID: 931541635
       vertices: []
       indices: 
       edges: []
@@ -255,27 +197,19 @@ TextureImporter:
       name: Paolo_4
       rect:
         serializedVersion: 2
-        x: 256
-        y: 0
-        width: 64
-        height: 64
+        x: 558
+        y: 26
+        width: 38
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
-      physicsShape:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
+      outline: []
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: c84473260f77f914c9e28acfae365f67
-      internalID: 754299402
+      spriteID: fe00673026572d3499f7497ae5300256
+      internalID: -2069238118
       vertices: []
       indices: 
       edges: []
@@ -284,27 +218,19 @@ TextureImporter:
       name: Paolo_5
       rect:
         serializedVersion: 2
-        x: 320
-        y: 0
-        width: 64
-        height: 64
+        x: 684
+        y: 26
+        width: 38
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
-      physicsShape:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
+      outline: []
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 59629f76805be534f8adad6b1d1771d5
-      internalID: 450227987
+      spriteID: ca398ec8dc49fee469efca67e7da452f
+      internalID: -1329692079
       vertices: []
       indices: 
       edges: []
@@ -313,27 +239,19 @@ TextureImporter:
       name: Paolo_6
       rect:
         serializedVersion: 2
-        x: 384
-        y: 0
-        width: 64
-        height: 64
+        x: 810
+        y: 26
+        width: 36
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
-      physicsShape:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
+      outline: []
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b70ae455559230f408ac681089ab73dc
-      internalID: 953970786
+      spriteID: f04d63ddd9c8f484bab938ad59283fdc
+      internalID: 260433180
       vertices: []
       indices: 
       edges: []
@@ -342,27 +260,19 @@ TextureImporter:
       name: Paolo_7
       rect:
         serializedVersion: 2
-        x: 448
-        y: 0
-        width: 64
-        height: 64
+        x: 954
+        y: 26
+        width: 36
+        height: 66
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
-      outline:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
-      physicsShape:
-      - - {x: 0, y: -32}
-        - {x: 32, y: 0}
-        - {x: 0, y: 32}
-        - {x: -32, y: 0}
+      outline: []
+      physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 15fb83f91fc6cb94f83cf79693ac2cfb
-      internalID: -1932562
+      spriteID: d6674f972b4f8b0429e3eec51a315101
+      internalID: 533087400
       vertices: []
       indices: 
       edges: []
@@ -378,14 +288,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Paolo_0: -2051001656
-      Paolo_1: 1012752974
-      Paolo_2: -380390254
-      Paolo_3: 1708605995
-      Paolo_4: 754299402
-      Paolo_5: 450227987
-      Paolo_6: 953970786
-      Paolo_7: -1932562
+      Paolo_0: -20846985
+      Paolo_1: 724540748
+      Paolo_2: -816461478
+      Paolo_3: 931541635
+      Paolo_4: -2069238118
+      Paolo_5: -1329692079
+      Paolo_6: 260433180
+      Paolo_7: 533087400
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
