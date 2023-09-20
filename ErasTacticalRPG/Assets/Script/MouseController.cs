@@ -48,7 +48,7 @@ public class MouseController : MonoBehaviour
             }
         }
 
-        if (path.Count > 0)
+        if (path.Count > 0 && character.characterMovement > 0)
         {
             MoveAlongPath();
         }
@@ -81,6 +81,7 @@ public class MouseController : MonoBehaviour
         {
             PositionCharacterOnTile(path[0]);
             path.RemoveAt(0);
+            character.characterMovement--;
         }
         if (path.Count == 0)
         {

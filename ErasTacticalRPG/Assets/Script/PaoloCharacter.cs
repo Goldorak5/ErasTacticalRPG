@@ -9,6 +9,7 @@ public class PaoloCharacter : MonoBehaviour
     public int dexterity;
     public OverlayTile activeTile;
 
+
     private void Start()
     {
         characterMovement = 4;
