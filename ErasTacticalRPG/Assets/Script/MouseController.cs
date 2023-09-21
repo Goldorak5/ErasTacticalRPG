@@ -108,7 +108,9 @@ public class MouseController : MonoBehaviour
         character.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y + 0.0001f, tile.transform.position.z);
         character.GetComponent<SpriteRenderer>().sortingOrder = tile.GetComponent<SpriteRenderer>().sortingOrder;  
         character.activeTile = tile;
-        GetInRangeTiles();
-
+        if(character.characterMovement > 0)
+        {
+            GetInRangeTiles();
+        }
     }
 }
