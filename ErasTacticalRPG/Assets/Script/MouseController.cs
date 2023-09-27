@@ -92,7 +92,7 @@ public class MouseController : MonoBehaviour
     public RaycastHit2D? GetFocusOnTile()
     {
         Vector3 mousPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 mousePos2d = new Vector2(mousPos.x, mousPos.y);
+        Vector2 mousePos2d = new Vector2(mousPos.x, mousPos.y - 0.2f);
         RaycastHit2D[] hits = Physics2D.RaycastAll(mousePos2d, Vector2.zero);
 
         if(hits.Length > 0)
