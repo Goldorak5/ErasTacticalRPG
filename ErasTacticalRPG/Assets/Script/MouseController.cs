@@ -10,7 +10,7 @@ public class MouseController : MonoBehaviour
     private PaoloCharacter character;
     private PathFinder pathFinder;
     private RangeFinder rangeFinder;
-
+    private OverlayTile overlayTile;
     private List<OverlayTile> inRangeTiles = new List<OverlayTile>();
     public float speed;
 
@@ -19,32 +19,38 @@ public class MouseController : MonoBehaviour
 
     private void Start()
     {
+
         pathFinder = new PathFinder();
         rangeFinder = new RangeFinder();
     }
 
     void LateUpdate()
     {
+ 
         var focusedTileHit = GetFocusOnTile();
-
+     
         if (focusedTileHit.HasValue)
         {
             //associate the overlay tile to the focus tile under the mouse cursor
-            OverlayTile overlayTile = focusedTileHit.Value.collider.gameObject.GetComponent<OverlayTile>();
+            overlayTile = focusedTileHit.Value.collider.gameObject.GetComponent<OverlayTile>();
             transform.position = overlayTile.transform.position;
             gameObject.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponent<SpriteRenderer>().sortingOrder;
 
             if (Input.GetMouseButtonDown(0))
             {
-                if(character == null)
+                if (character == null)
                 {
                     character = Instantiate(characterPrefab).GetComponent<PaoloCharacter>();
                     PositionCharacterOnTile(overlayTile);
+
                 }
                 else
                 {
-                   path = pathFinder.FindPath(character.activeTile, overlayTile, inRangeTiles);
+                    //changes
+                    overlayTile = character.GetComponent<OverlayTile>();
+                    path = pathFinder.FindPath(character.activeTile, overlayTile, inRangeTiles);
                 }
+
             }
         }
 
@@ -103,14 +109,12 @@ public class MouseController : MonoBehaviour
         return null;
     }
 
-    private void PositionCharacterOnTile(OverlayTile tile)
+    public void PositionCharacterOnTile(OverlayTile tile)
     {
         character.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y + 0.0001f, tile.transform.position.z);
         character.GetComponent<SpriteRenderer>().sortingOrder = tile.GetComponent<SpriteRenderer>().sortingOrder;  
         character.activeTile = tile;
-        if(character.characterMovement > 0)
-        {
-            GetInRangeTiles();
-        }
+        GetInRangeTiles();
+ 
     }
 }
