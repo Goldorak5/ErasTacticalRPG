@@ -10,9 +10,12 @@ public class PaoloCharacter : MonoBehaviour
     public int dexterity;
     public OverlayTile activeTile;
 
+ /*   public UiAnimation uI;*/
+
 
     private void Start()
     {
+
         characterMovement = 4;
         dexterity = 1;
     }
