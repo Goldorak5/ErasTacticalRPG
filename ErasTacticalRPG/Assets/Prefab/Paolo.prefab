@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 503494727671561407}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: ButtonBox
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,7 +50,7 @@ GameObject:
   - component: {fileID: 4810987918333323894}
   - component: {fileID: 1392335329497613141}
   - component: {fileID: 1173435321013821136}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: CanvasButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -152,7 +152,9 @@ GameObject:
   - component: {fileID: 5286332115063537969}
   - component: {fileID: 6186035404870679715}
   - component: {fileID: 1405025574364615550}
-  m_Layer: 0
+  - component: {fileID: 3022787793898587405}
+  - component: {fileID: 3698905594660350065}
+  m_Layer: 6
   m_Name: Paolo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -245,7 +247,7 @@ MonoBehaviour:
   characterMovement: 4
   dexterity: 1
   activeTile: {fileID: 6047143836184325056, guid: 2c3e3dd62aab4d34fafe9377f2fab113, type: 3}
-  uI: {fileID: 0}
+  IsMouseOver: 0
 --- !u!114 &1405025574364615550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -261,7 +263,55 @@ MonoBehaviour:
   attackButton: {fileID: 2004365570765257916, guid: bb78484438f149d468d39ea951d93745, type: 3}
   moveButton: {fileID: 3919072953557146936, guid: 60cc782ed3f243841b911c966f86f057, type: 3}
   abilityButton: {fileID: 1636525192205490592, guid: 9aa19ae066b78384ebd45c57a1eaa3ef, type: 3}
-  uiCanva: {fileID: 0}
+--- !u!114 &3022787793898587405
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5819772921733543721}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 253347c82f3e9d345b76424f2958d413, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  character: {fileID: 6186035404870679715}
+  isMouseOverCharacter: 0
+--- !u!70 &3698905594660350065
+CapsuleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5819772921733543721}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0.33}
+  m_Size: {x: 0.38, y: 0.66}
+  m_Direction: 0
 --- !u!1 &8326712551906808978
 GameObject:
   m_ObjectHideFlags: 0
@@ -274,7 +324,7 @@ GameObject:
   - component: {fileID: 4831460114259694103}
   - component: {fileID: 7136593068168497696}
   - component: {fileID: 3152598207370642008}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -375,7 +425,7 @@ GameObject:
   - component: {fileID: 5576564218561473258}
   - component: {fileID: 4786659454043772970}
   - component: {fileID: 8162313459701411296}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Image
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -551,6 +601,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: AttackButton
       objectReference: {fileID: 0}
+    - target: {fileID: 7720488239939883890, guid: bb78484438f149d468d39ea951d93745, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -572,6 +626,10 @@ PrefabInstance:
     - target: {fileID: 1373926618579747540, guid: 9aa19ae066b78384ebd45c57a1eaa3ef, type: 3}
       propertyPath: m_Name
       value: AbilitiesButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 1373926618579747540, guid: 9aa19ae066b78384ebd45c57a1eaa3ef, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 1636525192205490592, guid: 9aa19ae066b78384ebd45c57a1eaa3ef, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -682,6 +740,10 @@ PrefabInstance:
     - target: {fileID: 3974655971665256922, guid: 60cc782ed3f243841b911c966f86f057, type: 3}
       propertyPath: m_Name
       value: MoveButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 3974655971665256922, guid: 60cc782ed3f243841b911c966f86f057, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5449759781848957773, guid: 60cc782ed3f243841b911c966f86f057, type: 3}
       propertyPath: m_Color.a

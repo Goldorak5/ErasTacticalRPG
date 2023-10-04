@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5804419232638249995}
   - component: {fileID: 6047143836184325056}
   - component: {fileID: 2217898430725832824}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: OverlayTile
   m_TagString: Untagged
   m_Icon: {fileID: 0}

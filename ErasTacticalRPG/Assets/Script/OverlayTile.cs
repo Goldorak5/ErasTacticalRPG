@@ -7,6 +7,7 @@ public class OverlayTile : MonoBehaviour
     public int G;
     public int H;
     public int F { get { return G + H; } }
+    int moveCost;
 
     public bool isBlocked;
 
