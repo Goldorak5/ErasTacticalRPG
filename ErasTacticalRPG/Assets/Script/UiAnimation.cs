@@ -11,7 +11,6 @@ public class UiAnimation : MonoBehaviour
     public Button moveButton;
     public Button abilityButton;
 
-  /*  public Canvas uiCanva;*/
 
 
     public void OpenAttackMenu()
