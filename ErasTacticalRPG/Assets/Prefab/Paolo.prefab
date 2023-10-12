@@ -152,7 +152,6 @@ GameObject:
   - component: {fileID: 5286332115063537969}
   - component: {fileID: 6186035404870679715}
   - component: {fileID: 1405025574364615550}
-  - component: {fileID: 3022787793898587405}
   - component: {fileID: 3698905594660350065}
   m_Layer: 6
   m_Name: Paolo
@@ -247,7 +246,7 @@ MonoBehaviour:
   characterMovement: 4
   dexterity: 1
   activeTile: {fileID: 6047143836184325056, guid: 2c3e3dd62aab4d34fafe9377f2fab113, type: 3}
-  IsMouseOver: 0
+  canMove: 0
 --- !u!114 &1405025574364615550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -263,20 +262,6 @@ MonoBehaviour:
   attackButton: {fileID: 2004365570765257916, guid: bb78484438f149d468d39ea951d93745, type: 3}
   moveButton: {fileID: 3919072953557146936, guid: 60cc782ed3f243841b911c966f86f057, type: 3}
   abilityButton: {fileID: 1636525192205490592, guid: 9aa19ae066b78384ebd45c57a1eaa3ef, type: 3}
---- !u!114 &3022787793898587405
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5819772921733543721}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 253347c82f3e9d345b76424f2958d413, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  character: {fileID: 6186035404870679715}
-  isMouseOverCharacter: 0
 --- !u!70 &3698905594660350065
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

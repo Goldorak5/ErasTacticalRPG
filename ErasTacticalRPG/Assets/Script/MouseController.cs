@@ -20,7 +20,7 @@ public class MouseController : MonoBehaviour
     private new SpriteRenderer renderer;
     private List<OverlayTile> path = new List<OverlayTile>();
     public Canvas canvas;
-    bool overSpawningZone = false;
+    bool canSpawn = false;
 
     private void Start()
     {
@@ -36,7 +36,12 @@ public class MouseController : MonoBehaviour
 
     void LateUpdate()
     {
-        FindSpawningZone();
+        
+        if(character == null)
+        {
+            FindSpawningZone();
+        }
+        
         var focusedTileHit = GetFocusOnTile();
 
         if (focusedTileHit.HasValue)
@@ -62,18 +67,20 @@ public class MouseController : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
-                if (character == null && overSpawningZone)
+                if (character == null && canSpawn)
                 {
-                  character = Instantiate(characterPrefab).GetComponent<PaoloCharacter>();
-                    
-                  PositionCharacterOnTile(overlayTile);
+                    character = Instantiate(characterPrefab).GetComponent<PaoloCharacter>();
+                    PositionCharacterOnTile(overlayTile);
                     GameObject spawningZone = GameObject.Find("SpawningZone");
                     spawningZone.SetActive(false); 
                 }
                 else if(character != null)
                 {
-                    canvas.gameObject.SetActive(false);
-                    path = pathFinder.FindPath(character.activeTile, overlayTile, inRangeTiles);
+                    if(character.canMove == true)
+                    {
+                        canvas.gameObject.SetActive(false);
+                        path = pathFinder.FindPath(character.activeTile, overlayTile, inRangeTiles);
+                    }
                 }
             }
         }
@@ -130,12 +137,12 @@ public class MouseController : MonoBehaviour
         {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Spawning"))
             {
-                overSpawningZone = true;
+                canSpawn = true;
                 break;
             }
             else
             {
-                overSpawningZone = false;
+                canSpawn = false;
             }
         }
     }
@@ -196,6 +203,7 @@ public class MouseController : MonoBehaviour
         if (character != null)
         {
             GetInRangeTiles();
+            character.canMove = true;
         }
     }
     public void ResetMovementPoint()

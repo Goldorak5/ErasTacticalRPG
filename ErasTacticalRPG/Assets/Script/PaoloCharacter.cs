@@ -9,6 +9,7 @@ public class PaoloCharacter : MonoBehaviour
     public int characterMovement;
     public int dexterity;
     public OverlayTile activeTile;
+    public bool canMove = false;
 
 
  /*   public UiAnimation uI;*/
