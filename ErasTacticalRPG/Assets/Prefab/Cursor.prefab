@@ -98,4 +98,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterPrefab: {fileID: 5819772921733543721, guid: 5eca144cfed9b7840b29a3d7b3efa9d8, type: 3}
+  inRangeTiles: []
   speed: 4
+  canvas: {fileID: 0}

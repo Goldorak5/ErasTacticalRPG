@@ -30,6 +30,4 @@ public class RangeFinder
         }
         return inRangeTile.Distinct().ToList();
     }
-
-    
 }

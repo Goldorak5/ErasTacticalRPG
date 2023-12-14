@@ -12,26 +12,40 @@ public class MouseController : MonoBehaviour
 {
     public GameObject characterPrefab;
     private PaoloCharacter character;
+
     private PathFinder pathFinder;
     private RangeFinder rangeFinder;
     private OverlayTile overlayTile;
-    private List<OverlayTile> inRangeTiles = new List<OverlayTile>();
+    public List<OverlayTile> inRangeTiles = new List<OverlayTile>();
     public float speed;
     private new SpriteRenderer renderer;
     private List<OverlayTile> path = new List<OverlayTile>();
+    RegularAttack regularAttack;
+
+
     public Canvas canvas;
+    public static CharacterState characterState;
     bool canSpawn = false;
 
     private void Start()
     {
         pathFinder = new PathFinder();
-        rangeFinder = new RangeFinder();
+        rangeFinder = new RangeFinder();   
+    
     }
 
 
     private bool FocusIsOnTile(ref RaycastHit2D? focusedTileHit)
     {
         return focusedTileHit.Value.collider.gameObject.layer == LayerMask.NameToLayer("Tile");
+    }
+
+    private void SetCharacterSpriteWhite()
+    {
+        if (character != null)
+        {
+            character.GetComponent<SpriteRenderer>().color = Color.white;
+        }
     }
 
     void LateUpdate()
@@ -56,11 +70,9 @@ public class MouseController : MonoBehaviour
                     gameObject.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponent<SpriteRenderer>().sortingOrder;
                 }
             }
-            if(character != null)
-            {
-                character.GetComponent<SpriteRenderer>().color = Color.white;
-            }
-            if(renderer != null)
+            SetCharacterSpriteWhite();
+
+            if (renderer != null)
             {
                 renderer.color = Color.white;
             }
@@ -71,12 +83,14 @@ public class MouseController : MonoBehaviour
                 {
                     character = Instantiate(characterPrefab).GetComponent<PaoloCharacter>();
                     PositionCharacterOnTile(overlayTile);
+                    character.GetComponent<SpriteRenderer>().sortingOrder = 5;
                     GameObject spawningZone = GameObject.Find("SpawningZone");
-                    spawningZone.SetActive(false); 
+                    Destroy(spawningZone);
                 }
                 else if(character != null)
                 {
-                    if(character.canMove == true)
+
+                    if (characterState == CharacterState.Moving)
                     {
                         canvas.gameObject.SetActive(false);
                         path = pathFinder.FindPath(character.activeTile, overlayTile, inRangeTiles);
@@ -84,18 +98,23 @@ public class MouseController : MonoBehaviour
                 }
             }
         }
-        if (path.Count > 0 && character.characterMovement > 0)
+        if (path.Count > 0 && character.characterMovement > 0 && characterState == CharacterState.Moving)
         {
             MoveAlongPath();
         }
+        if(character != null)
+        {
+            if (character.characterMovement == 0)
+            {
+                 HideMovementTiles();
+            }
+        }
+
     }
 
     private void GetInRangeTiles()
-    { 
-        foreach (var tile in inRangeTiles)
-        {
-            tile.HideTile();
-        }
+    {
+        HideMovementTiles();
 
         inRangeTiles = rangeFinder.GetTilesInRange(character.activeTile, character.characterMovement);
 
@@ -179,10 +198,14 @@ public class MouseController : MonoBehaviour
                 if (renderer != null)
                 {
                    renderer.color = Color.red;
-                    if (Input.GetMouseButtonDown(0))
+                    if (Input.GetMouseButtonDown(0) && characterState == CharacterState.Attacking)
                     {
                         Debug.Log("Enemy!");
                         canvas.gameObject.SetActive(false);
+                        characterState = CharacterState.Clickers;
+                        regularAttack = character.GetComponent<RegularAttack>();
+                        regularAttack.StartClickersBoxe();
+                        Debug.Log(characterState);
                     }
                 }
                 return null;
@@ -203,13 +226,46 @@ public class MouseController : MonoBehaviour
         if (character != null)
         {
             GetInRangeTiles();
-            character.canMove = true;
+            SetCharacterMoveState();
+      
         }
+        SetCharacterMoveState();
     }
-    public void ResetMovementPoint()
+
+    public void EndTurnButton()
     {
         character.characterMovement = 4;
         canvas.gameObject.SetActive(false);
+        HideMovementTiles();
+        SetCharacterIdleState();
+    }
+
+    public void AttackButton()
+    {
+        HideMovementTiles();
+        canvas.gameObject.SetActive(false);
+        SetCharacterAttackState();
+    }
+
+    private void SetCharacterAttackState()
+    {
+        characterState = CharacterState.Attacking;
+    }
+    private void SetCharacterIdleState()
+    {
+        characterState = CharacterState.Ideling;
+    }
+    private void SetCharacterMoveState()
+    {
+        characterState = CharacterState.Moving;
+    }
+
+    public void HideMovementTiles()
+    {
+        foreach (var tile in inRangeTiles)
+        {
+            tile.HideTile();
+        }
     }
 
     public void PositionCharacterOnTile(OverlayTile tile)
@@ -217,7 +273,5 @@ public class MouseController : MonoBehaviour
         character.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y + 0.0001f, tile.transform.position.z);
         character.GetComponent<SpriteRenderer>().sortingOrder = tile.GetComponent<SpriteRenderer>().sortingOrder;  
         character.activeTile = tile;
-        //GetInRangeTiles();
- 
     }
 }

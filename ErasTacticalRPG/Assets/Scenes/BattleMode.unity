@@ -779,11 +779,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7229363875767422859, guid: 9c1185a4cb07f0b4bb00093f0ed9935e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.51
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7229363875767422859, guid: 9c1185a4cb07f0b4bb00093f0ed9935e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.79
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7229363875767422859, guid: 9c1185a4cb07f0b4bb00093f0ed9935e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -904,7 +904,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 396022495}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 2080394809}
+        m_TargetAssemblyTypeName: MouseController, Assembly-CSharp
+        m_MethodName: AttackButton
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &396022495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1004,7 +1016,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 3
+  orthographic size: 4.5
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1029,7 +1041,7 @@ Transform:
   m_GameObject: {fileID: 430217400}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.49, y: 0.76, z: -8}
+  m_LocalPosition: {x: -2.11, y: 0.37, z: -8}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3303,7 +3315,7 @@ GameObject:
   - component: {fileID: 1056581942}
   - component: {fileID: 1056581941}
   m_Layer: 5
-  m_Name: Canvas
+  m_Name: DebugCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3477,7 +3489,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2080394809}
         m_TargetAssemblyTypeName: MouseController, Assembly-CSharp
-        m_MethodName: ResetMovementPoint
+        m_MethodName: EndTurnButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4429,11 +4441,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7229363875767422859, guid: 9c1185a4cb07f0b4bb00093f0ed9935e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.03
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7229363875767422859, guid: 9c1185a4cb07f0b4bb00093f0ed9935e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.11
+      value: 0.194
       objectReference: {fileID: 0}
     - target: {fileID: 7229363875767422859, guid: 9c1185a4cb07f0b4bb00093f0ed9935e, type: 3}
       propertyPath: m_LocalPosition.z
