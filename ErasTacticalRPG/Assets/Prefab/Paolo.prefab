@@ -1531,10 +1531,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 276278899de495d40b04506add614ec3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 0
+  health: 100
   maxHealth: 100
   characterMovement: 4
   dexterity: 1
+  isHuman: 1
   activeTile: {fileID: 0}
   canMove: 0
   tMP_Texts1Clicker:
@@ -1591,8 +1592,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterScript: {fileID: 0}
-  listOfClicker: []
-  listInitialize: 0
+  rollingSpeed: 0.2
   weaponPrefab: {fileID: 6327910693405876580, guid: b0291b26284e23c4f86122793dc1879d, type: 3}
 --- !u!1 &6403870300994841563
 GameObject:

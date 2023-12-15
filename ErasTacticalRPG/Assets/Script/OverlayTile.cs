@@ -4,8 +4,11 @@ using UnityEngine;
 
 public class OverlayTile : MonoBehaviour
 {
+    //cost to the next cell
     public int G;
+    //total cost to the end point
     public int H;
+    //
     public int F { get { return G + H; } }
     int moveCost;
 

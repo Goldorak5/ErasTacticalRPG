@@ -3,15 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public enum CharacterState
-{       Ideling,
-        Attacking,
-        Clickers,
-        Abilities,
-        Moving
-}
-
-public class PaoloCharacter : MonoBehaviour
+public class Enemies : MonoBehaviour
 {
     public int health;
     public int maxHealth;
@@ -20,18 +12,20 @@ public class PaoloCharacter : MonoBehaviour
     public bool isHuman = true;
     public OverlayTile activeTile;
     public bool canMove = false;
+
     public List<TMP_Text> tMP_Texts1Clicker;
     public List<TMP_Text> tMP_Texts2Clicker;
     public List<TMP_Text> tMP_Texts3Clicker;
     public List<TMP_Text> tMP_Texts4Clicker;
-    
-    
-    private void Start()
+    // Start is called before the first frame update
+    void Start()
     {
-        characterMovement = 4;
-        dexterity = 1;
+        
     }
 
-
-
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
 }

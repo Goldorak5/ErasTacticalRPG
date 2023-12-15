@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using Unity.VisualScripting;
 
 public class RegularAttack: MonoBehaviour
 {
     public PaoloCharacter characterScript;
-    private float delay = 0.2f;
+    [SerializeField]private float rollingSpeed = 0.2f;
+    private int totalDamage;
     private int count = 1;
     private int endCount;
     private int startCountNovice = 1;
@@ -19,21 +21,20 @@ public class RegularAttack: MonoBehaviour
     private string clickerIntermediaireSelected = "Intermediaire";
     private string clickerExpertSelected = "Expert";
     private string clickerMaitreSelected = "Maitre";
-    public List<TMP_Text> listOfClicker;
-    public bool listInitialize = false;
+    private List<TMP_Text> listOfClicker;
+    private bool listInitialize = false;
     private int indexText = 0;
     private bool stopCountDown = false;
     private Weapons weaponScript;
     private GameObject weaponInstance;
     public GameObject weaponPrefab;
+    private Coroutine coroutine;
+    private int boxValue;
 
 
     void Awake()
     {
-        characterScript = FindObjectOfType<PaoloCharacter>();
-        stopCountDown = false;
-        weaponInstance = Instantiate(weaponPrefab);
-        weaponScript = weaponInstance.GetComponent<Weapons>();
+
         
     }
 
@@ -68,7 +69,7 @@ public class RegularAttack: MonoBehaviour
                     break;
                 }
                 countDownText.text = i.ToString("0");
-                yield return new WaitForSeconds(delay);
+                yield return new WaitForSeconds(rollingSpeed);
             }
         }
     }
@@ -80,7 +81,7 @@ public class RegularAttack: MonoBehaviour
         {
             endCount = 4;
             clickerSelected = clickerNoviceSelected; 
-            CountCoroutineManager.Instance.StartCoroutine(CountCoroutine(listOfClicker[indexText]));
+            coroutine = CountCoroutineManager.Instance.StartCoroutine(CountCoroutine(listOfClicker[indexText]));
             weaponScript.ClickerNovice--;
             numClicker--;
         }
@@ -88,7 +89,7 @@ public class RegularAttack: MonoBehaviour
         {
             endCount = 6;
             clickerSelected = clickerIntermediaireSelected;
-            CountCoroutineManager.Instance.StartCoroutine(CountCoroutine(listOfClicker[indexText]));
+            coroutine = CountCoroutineManager.Instance.StartCoroutine(CountCoroutine(listOfClicker[indexText]));
             weaponScript.ClickerIntermidiaire--;
             numClicker--;
         }
@@ -96,7 +97,7 @@ public class RegularAttack: MonoBehaviour
         {
             endCount = 10;
             clickerSelected = clickerExpertSelected;
-            CountCoroutineManager.Instance.StartCoroutine(CountCoroutine(listOfClicker[indexText]));
+            coroutine = CountCoroutineManager.Instance.StartCoroutine(CountCoroutine(listOfClicker[indexText]));
             weaponScript.ClickerExpert--;
             numClicker--;
         }
@@ -104,7 +105,7 @@ public class RegularAttack: MonoBehaviour
         {
             endCount = 12;
             clickerSelected = clickerMaitreSelected;
-            CountCoroutineManager.Instance.StartCoroutine(CountCoroutine(listOfClicker[indexText]));
+            coroutine = CountCoroutineManager.Instance.StartCoroutine(CountCoroutine(listOfClicker[indexText]));
             weaponScript.ClickerMaitre--;
             numClicker--;
         }
@@ -112,35 +113,25 @@ public class RegularAttack: MonoBehaviour
 
     public void StartClickersBoxe()
     {
-        InitializeCharacterAndList();
-
-        switch (weaponScript.numBoxClicker)
+        if (!listInitialize)
         {
-            case 1:
-                ChooseClickerList();
-                break;
-            case 2:
-                ChooseClickerList();
-                break;
-            case 3:
-                ChooseClickerList();
-                break;
-            case 4:
-                ChooseClickerList();
-                break;
+            InitializeCharacterAndList();
+            listInitialize = true;
         }
+        
+        ChooseClickerList();
+
     }
 
     private void InitializeCharacterAndList()
     {
-           
-            //initialize right list of boxes
-//             if (weaponScript == null)
-//         {
-//             weaponScript = FindAnyObjectByType<Weapons>();
-//         }
+        //initialize right list of boxes
+        characterScript = FindObjectOfType<PaoloCharacter>();
+        stopCountDown = false;
+        weaponInstance = Instantiate(weaponPrefab);
+        weaponScript = weaponInstance.GetComponent<Weapons>();
 
-            switch (weaponScript.numBoxClicker)
+        switch (weaponScript.numBoxClicker)
                 {
                     case 1:
                         listOfClicker = characterScript.tMP_Texts1Clicker; break;
@@ -161,14 +152,19 @@ public class RegularAttack: MonoBehaviour
         yield return null;
         if (numClicker > 0)
         {
+            int.TryParse(listOfClicker[indexText].text, out boxValue);
+            totalDamage += boxValue;
             indexText++;
             stopCountDown = false;
             StartClickersBoxe();
         }
         else
         {
-            CountCoroutineManager.Instance.StopAllCoroutines();
+            CountCoroutineManager.Instance.StopCoroutine(coroutine);
             stopCountDown = true;
+            int.TryParse(listOfClicker[indexText].text, out boxValue);
+            totalDamage += boxValue;
+            Debug.Log(totalDamage);
         }
     }
 
@@ -176,9 +172,9 @@ public class RegularAttack: MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Return))
         {
-//             //stop count
+//          //stop count
             stopCountDown = true;
-            CountCoroutineManager.Instance.StopAllCoroutines();
+            CountCoroutineManager.Instance.StopCoroutine(coroutine);
             StartCoroutine(WaitToStart());
         }
     }

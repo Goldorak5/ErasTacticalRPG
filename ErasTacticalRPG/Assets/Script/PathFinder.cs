@@ -17,7 +17,6 @@ public class PathFinder
 
         while (openList.Count > 0)
         {
-
             //takes the smaller F of the neighbor tiles that mean the tiles that cost the less to move
             OverlayTile currentOverlayTile = openList.OrderBy(x => x.F).First();
 
@@ -59,6 +58,7 @@ public class PathFinder
 
     private int GetManhattenDistance(OverlayTile start, OverlayTile neighbour)
     {
+        //absolute means no negative
         return Mathf.Abs(start.gridLocation.x - neighbour.gridLocation.x) + Mathf.Abs(start.gridLocation.y - neighbour.gridLocation.y);
     }
 
