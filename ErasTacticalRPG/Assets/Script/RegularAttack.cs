@@ -26,7 +26,7 @@ public class RegularAttack: MonoBehaviour
     private int indexText = 0;
     private bool stopCountDown = false;
     private Weapons weaponScript;
-    private GameObject weaponInstance;
+    private GameObject weaponInstance = null;
     public GameObject weaponPrefab;
     private Coroutine coroutine;
     private int boxValue;
@@ -43,7 +43,6 @@ public class RegularAttack: MonoBehaviour
         
         while (!stopCountDown)
         {
-            Debug.Log(stopCountDown.ToString());
 
             if (clickerSelected == clickerNoviceSelected)
               {
@@ -118,9 +117,7 @@ public class RegularAttack: MonoBehaviour
             InitializeCharacterAndList();
             listInitialize = true;
         }
-        
         ChooseClickerList();
-
     }
 
     private void InitializeCharacterAndList()
@@ -128,8 +125,11 @@ public class RegularAttack: MonoBehaviour
         //initialize right list of boxes
         characterScript = FindObjectOfType<PaoloCharacter>();
         stopCountDown = false;
-        weaponInstance = Instantiate(weaponPrefab);
-        weaponScript = weaponInstance.GetComponent<Weapons>();
+        if(weaponInstance == null)
+        {
+            weaponInstance = Instantiate(weaponPrefab);
+            weaponScript = weaponInstance.GetComponent<Weapons>();
+        }
 
         switch (weaponScript.numBoxClicker)
                 {
@@ -147,24 +147,48 @@ public class RegularAttack: MonoBehaviour
         numClicker = weaponScript.numBoxClicker;
     }
 
+    private void ReinitializeValue()
+    {
+        int indexToErase = 0;
+        while (indexToErase < listOfClicker.Count)
+        {
+            listOfClicker[indexToErase].text = "";
+            indexToErase++;
+        }
+        listOfClicker = null;
+        indexText = 0;
+        stopCountDown = false;
+        totalDamage = 0;
+         listInitialize = false;
+        Destroy(weaponInstance);
+        weaponInstance = null;
+    }
+
     private IEnumerator WaitToStart()
     {
         yield return null;
         if (numClicker > 0)
         {
+            //transform content of text box into integer for addition
             int.TryParse(listOfClicker[indexText].text, out boxValue);
             totalDamage += boxValue;
             indexText++;
             stopCountDown = false;
             StartClickersBoxe();
+            
         }
         else
         {
-            CountCoroutineManager.Instance.StopCoroutine(coroutine);
-            stopCountDown = true;
+            if(coroutine != null)
+            {
+                CountCoroutineManager.Instance.StopCoroutine(coroutine);
+                coroutine = null;
+            }
             int.TryParse(listOfClicker[indexText].text, out boxValue);
             totalDamage += boxValue;
             Debug.Log(totalDamage);
+            ReinitializeValue();
+
         }
     }
 
@@ -174,8 +198,17 @@ public class RegularAttack: MonoBehaviour
         {
 //          //stop count
             stopCountDown = true;
-            CountCoroutineManager.Instance.StopCoroutine(coroutine);
-            StartCoroutine(WaitToStart());
+            if(coroutine != null)
+            {
+                CountCoroutineManager.Instance.StopCoroutine(coroutine);
+                coroutine = null;
+            }
+            IEnumerator waitToSart = WaitToStart();
+            if(waitToSart != null)
+            {
+            CountCoroutineManager.Instance.StartCoroutine(waitToSart);
+            }
+            
         }
     }
 }

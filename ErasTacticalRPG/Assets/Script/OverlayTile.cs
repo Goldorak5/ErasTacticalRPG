@@ -4,12 +4,16 @@ using UnityEngine;
 
 public class OverlayTile : MonoBehaviour
 {
-    //cost to the next cell
+    //cost from the origin point
     public int G;
+
     //total cost to the end point
     public int H;
-    //
+
+    //total best cost to move
     public int F { get { return G + H; } }
+
+
     int moveCost;
 
     public bool isBlocked;

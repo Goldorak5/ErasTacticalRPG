@@ -10,30 +10,30 @@ using UnityEngine.UI;
 
 public class MouseController : MonoBehaviour
 {
-    public GameObject characterPrefab;
+    //private
     private PaoloCharacter character;
-
     private PathFinder pathFinder;
     private RangeFinder rangeFinder;
     private OverlayTile overlayTile;
-    public List<OverlayTile> inRangeTiles = new List<OverlayTile>();
-    public float speed;
     private new SpriteRenderer renderer;
     private List<OverlayTile> path = new List<OverlayTile>();
-    RegularAttack regularAttack;
+    private RegularAttack regularAttack;
 
-
-    public Canvas canvas;
+    //public
     public static CharacterState characterState;
-    bool canSpawn = false;
+    public GameObject characterPrefab;
+    public TurnManager turnManager;
+    public List<OverlayTile> inRangeTiles = new List<OverlayTile>();
+    public float movementSpeed;
+    public Canvas canvas;
+    [HideInInspector]public bool canSpawn = false;
 
     private void Start()
     {
         pathFinder = new PathFinder();
-        rangeFinder = new RangeFinder();   
-    
+        rangeFinder = new RangeFinder();
+        
     }
-
 
     private bool FocusIsOnTile(ref RaycastHit2D? focusedTileHit)
     {
@@ -53,6 +53,7 @@ public class MouseController : MonoBehaviour
         
         if(character == null)
         {
+            //raycast funtion to check if mouse controler is over spanwning zone;
             FindSpawningZone();
         }
         
@@ -70,6 +71,7 @@ public class MouseController : MonoBehaviour
                     gameObject.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponent<SpriteRenderer>().sortingOrder;
                 }
             }
+            //put the colr of the player back to normal after cursor is not on it
             SetCharacterSpriteWhite();
 
             if (renderer != null)
@@ -77,6 +79,7 @@ public class MouseController : MonoBehaviour
                 renderer.color = Color.white;
             }
 
+            //lorsque la souris est cliquer
             if (Input.GetMouseButtonDown(0))
             {
                 if (character == null && canSpawn)
@@ -86,37 +89,41 @@ public class MouseController : MonoBehaviour
                     character.GetComponent<SpriteRenderer>().sortingOrder = 5;
                     GameObject spawningZone = GameObject.Find("SpawningZone");
                     Destroy(spawningZone);
+                    StartCoroutine(turnManager.PlayGame());
                 }
                 else if(character != null)
                 {
 
                     if (characterState == CharacterState.Moving)
                     {
+                        //hiding canvas
                         canvas.gameObject.SetActive(false);
+
+                        //initialize the path 
                         path = pathFinder.FindPath(character.activeTile, overlayTile, inRangeTiles);
                     }
                 }
             }
         }
-        if (path.Count > 0 && character.characterMovement > 0 && characterState == CharacterState.Moving)
+        if (path.Count > 0 && character.movementPoints > 0 && characterState == CharacterState.Moving)
         {
+            //moving character
             MoveAlongPath();
         }
         if(character != null)
         {
-            if (character.characterMovement == 0)
+            if (character.movementPoints == 0)
             {
                  HideMovementTiles();
             }
         }
-
     }
 
     private void GetInRangeTiles()
     {
         HideMovementTiles();
 
-        inRangeTiles = rangeFinder.GetTilesInRange(character.activeTile, character.characterMovement);
+        inRangeTiles = rangeFinder.GetTilesInRange(character.activeTile, character.movementPoints);
 
         foreach(var tile in inRangeTiles)
         {
@@ -126,8 +133,8 @@ public class MouseController : MonoBehaviour
 
     private void MoveAlongPath()
     {
-    var step = speed * Time.deltaTime;
-
+        var step = character.characterMovementSpeed * Time.deltaTime;
+       character.activeTile.isBlocked = false;
         var zIndex = path[0].transform.position.z;
         character.transform.position = Vector2.MoveTowards(character.transform.position, path[0].transform.position , step);
         character.transform.position = new Vector3 (character.transform.position.x, character.transform.position.y, zIndex);
@@ -135,15 +142,18 @@ public class MouseController : MonoBehaviour
         if(Vector2.Distance(character.transform.position , path[0].transform.position) < 0.0001f)
         {
             PositionCharacterOnTile(path[0]);
+
             path.RemoveAt(0);
-            character.characterMovement--;
+            character.movementPoints--;
             GetInRangeTiles();
         }
         if (path.Count == 0)
         {
             GetInRangeTiles();
+            //make debug menu appear
             canvas.gameObject.SetActive(true);
         }
+       character.activeTile.isBlocked = true;
     }
 
     public void FindSpawningZone()
@@ -200,12 +210,12 @@ public class MouseController : MonoBehaviour
                    renderer.color = Color.red;
                     if (Input.GetMouseButtonDown(0) && characterState == CharacterState.Attacking)
                     {
-                        Debug.Log("Enemy!");
+                        //if clicked on an enemy
+                        Debug.Log("Enemy Selected!");
                         canvas.gameObject.SetActive(false);
                         characterState = CharacterState.Clickers;
                         regularAttack = character.GetComponent<RegularAttack>();
                         regularAttack.StartClickersBoxe();
-                        Debug.Log(characterState);
                     }
                 }
                 return null;
@@ -234,7 +244,7 @@ public class MouseController : MonoBehaviour
 
     public void EndTurnButton()
     {
-        character.characterMovement = 4;
+        character.movementPoints = 4;
         canvas.gameObject.SetActive(false);
         HideMovementTiles();
         SetCharacterIdleState();

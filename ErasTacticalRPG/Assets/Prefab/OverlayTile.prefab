@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2217898430725832824}
   m_Layer: 7
   m_Name: OverlayTile
-  m_TagString: Untagged
+  m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

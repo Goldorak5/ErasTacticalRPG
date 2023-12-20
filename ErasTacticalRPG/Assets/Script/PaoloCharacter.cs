@@ -3,33 +3,22 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public enum CharacterState
-{       Ideling,
-        Attacking,
-        Clickers,
-        Abilities,
-        Moving
-}
+// public enum CharacterState
+// {       Ideling,
+//         Attacking,
+//         Clickers,
+//         Abilities,
+//         Moving
+// }
 
-public class PaoloCharacter : MonoBehaviour
+public class PaoloCharacter : BaseCharacter
 {
-    public int health;
-    public int maxHealth;
-    public int characterMovement;
-    public int dexterity;
-    public bool isHuman = true;
-    public OverlayTile activeTile;
-    public bool canMove = false;
-    public List<TMP_Text> tMP_Texts1Clicker;
-    public List<TMP_Text> tMP_Texts2Clicker;
-    public List<TMP_Text> tMP_Texts3Clicker;
-    public List<TMP_Text> tMP_Texts4Clicker;
-    
-    
+   
     private void Start()
     {
-        characterMovement = 4;
+        movementPoints = 4;
         dexterity = 1;
+        activeTile.isBlocked = true;
     }
 
 

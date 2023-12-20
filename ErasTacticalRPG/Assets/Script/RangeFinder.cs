@@ -6,7 +6,7 @@ using UnityEngine;
 
 public class RangeFinder
 {
-    public List<OverlayTile> GetTilesInRange(OverlayTile startingTile, int range)
+    public List<OverlayTile> GetTilesInRange(OverlayTile startingTile, int movePoints)
     {
         var inRangeTile = new List<OverlayTile>();
         int stepCount = 0;
@@ -15,7 +15,7 @@ public class RangeFinder
 
         var tileForPreviousTiles = new List<OverlayTile>{ startingTile };
 
-        while (stepCount < range)
+        while (stepCount < movePoints)
         {
             var surrendingTiles = new List<OverlayTile>();
 

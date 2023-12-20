@@ -65,11 +65,12 @@ public class MapManager : MonoBehaviour
 
     }
 
-
-    public List<OverlayTile> GetNeighbourTiles(OverlayTile currentOverlayTile, List<OverlayTile> limiteTiles)
+    //gives the four neighbourg
+    //if limitList is new list 
+    public List<OverlayTile> GetNeighbourTiles(OverlayTile currentOverlayTile, List<OverlayTile> limitList)
     {
           
-        List<OverlayTile> neighbour = new List<OverlayTile>();
+        List<OverlayTile> neighbourList = new List<OverlayTile>();
          
 
         //top neighbour
@@ -77,32 +78,38 @@ public class MapManager : MonoBehaviour
             currentOverlayTile.gridLocation.x,
             currentOverlayTile.gridLocation.y + 1);
 
-        AddTileToNeighbourList(currentOverlayTile, map, neighbour, locationCheck, limiteTiles);
+        AddTileToNeighbourList(currentOverlayTile, map, neighbourList, locationCheck, limitList);
 
         //down neighbour
         locationCheck = new Vector2Int(
             currentOverlayTile.gridLocation.x,
             currentOverlayTile.gridLocation.y - 1);
 
-        AddTileToNeighbourList(currentOverlayTile, map, neighbour, locationCheck, limiteTiles);
+        AddTileToNeighbourList(currentOverlayTile, map, neighbourList, locationCheck, limitList);
 
         //right neighbour
         locationCheck = new Vector2Int(
             currentOverlayTile.gridLocation.x + 1,
             currentOverlayTile.gridLocation.y);
 
-        AddTileToNeighbourList(currentOverlayTile, map, neighbour, locationCheck, limiteTiles);
+        AddTileToNeighbourList(currentOverlayTile, map, neighbourList, locationCheck, limitList);
 
         //left neighbour
         locationCheck = new Vector2Int(
             currentOverlayTile.gridLocation.x - 1,
             currentOverlayTile.gridLocation.y);
 
-        AddTileToNeighbourList(currentOverlayTile, map, neighbour, locationCheck, limiteTiles);
+        AddTileToNeighbourList(currentOverlayTile, map, neighbourList, locationCheck, limitList);
 
-        return neighbour;
+        return neighbourList;
     }
 
+    /*if tiles have a particular spec adding it here
+     * add 4 tiles around the caracter,
+     * if an empty list is giving here it will search the entire map but still gonna give the 4 neighbourgs
+     * The limitList is for when the charcater run out of movement.
+     * this function also gives the probability of going higher if the character can.
+     */
     private void AddTileToNeighbourList(OverlayTile currentOverlayTile, Dictionary<Vector2Int, OverlayTile> map, List<OverlayTile> neighbour, Vector2Int locationCheck, List<OverlayTile> limiteTiles)
     {
         PaoloCharacter character = GameObject.Find("Paolo(Clone)").GetComponent<PaoloCharacter>();
@@ -119,13 +126,13 @@ public class MapManager : MonoBehaviour
         {
             tilesToSearch = map;
         }
-
+        
         if (tilesToSearch.ContainsKey(locationCheck))
         {
             //Dexterity = the max z that the character could climb
             if (Mathf.Abs(currentOverlayTile.gridLocation.z - tilesToSearch[locationCheck].gridLocation.z) <= character.dexterity)
-             
             neighbour.Add(tilesToSearch[locationCheck]);
+
         }
     }
 }
