@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,7 @@ public class Enemies : BaseCharacter
     private List<OverlayTile> path = new List<OverlayTile>();
     private List<OverlayTile> inRangeTiles = new List<OverlayTile>();
     private OverlayTile targetTile;
+    private int numTilesToSearch;
 
   
     // Start is called before the first frame update
@@ -30,7 +32,7 @@ public class Enemies : BaseCharacter
         // Create a LayerMask that includes only tile
         int layerMask = 1 << LayerMask.NameToLayer("Tile");
         Vector2 direction = Vector2.down;
-        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, 0.2f, layerMask);
+        RaycastHit2D[] hits = Physics2D.RaycastAll(transform.position, direction, 1f, layerMask);
 
         //start with ridiculous big distance
         float minDistance = Mathf.Infinity;
@@ -58,27 +60,58 @@ public class Enemies : BaseCharacter
 
     public void MoveEnemy()
     {
-       
-        OverlayTile playerTile = FindObjectOfType<PaoloCharacter>().activeTile;
-        inRangeTiles = rangeFinder.GetTilesInRange(playerTile, 1);
-
-        //find the closest tile Euclidean distance
-        targetTile = MapManager.Instance.GetNeighbourTiles(playerTile, inRangeTiles)
-                                .OrderBy(x => Vector2.Distance(activeTile.grid2DLocation, new Vector2(x.grid2DLocation.x, x.grid2DLocation.y)))
-                                .First();
-
-        //if its block find another tile
-        if (targetTile.isBlocked) 
-        {
-            targetTile = MapManager.Instance.GetNeighbourTiles(playerTile, inRangeTiles).OrderBy(x => x.F).First();
-        }
+        GetTargetTiles();
+        numTilesToSearch = MapManager.Instance.map.Count;
 
         //search trough all the tiles with the movement points
-        inRangeTiles = rangeFinder.GetTilesInRange(activeTile, movementPoints);
+        inRangeTiles = rangeFinder.GetTilesInRange(activeTile, numTilesToSearch);
 
         path = pathFinder.FindPath(activeTile, targetTile, inRangeTiles);
 
+        //reduce the path to the number of movement points
+        if(path.Count > movementPoints && path != null)
+        {
+            while(path.Count > movementPoints)
+            {
+                path.RemoveAt(path.Count - 1);
+            }
+        }
+
     }
+
+    private OverlayTile GetTargetTiles()
+    {
+        OverlayTile playerTile = FindObjectOfType<PaoloCharacter>().activeTile;
+        //find the tiles around the player
+        inRangeTiles = rangeFinder.GetTilesInRange(playerTile, 1);
+
+        //make a list of tiles around the player
+        List<OverlayTile> listOfClosestTiles = new List<OverlayTile>();
+        listOfClosestTiles = MapManager.Instance.GetNeighbourTiles(playerTile, inRangeTiles)
+                                .OrderBy(x => Vector2.Distance(activeTile.grid2DLocation, new Vector2(x.grid2DLocation.x, x.grid2DLocation.y))).ToList();
+
+        targetTile = listOfClosestTiles.First();
+
+        if (targetTile.isBlocked)
+        {
+                 if (targetTile == activeTile) 
+                    {
+                    return targetTile;
+                    }
+            while(listOfClosestTiles.Count > 0 && targetTile.isBlocked)
+            {
+            listOfClosestTiles.RemoveAt(0);
+            if (listOfClosestTiles.Count == 0)
+                {
+                    return targetTile = null;
+                }
+            targetTile = listOfClosestTiles.First();
+            }
+        }
+        
+        return targetTile;
+    }
+
     private void LateUpdate()
     {
         if (path.Count > 0 && movementPoints > 0)
@@ -97,7 +130,6 @@ public class Enemies : BaseCharacter
     {
         activeTile.isBlocked = false;
         var step = characterMovementSpeed * Time.deltaTime;
-        activeTile.isBlocked = false;
         var zIndex = path[0].transform.position.z;
         transform.position = Vector2.MoveTowards(transform.position, path[0].transform.position, step);
         transform.position = new Vector3(transform.position.x, transform.position.y, zIndex);
