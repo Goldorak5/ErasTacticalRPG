@@ -30,12 +30,14 @@ public class TurnManager : MonoBehaviour
     IEnumerator PlayTurn(int playerNumber)
     {
         BaseCharacter currentPlayerTurn = character[playerNumber];
-
+        currentPlayerTurn.IsMyTurn = true;
         if (currentPlayerTurn.isHuman)
         {
+            currentPlayerTurn.AsAttack = false;
             Debug.Log("Paolo Turn!");
             while (!currentPlayerTurn.endTurn)
             {
+                
                 //Player Turn
                 yield return null;
             }
@@ -44,16 +46,28 @@ public class TurnManager : MonoBehaviour
         else
         {  //execute AI Turn
             Enemies enemie = currentPlayerTurn as Enemies;
+
             if(enemie != null)
             {
+                Debug.Log("Enemies Turn!");
+                enemie.IsMyTurn = true;
+                currentPlayerTurn.AsAttack = false;
                 enemie.movementPoints = enemie.maxMovementPoints;
-                enemie.MoveEnemy();
-                
-            }
-            Debug.Log("Enemies Turn!");
-            currentPlayerTurn.endTurn = false;
 
-            yield return null;
+                enemie.MoveEnemy();
+                yield return new WaitUntil(() => enemie.hasMoved);
+                enemie.HasMoveFlagFalse();
+
+                if (enemie.FindTarget())
+                {
+                    enemie.AttackEnemy();
+                    yield return new WaitUntil(() => enemie.hasAttacked);
+                    enemie.HasAttackFlagFalse();
+                    
+                }
+            }
+            currentPlayerTurn.endTurn = false;
+            enemie.IsMyTurn = false;
         }
 
         yield return null;

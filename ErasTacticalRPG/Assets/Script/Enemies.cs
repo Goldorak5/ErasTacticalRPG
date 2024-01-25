@@ -6,29 +6,34 @@ using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
+using UnityEngine.Tilemaps;
+using UnityEngine.UI;
 
 public class Enemies : BaseCharacter
 {
     private PathFinder pathFinder;
+    private BaseCharacter playerTarget;
     private RangeFinder rangeFinder;
     private List<OverlayTile> path = new List<OverlayTile>();
     private List<OverlayTile> inRangeTiles = new List<OverlayTile>();
     private OverlayTile targetTile;
+    private OverlayTile playerTile;
+    private RegularAttack regularAttackScript;
     private int numTilesToSearch;
+    public bool hasMoved { get; private set; }
+    public bool hasAttacked { get; set; }
 
-  
-    // Start is called before the first frame update
     void Start()
     {
         pathFinder = new PathFinder();
         rangeFinder = new RangeFinder();
         StartCoroutine(InitializePosition());
-
+        regularAttackScript = GetComponent<RegularAttack>();
     }
 
     private IEnumerator InitializePosition()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
         // Create a LayerMask that includes only tile
         int layerMask = 1 << LayerMask.NameToLayer("Tile");
         Vector2 direction = Vector2.down;
@@ -76,16 +81,63 @@ public class Enemies : BaseCharacter
                 path.RemoveAt(path.Count - 1);
             }
         }
-
     }
 
+    public void HasMoveFlagFalse()
+    {
+        hasMoved = false;
+    }
+    public bool FindTarget()
+    {
+        playerTarget = FindObjectOfType<PaoloCharacter>();
+        //         // 4 tiles next of the enemy
+        //         inRangeTiles = rangeFinder.GetTilesInRange(activeTile, 1);
+        //         playerTile = FindObjectOfType<PaoloCharacter>().activeTile;
+        // 
+        //         foreach (var tile in inRangeTiles)
+        //         {
+        //             if ( tile == playerTile)
+       // {
+//                 playerTarget = playerTile.gameObject.GetComponentInParent<PaoloCharacter>();
+//                /* break;*/
+//             }
+            
+//             if (characterOnTile != null && tile == playerTile)
+// //             {
+// //                 playerTarget = characterOnTile;
+// //                 break;
+// //             }
+//             else
+//             {
+//                 playerTarget = null;
+//             }
+//         }
+
+        if(playerTarget != null)
+        {
+            return true;
+        }
+        else return false;
+    }
+
+    public void AttackEnemy()
+    {
+        if(playerTarget != null)
+        {
+           regularAttackScript.StartClickersBoxe(playerTarget);
+        }
+    }
+    public void HasAttackFlagFalse()
+    {
+        hasAttacked = false;
+    }
     private OverlayTile GetTargetTiles()
     {
-        OverlayTile playerTile = FindObjectOfType<PaoloCharacter>().activeTile;
+        playerTile = FindObjectOfType<PaoloCharacter>().activeTile;
         //find the tiles around the player
         inRangeTiles = rangeFinder.GetTilesInRange(playerTile, 1);
 
-        //make a list of tiles around the player
+        //make a list of tiles around the target and chose the closest one
         List<OverlayTile> listOfClosestTiles = new List<OverlayTile>();
         listOfClosestTiles = MapManager.Instance.GetNeighbourTiles(playerTile, inRangeTiles)
                                 .OrderBy(x => Vector2.Distance(activeTile.grid2DLocation, new Vector2(x.grid2DLocation.x, x.grid2DLocation.y))).ToList();
@@ -98,6 +150,7 @@ public class Enemies : BaseCharacter
                     {
                     return targetTile;
                     }
+                 //as long as the tile that the NME want to move is block he remove one tile of the list 
             while(listOfClosestTiles.Count > 0 && targetTile.isBlocked)
             {
             listOfClosestTiles.RemoveAt(0);
@@ -112,11 +165,17 @@ public class Enemies : BaseCharacter
         return targetTile;
     }
 
+    
+
     private void LateUpdate()
     {
+        if (movementPoints == 0)
+        {
+            hasMoved = true;
+        }
         if (path.Count > 0 && movementPoints > 0)
         {
-            //moving character
+            //moving Enemy
             MoveAlongPath();
         }
         if (endTurn)

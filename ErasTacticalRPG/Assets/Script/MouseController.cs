@@ -18,6 +18,7 @@ public class MouseController : MonoBehaviour
     private new SpriteRenderer renderer;
     private List<OverlayTile> path = new List<OverlayTile>();
     private RegularAttack regularAttack;
+    private BaseCharacter targetedEnemy;
 
     //public
     public static CharacterState characterState;
@@ -71,7 +72,7 @@ public class MouseController : MonoBehaviour
                     gameObject.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponent<SpriteRenderer>().sortingOrder;
                 }
             }
-            //put the colr of the player back to normal after cursor is not on it
+            //put the color of the player back to normal after cursor is not on it
             SetCharacterSpriteWhite();
 
             if (renderer != null)
@@ -134,7 +135,7 @@ public class MouseController : MonoBehaviour
     private void MoveAlongPath()
     {
         var step = character.characterMovementSpeed * Time.deltaTime;
-       character.activeTile.isBlocked = false;
+        character.activeTile.isBlocked = false;
         var zIndex = path[0].transform.position.z;
         character.transform.position = Vector2.MoveTowards(character.transform.position, path[0].transform.position , step);
         character.transform.position = new Vector3 (character.transform.position.x, character.transform.position.y, zIndex);
@@ -205,17 +206,23 @@ public class MouseController : MonoBehaviour
             else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("NME"))
             {
                 renderer = hit.collider.gameObject.GetComponent<SpriteRenderer>();
+                
                 if (renderer != null)
                 {
                    renderer.color = Color.red;
                     if (Input.GetMouseButtonDown(0) && characterState == CharacterState.Attacking)
                     {
+                        targetedEnemy = hit.collider.gameObject.GetComponent<BaseCharacter>();
                         //if clicked on an enemy
                         Debug.Log("Enemy Selected!");
-                        canvas.gameObject.SetActive(false);
-                        characterState = CharacterState.Clickers;
-                        regularAttack = character.GetComponent<RegularAttack>();
-                        regularAttack.StartClickersBoxe();
+                        if (!character.AsAttack)
+                        {
+                            canvas.gameObject.SetActive(false);
+                            characterState = CharacterState.Clickers;
+                            regularAttack = character.GetComponent<RegularAttack>();
+                            regularAttack.StartClickersBoxe(targetedEnemy);
+                        }
+                        else Debug.Log("Already Attack");
                     }
                 }
                 return null;

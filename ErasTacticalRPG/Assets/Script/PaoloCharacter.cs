@@ -2,14 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-// public enum CharacterState
-// {       Ideling,
-//         Attacking,
-//         Clickers,
-//         Abilities,
-//         Moving
-// }
 
 public class PaoloCharacter : BaseCharacter
 {
@@ -19,6 +13,9 @@ public class PaoloCharacter : BaseCharacter
         movementPoints = 4;
         dexterity = 1;
         activeTile.isBlocked = true;
+        healthArmorCanvasTransform = transform.Find("HealthArmorCanvas");
+        healthImage = healthArmorCanvasTransform.Find("HealthImage")?.GetComponent<Image>();
+        armorImage = healthArmorCanvasTransform.Find("ArmorImage")?.GetComponent<Image>();
     }
 
 
