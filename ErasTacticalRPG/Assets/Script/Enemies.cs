@@ -32,6 +32,8 @@ public class Enemies : BaseCharacter
         StartCoroutine(InitializePosition());
         regularAttackScript = GetComponent<RegularAttack>();
         HideHealthArmor();
+        tMP_TextsArmor.text = maxArmor.ToString();
+        tMP_TextsHealth.text = maxHealth.ToString();
     }
     private void LateUpdate()
     {
