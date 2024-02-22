@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -16,12 +17,13 @@ public class Enemies : BaseCharacter
     private RangeFinder rangeFinder;
     private List<OverlayTile> path = new List<OverlayTile>();
     private List<OverlayTile> inRangeTiles = new List<OverlayTile>();
-    private OverlayTile targetTile;
+    private OverlayTile targetTile = null;
     private OverlayTile playerTile;
+    private bool isReady = false;
+    private List<OverlayTile> cacPlayerTile;
     private RegularAttack regularAttackScript;
     private int numTilesToSearch;
     public bool hasMoved { get; private set; }
-    public bool hasAttacked { get; set; }
 
     void Start()
     {
@@ -29,6 +31,24 @@ public class Enemies : BaseCharacter
         rangeFinder = new RangeFinder();
         StartCoroutine(InitializePosition());
         regularAttackScript = GetComponent<RegularAttack>();
+        HideHealthArmor();
+    }
+    private void LateUpdate()
+    {
+        if (isReady && (targetTile == activeTile || movementPoints == 0))
+        {
+            hasMoved = true;
+        }
+        if (path.Count > 0 && movementPoints > 0)
+        {
+            //moving Enemy
+            MoveAlongPath();
+        }
+        if (endTurn)
+        {
+            movementPoints = maxMovementPoints;
+        }
+
     }
 
     private IEnumerator InitializePosition()
@@ -59,8 +79,17 @@ public class Enemies : BaseCharacter
                 {
                     activeTile = closestHit.collider.gameObject.GetComponent<OverlayTile>();
                     activeTile.isBlocked = true;
+
                 }
         PositionCharacterOnTile(activeTile);
+        isReady = true;
+    }
+
+    public void PositionCharacterOnTile(OverlayTile tile)
+    {
+        transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y + 0.001f, tile.transform.position.z);
+        GetComponent<SpriteRenderer>().sortingOrder = tile.GetComponent<SpriteRenderer>().sortingOrder + 1;
+        activeTile = tile;
     }
 
     public void MoveEnemy()
@@ -82,60 +111,14 @@ public class Enemies : BaseCharacter
             }
         }
     }
-
-    public void HasMoveFlagFalse()
-    {
-        hasMoved = false;
-    }
-    public bool FindTarget()
-    {
-        playerTarget = FindObjectOfType<PaoloCharacter>();
-        //         // 4 tiles next of the enemy
-        //         inRangeTiles = rangeFinder.GetTilesInRange(activeTile, 1);
-        //         playerTile = FindObjectOfType<PaoloCharacter>().activeTile;
-        // 
-        //         foreach (var tile in inRangeTiles)
-        //         {
-        //             if ( tile == playerTile)
-       // {
-//                 playerTarget = playerTile.gameObject.GetComponentInParent<PaoloCharacter>();
-//                /* break;*/
-//             }
-            
-//             if (characterOnTile != null && tile == playerTile)
-// //             {
-// //                 playerTarget = characterOnTile;
-// //                 break;
-// //             }
-//             else
-//             {
-//                 playerTarget = null;
-//             }
-//         }
-
-        if(playerTarget != null)
-        {
-            return true;
-        }
-        else return false;
-    }
-
-    public void AttackEnemy()
-    {
-        if(playerTarget != null)
-        {
-           regularAttackScript.StartClickersBoxe(playerTarget);
-        }
-    }
-    public void HasAttackFlagFalse()
-    {
-        hasAttacked = false;
-    }
     private OverlayTile GetTargetTiles()
     {
         playerTile = FindObjectOfType<PaoloCharacter>().activeTile;
         //find the tiles around the player
         inRangeTiles = rangeFinder.GetTilesInRange(playerTile, 1);
+
+        //initialize the four tile around the player
+        cacPlayerTile = inRangeTiles;
 
         //make a list of tiles around the target and chose the closest one
         List<OverlayTile> listOfClosestTiles = new List<OverlayTile>();
@@ -146,45 +129,23 @@ public class Enemies : BaseCharacter
 
         if (targetTile.isBlocked)
         {
-                 if (targetTile == activeTile) 
-                    {
-                    return targetTile;
-                    }
-                 //as long as the tile that the NME want to move is block he remove one tile of the list 
-            while(listOfClosestTiles.Count > 0 && targetTile.isBlocked)
+            if (targetTile == activeTile)
             {
-            listOfClosestTiles.RemoveAt(0);
-            if (listOfClosestTiles.Count == 0)
+                return targetTile;
+            }
+            //as long as the tile that the NME want to move is block he remove one tile of the list 
+            while (listOfClosestTiles.Count > 0 && targetTile.isBlocked)
+            {
+                listOfClosestTiles.RemoveAt(0);
+                if (listOfClosestTiles.Count == 0)
                 {
                     return targetTile = null;
                 }
-            targetTile = listOfClosestTiles.First();
+                targetTile = listOfClosestTiles.First();
             }
         }
-        
         return targetTile;
     }
-
-    
-
-    private void LateUpdate()
-    {
-        if (movementPoints == 0)
-        {
-            hasMoved = true;
-        }
-        if (path.Count > 0 && movementPoints > 0)
-        {
-            //moving Enemy
-            MoveAlongPath();
-        }
-        if (endTurn)
-        {
-            movementPoints = maxMovementPoints;
-        }
-    }
-
-
     private void MoveAlongPath()
     {
         activeTile.isBlocked = false;
@@ -209,10 +170,38 @@ public class Enemies : BaseCharacter
         activeTile.isBlocked = true;
     }
 
-    public void PositionCharacterOnTile(OverlayTile tile)
+    public bool FindTarget()
     {
-        transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y + 0.001f, tile.transform.position.z);
-        GetComponent<SpriteRenderer>().sortingOrder = tile.GetComponent<SpriteRenderer>().sortingOrder + 1;
-        activeTile = tile;
+        playerTarget = FindObjectOfType<PaoloCharacter>();
+        if (cacPlayerTile != null)
+        {
+             foreach (var tile in cacPlayerTile)
+            {
+                if(activeTile == tile)
+                {
+                return true;
+                    
+                }
+            }
+        }
+        return false;
+    }
+
+    public void EnemyAttacking()
+    {
+        if(playerTarget != null)
+        {
+           regularAttackScript.StartClickersBoxe(playerTarget);
+        }
+    }
+
+    public void HasAttackFlagFalse()
+    {
+        hasAttack = false;
+    }
+
+    public void HasMoveFlagFalse()
+    {
+        hasMoved = false;
     }
 }

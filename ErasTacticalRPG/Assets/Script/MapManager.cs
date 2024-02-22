@@ -69,10 +69,8 @@ public class MapManager : MonoBehaviour
     //if limitList is new list 
     public List<OverlayTile> GetNeighbourTiles(OverlayTile currentOverlayTile, List<OverlayTile> limitList)
     {
-          
         List<OverlayTile> neighbourList = new List<OverlayTile>();
          
-
         //top neighbour
         Vector2Int locationCheck = new Vector2Int(
             currentOverlayTile.gridLocation.x,
@@ -126,13 +124,11 @@ public class MapManager : MonoBehaviour
         {
             tilesToSearch = map;
         }
-        
         if (tilesToSearch.ContainsKey(locationCheck))
         {
             //Dexterity = the max z that the character could climb
             if (Mathf.Abs(currentOverlayTile.gridLocation.z - tilesToSearch[locationCheck].gridLocation.z) <= character.dexterity)
             neighbour.Add(tilesToSearch[locationCheck]);
-
         }
     }
 }

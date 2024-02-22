@@ -11,15 +11,12 @@ public enum WeaponState
 };
 public class Weapons: MonoBehaviour
 {
-
     public new string name;
-
     public int ClickerNovice;
     public int ClickerIntermidiaire;
     public int ClickerExpert;
     public int ClickerMaitre;
     public int numBoxClicker;
-
 
     void Awake()
     {

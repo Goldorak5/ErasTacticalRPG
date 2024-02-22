@@ -30,16 +30,18 @@ public class RegularAttack: MonoBehaviour
     private Weapons weaponScript;
     private GameObject weaponInstance = null;
     public GameObject weaponPrefab;
-    
     private Coroutine coroutine;
     private int boxValue;
     private bool isRandomWaitRunning = true;
+    private bool isReinitializingVariables = false;
+    private TurnState attackTurnState;
+    public TurnManager turnManager;
 
 
     void Awake()
     {
-
-        
+//         turnManager = GetComponent<TurnManager>();
+//         attackTurnState = turnManager.turnState;
     }
 
     private IEnumerator CountCoroutine(TMP_Text countDownText)
@@ -79,14 +81,10 @@ public class RegularAttack: MonoBehaviour
                     }
                     countDownText.text = i.ToString("0");
                     yield return new WaitForSeconds(rollingSpeed);
-                if (characterScript != null && !characterScript.isHuman)
-                {
-                    elapsedTime += Time.deltaTime;
-                }
-                }
-                if(characterScript != null && !characterScript.isHuman)
-                {
-                    elapsedTime += Time.deltaTime;
+                    if (characterScript != null && !characterScript.isHuman)
+                        {
+                        elapsedTime += Time.deltaTime;
+                        }
                 }
         }
     }
@@ -109,6 +107,8 @@ public class RegularAttack: MonoBehaviour
             coroutine = CountCoroutineManager.Instance.StartCoroutine(CountCoroutine(listOfClicker[indexText]));
             weaponScript.ClickerIntermidiaire--;
             numClicker--;
+//             Debug.Log("Clicker intermediaire selected");
+//             Debug.Log(isRandomWaitRunning);
         }
         else if (weaponScript.ClickerExpert >= 1)
         {
@@ -145,12 +145,12 @@ public class RegularAttack: MonoBehaviour
         //initialize right list of boxes
         characterScript = GetComponent<BaseCharacter>();
         stopCountDown = false;
+        isRandomWaitRunning = true;
         if(weaponInstance == null)
         {
             weaponInstance = Instantiate(weaponPrefab);
             weaponScript = weaponInstance.GetComponent<Weapons>();
         }
-
         switch (weaponScript.numBoxClicker)
                 {
                     case 1:
@@ -179,7 +179,7 @@ public class RegularAttack: MonoBehaviour
             }
         }
      
-        listOfClicker = null;
+        /*listOfClicker = null;*/
         indexText = 0;
         stopCountDown = false;
         totalDamage = 0;
@@ -188,9 +188,10 @@ public class RegularAttack: MonoBehaviour
         weaponInstance = null;
         if (characterScript.isHuman) 
         {
-            characterScript.AsAttack = true;
+            characterScript.HasAttack = true;
         }
-        coroutine = null;
+        /*coroutine = null;*/
+        isReinitializingVariables = true;
     }
 
     private IEnumerator WaitToStart()
@@ -198,74 +199,63 @@ public class RegularAttack: MonoBehaviour
         yield return null;
         if (numClicker > 0)
         {
-            //transform content of text box into integer for addition
             if (listOfClicker != null)
-            {
+            {//transform content of text box into integer for addition
                 int.TryParse(listOfClicker[indexText].text, out boxValue);
             }
             
-//             if (!characterScript.isHuman)
-//             {
-//                 yield return new WaitForSeconds(1);
-//             }
             totalDamage += boxValue;
             indexText++;
             stopCountDown = false;
             StartClickersBoxe(targetedEnemy);
+            isRandomWaitRunning = true;
         }
         else
         {
+            isRandomWaitRunning = false;
             if (coroutine != null)
             {
                 CountCoroutineManager.Instance.StopCoroutine(coroutine);
             }
-            if (listOfClicker != null)
-            {
+            if(listOfClicker != null)
+                {
+                //transform content of text box into integer for addition else take ToString function
                 int.TryParse(listOfClicker[indexText].text, out boxValue);
-            }
+                }
             totalDamage += boxValue;
-//             if (!characterScript.isHuman)
-//             {
-//               /*  yield return new WaitForSeconds(1);*/
-//                 Enemies enemie = characterScript as Enemies;
-//                 enemie.hasAttacked = true;
-//             }
-            Debug.Log(totalDamage);
+
             if(targetedEnemy != null)
             {
-                targetedEnemy.handleDamage(totalDamage);
+                targetedEnemy.handleDamage(totalDamage, targetedEnemy);
             }
             if (!characterScript.isHuman)
             {
                 Enemies enemie = characterScript as Enemies;
-                enemie.hasAttacked = true;
-                Debug.Log(enemie.hasAttacked);
+                enemie.hasAttack = true; 
             }
-            yield return new WaitForSeconds(2);
-            ReinitializeValue(); 
-
+            Debug.Log(totalDamage);
+            ReinitializeValue();
+            yield return new WaitUntil(() => isReinitializingVariables);
+            isReinitializingVariables = false;
+            StopAllCoroutines();
         }
     }
     private IEnumerator RandomWaitToStopBox()
     {
         isRandomWaitRunning = false;
-        float randomSecondes = Random.Range(0.2f,5f);
+        float randomSecondes = Random.Range(0.1f,3f);
         yield return new WaitForSeconds(randomSecondes);
         stopCountDown = true;
         if (coroutine != null)
         {
         CountCoroutineManager.Instance.StopCoroutine(coroutine);
         }
-        //         yield return null;
-        isRandomWaitRunning = true;
         StartCoroutine(WaitToStart());
-        
     }
 
     void Update()
-    {
-        
-        if (characterScript != null && characterScript.IsMyTurn && characterScript.isHuman)
+    { 
+        if (characterScript != null && characterScript.IsMyTurn && characterScript.isHuman && characterScript.characterState == CharacterState.Clickers)
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
@@ -280,11 +270,8 @@ public class RegularAttack: MonoBehaviour
             if(isRandomWaitRunning)
             {
             //stop count
-            Debug.Log("Enemy Attack!!");
             StartCoroutine(RandomWaitToStopBox());
             }
-
-
         }
     }
 }

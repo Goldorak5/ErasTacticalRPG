@@ -45,8 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   name: CleAMollette
-  ClickerNovice: 2
-  ClickerIntermidiaire: 0
+  ClickerNovice: 1
+  ClickerIntermidiaire: 1
   ClickerExpert: 1
   ClickerMaitre: 1
   numBoxClicker: 0

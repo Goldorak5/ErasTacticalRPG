@@ -5,11 +5,19 @@ using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEditor.Progress;
 
+public enum TurnState 
+{
+PlayersTurn,
+EnemiesTurn
+}
+
 public class TurnManager : MonoBehaviour
 {
-    public List<BaseCharacter> character = new List<BaseCharacter>();
+    public List<BaseCharacter> charactersList = new List<BaseCharacter>();
     private int indexList;
     private bool gameOver = false;
+    public TurnState turnState;
+    private int turnNumber = 1;
 
     public IEnumerator PlayGame()
     {
@@ -17,89 +25,104 @@ public class TurnManager : MonoBehaviour
         {
             //initialize the player in the game each time so if some are dead they wont be in the list
             InitializeVariables();
-            for(int i = 0; i < character.Count; i++) 
+
+            Debug.Log("Turn: " + turnNumber);
+            for(int i = 0; i < charactersList.Count; i++) 
             {
                 indexList = i; 
                 yield return StartCoroutine(PlayTurn(i));
-                yield return new WaitForSeconds(1);
-
+                yield return new WaitForSeconds(0.5f);
             }
+            turnNumber++;
         }
     }
 
     IEnumerator PlayTurn(int playerNumber)
     {
-        BaseCharacter currentPlayerTurn = character[playerNumber];
+        BaseCharacter currentPlayerTurn = charactersList[playerNumber];
         currentPlayerTurn.IsMyTurn = true;
         if (currentPlayerTurn.isHuman)
         {
-            currentPlayerTurn.AsAttack = false;
+            turnState = TurnState.PlayersTurn;
+            currentPlayerTurn.hasAttack = false;
             Debug.Log("Paolo Turn!");
             while (!currentPlayerTurn.endTurn)
             {
-                
                 //Player Turn
                 yield return null;
             }
         currentPlayerTurn.endTurn = false;
+            
         }
         else
         {  //execute AI Turn
             Enemies enemie = currentPlayerTurn as Enemies;
-
+            turnState = TurnState.EnemiesTurn;
             if(enemie != null)
             {
                 Debug.Log("Enemies Turn!");
                 enemie.IsMyTurn = true;
-                currentPlayerTurn.AsAttack = false;
-                enemie.movementPoints = enemie.maxMovementPoints;
+                currentPlayerTurn.hasAttack = false;
 
                 enemie.MoveEnemy();
                 yield return new WaitUntil(() => enemie.hasMoved);
+                enemie.movementPoints = enemie.maxMovementPoints;
                 enemie.HasMoveFlagFalse();
 
                 if (enemie.FindTarget())
                 {
-                    enemie.AttackEnemy();
-                    yield return new WaitUntil(() => enemie.hasAttacked);
+                    /*Debug.Log("Attacking");*/
+                    enemie.EnemyAttacking();
+                    /*Debug.Log("Enemy Attacking");*/
+                    yield return new WaitUntil(() => enemie.hasAttack);
+                  /*  Debug.Log("Enemy As attack");*/
                     enemie.HasAttackFlagFalse();
-                    
                 }
             }
             currentPlayerTurn.endTurn = false;
             enemie.IsMyTurn = false;
+            
         }
-
         yield return null;
     }
 
     private void InitializeVariables()
     {
-        if (MouseController.characterState != CharacterState.Dead)
-        {
        //find all object that can play
        BaseCharacter[] listCharacterInScene = GameObject.FindObjectsOfType<BaseCharacter>();
 
             //add them to the list of character
-            foreach (BaseCharacter elem in listCharacterInScene)
+        foreach (BaseCharacter elem in listCharacterInScene)
         {
-            if (elem != null && !character.Contains(elem))
+            if (elem != null && !charactersList.Contains(elem) && IsNotDead(elem))
             {
-                character.Add(elem);
+                charactersList.Add(elem);
             }
         }
-
         //put the list in order the biggest Speed first
-        character.Sort((a,b) => b.turnSpeed.CompareTo(a.turnSpeed));
-        }
- 
+        charactersList.Sort((a,b) => b.turnSpeed.CompareTo(a.turnSpeed));
     }
+
+    private void StillRemainsPlayer()
+    {
+        if(charactersList.Any(character => character.isHuman))
+        {
+            gameOver = false;
+        }
+        gameOver = true;
+    }
+
+    private static bool IsNotDead(BaseCharacter elem)
+    {
+        return elem.characterState != CharacterState.Dead;
+    }
+
     public void CharacterEndTurn()
     {
-        if (character != null)
+        if (charactersList != null)
         {
-            character[indexList].endTurn = true;
-            character[indexList].movementPoints = character[indexList].maxMovementPoints;
+            charactersList[indexList].endTurn = true;
+            charactersList[indexList].movementPoints = charactersList[indexList].maxMovementPoints;
         }
     }
 }
