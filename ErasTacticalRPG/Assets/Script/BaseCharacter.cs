@@ -50,8 +50,12 @@ public class BaseCharacter : MonoBehaviour
     public List<TMP_Text> tMP_Texts3Clicker;
     public List<TMP_Text> tMP_Texts4Clicker;
     public TMP_Text tMP_TextsTotalDamage;
+    public TMP_Text tMP_TextsHealth;
+    public TMP_Text tMP_TextsArmor;
+
     public Canvas healthArmorCanvas;
     public bool isReceivingDamage;
+
 
 
     public void handleDamage(int damage, BaseCharacter damagedCharacter)
@@ -94,11 +98,18 @@ public class BaseCharacter : MonoBehaviour
         tMP_TextsTotalDamage.text = totalDamage.ToString();
         ShowHealthArmor();
         yield return new WaitForSeconds(.5f);
+        UpdateHealthArmorText();
         UpdateFillAmountHealthArmor();
         yield return new WaitForSeconds(2);
         isReceivingDamage = false;
         HideHealthArmor();
         tMP_TextsTotalDamage.text = " ";
+    }
+
+    public void UpdateHealthArmorText()
+    {
+        tMP_TextsHealth.text = health.ToString();
+        tMP_TextsArmor.text = armor.ToString();
     }
 
     public void UpdateFillAmountHealthArmor()

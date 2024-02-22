@@ -172,7 +172,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e585049df223dc341b746d7f02009ffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: []
+  charactersList: []
   turnState: 0
 --- !u!1 &204932885
 GameObject:
@@ -3504,7 +3504,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e585049df223dc341b746d7f02009ffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  character: []
+  charactersList: []
   turnState: 0
 --- !u!114 &1093336627 stripped
 MonoBehaviour:
@@ -4386,19 +4386,19 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8247068148711270257, guid: 21516373fc9c2024ab779da7840af803, type: 3}
       propertyPath: armor
-      value: 50
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -8247068148711270257, guid: 21516373fc9c2024ab779da7840af803, type: 3}
       propertyPath: health
-      value: 50
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -8247068148711270257, guid: 21516373fc9c2024ab779da7840af803, type: 3}
       propertyPath: maxArmor
-      value: 50
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -8247068148711270257, guid: 21516373fc9c2024ab779da7840af803, type: 3}
       propertyPath: maxHealth
-      value: 50
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: -8247068148711270257, guid: 21516373fc9c2024ab779da7840af803, type: 3}
       propertyPath: turnSpeed

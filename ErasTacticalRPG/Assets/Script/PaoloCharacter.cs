@@ -17,5 +17,7 @@ public class PaoloCharacter : BaseCharacter
         healthImage = healthArmorCanvasTransform.Find("HealthImage")?.GetComponent<Image>();
         armorImage = healthArmorCanvasTransform.Find("ArmorImage")?.GetComponent<Image>();
         HideHealthArmor();
+        tMP_TextsArmor.text = maxArmor.ToString();
+        tMP_TextsHealth.text = maxHealth.ToString();
     }
 }
