@@ -32,8 +32,10 @@ public class Enemies : BaseCharacter
         StartCoroutine(InitializePosition());
         regularAttackScript = GetComponent<RegularAttack>();
         HideHealthArmor();
-        tMP_TextsArmor.text = maxArmor.ToString();
-        tMP_TextsHealth.text = maxHealth.ToString();
+        tMP_TextsHealthBox = tMP_TextsHealthBox.GetComponent<TMP_Text>();
+
+        tMP_TextsArmorBox.text = maxArmor.ToString();
+        tMP_TextsHealthBox.text = maxHealth.ToString();
     }
     private void LateUpdate()
     {
@@ -50,7 +52,6 @@ public class Enemies : BaseCharacter
         {
             movementPoints = maxMovementPoints;
         }
-
     }
 
     private IEnumerator InitializePosition()
@@ -115,7 +116,7 @@ public class Enemies : BaseCharacter
     }
     private OverlayTile GetTargetTiles()
     {
-        playerTile = FindObjectOfType<PaoloCharacter>().activeTile;
+        playerTile = FindObjectOfType<BaseCharacter>().activeTile;
         //find the tiles around the player
         inRangeTiles = rangeFinder.GetTilesInRange(playerTile, 1);
 
@@ -174,7 +175,7 @@ public class Enemies : BaseCharacter
 
     public bool FindTarget()
     {
-        playerTarget = FindObjectOfType<PaoloCharacter>();
+        playerTarget = FindObjectOfType<BaseCharacter>();
         if (cacPlayerTile != null)
         {
              foreach (var tile in cacPlayerTile)

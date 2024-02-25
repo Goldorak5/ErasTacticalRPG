@@ -1,15 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-
-public class PaoloCharacter : BaseCharacter
+public class KuroCharacter : BaseCharacter
 {
     private void Start()
     {
-        movementPoints = 7;
+        movementPoints = 4;
         dexterity = 1;
         activeTile.isBlocked = true;
         healthArmorCanvasTransform = transform.Find("HealthArmorCanvas");

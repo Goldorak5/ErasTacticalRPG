@@ -6,12 +6,12 @@ using UnityEngine.Tilemaps;
 
 public class MapManager : MonoBehaviour
 {
-   private static MapManager _instance;
-   public static MapManager Instance 
+    private static MapManager _instance;
+    public static MapManager Instance 
     { 
         get { return _instance; } 
     }
-
+    private MouseController mouseController;
     public OverlayTile overlayTilePrefab;
     public GameObject overlayContainer;
     public Dictionary<Vector2Int, OverlayTile> map;
@@ -31,6 +31,7 @@ public class MapManager : MonoBehaviour
 
     void Start()
     {
+        mouseController = GetComponent<MouseController>();
         var tileMap = gameObject.GetComponentInChildren<Tilemap>();
         map = new Dictionary<Vector2Int, OverlayTile> ();
         BoundsInt bounds = tileMap.cellBounds;
@@ -60,8 +61,6 @@ public class MapManager : MonoBehaviour
                 }
             }
         }
-
-        //spawning enemies
 
     }
 
@@ -103,14 +102,15 @@ public class MapManager : MonoBehaviour
     }
 
     /*if tiles have a particular spec adding it here
-     * add 4 tiles around the caracter,
+     * add 4 tiles around the character,
      * if an empty list is giving here it will search the entire map but still gonna give the 4 neighbourgs
-     * The limitList is for when the charcater run out of movement.
+     * The limitList is for when the character run out of movement.
      * this function also gives the probability of going higher if the character can.
      */
     private void AddTileToNeighbourList(OverlayTile currentOverlayTile, Dictionary<Vector2Int, OverlayTile> map, List<OverlayTile> neighbour, Vector2Int locationCheck, List<OverlayTile> limiteTiles)
     {
-        PaoloCharacter character = GameObject.Find("Paolo(Clone)").GetComponent<PaoloCharacter>();
+/*        BaseCharacter playerCharacter = mouseController.character;*/
+/*        PaoloCharacter character = GameObject.Find("Paolo(Clone)").GetComponent<PaoloCharacter>();*/
         Dictionary<Vector2Int, OverlayTile> tilesToSearch = new Dictionary<Vector2Int, OverlayTile>();
 
         if (limiteTiles.Count > 0)
@@ -126,9 +126,9 @@ public class MapManager : MonoBehaviour
         }
         if (tilesToSearch.ContainsKey(locationCheck))
         {
-            //Dexterity = the max z that the character could climb
-            if (Mathf.Abs(currentOverlayTile.gridLocation.z - tilesToSearch[locationCheck].gridLocation.z) <= character.dexterity)
-            neighbour.Add(tilesToSearch[locationCheck]);
-        }
+//             //Dexterity = the max z that the character could climb
+//             if (Mathf.Abs(currentOverlayTile.gridLocation.z - tilesToSearch[locationCheck].gridLocation.z) <= playerCharacter.dexterity)
+             neighbour.Add(tilesToSearch[locationCheck]);
+         }
     }
 }

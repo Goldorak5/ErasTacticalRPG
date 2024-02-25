@@ -283,15 +283,11 @@ MonoBehaviour:
   characterMovementSpeed: 5
   turnSpeed: 3
   characterState: 0
-  endTurn: 0
   dexterity: 2
-  isHuman: 0
   activeTile: {fileID: 0}
-  canMove: 0
   healthArmorCanvasTransform: {fileID: 2641098765687868301}
   healthImage: {fileID: 7091026619178661441}
   armorImage: {fileID: 5281808553083890893}
-  hasAttack: 0
   tMP_Texts1Clicker:
   - {fileID: 4881442656653036783}
   tMP_Texts2Clicker:
@@ -307,8 +303,12 @@ MonoBehaviour:
   - {fileID: 4766455004667726096}
   - {fileID: 8260142636835721491}
   tMP_TextsTotalDamage: {fileID: 8611059043569836072}
-  tMP_TextsHealth: {fileID: 8230281882024397158}
-  tMP_TextsArmor: {fileID: 1363928188169561968}
+  tMP_TextsHealthBox: {fileID: 8230281882024397158}
+  tMP_TextsArmorBox: {fileID: 1363928188169561968}
+  isHuman: 0
+  endTurn: 0
+  canMove: 0
+  hasAttack: 0
   healthArmorCanvas: {fileID: 443837721853107222}
   isReceivingDamage: 0
 --- !u!114 &-5689314284342515956

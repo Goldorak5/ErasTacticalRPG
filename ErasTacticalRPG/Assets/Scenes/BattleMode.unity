@@ -172,7 +172,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e585049df223dc341b746d7f02009ffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  charactersList: []
+  playerCharacterList:
+  - {fileID: 675901716322303537, guid: caed355299c7b0a498adec6c6f6e6374, type: 3}
   turnState: 0
 --- !u!1 &204932885
 GameObject:
@@ -3504,7 +3505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e585049df223dc341b746d7f02009ffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  charactersList: []
+  playerCharacterList: []
   turnState: 0
 --- !u!114 &1093336627 stripped
 MonoBehaviour:
@@ -4553,6 +4554,26 @@ PrefabInstance:
       propertyPath: turnManager
       value: 
       objectReference: {fileID: 109473801}
+    - target: {fileID: 821667366544274518, guid: ad29bdf50f4201a4aa2f6cc56ccf3093, type: 3}
+      propertyPath: kuroCharacter
+      value: 
+      objectReference: {fileID: 675901716322303537, guid: caed355299c7b0a498adec6c6f6e6374, type: 3}
+    - target: {fileID: 821667366544274518, guid: ad29bdf50f4201a4aa2f6cc56ccf3093, type: 3}
+      propertyPath: paoloCharacter
+      value: 
+      objectReference: {fileID: 6186035404870679715, guid: 5eca144cfed9b7840b29a3d7b3efa9d8, type: 3}
+    - target: {fileID: 821667366544274518, guid: ad29bdf50f4201a4aa2f6cc56ccf3093, type: 3}
+      propertyPath: characterPrefabList.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 821667366544274518, guid: ad29bdf50f4201a4aa2f6cc56ccf3093, type: 3}
+      propertyPath: characterPrefabList.Array.data[0]
+      value: 
+      objectReference: {fileID: 5819772921733543721, guid: caed355299c7b0a498adec6c6f6e6374, type: 3}
+    - target: {fileID: 821667366544274518, guid: ad29bdf50f4201a4aa2f6cc56ccf3093, type: 3}
+      propertyPath: characterPrefabList.Array.data[1]
+      value: 
+      objectReference: {fileID: 5819772921733543721, guid: 5eca144cfed9b7840b29a3d7b3efa9d8, type: 3}
     - target: {fileID: 5630109956544382651, guid: ad29bdf50f4201a4aa2f6cc56ccf3093, type: 3}
       propertyPath: m_Name
       value: Cursor

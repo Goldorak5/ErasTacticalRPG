@@ -13,7 +13,8 @@ EnemiesTurn
 
 public class TurnManager : MonoBehaviour
 {
-    public List<BaseCharacter> charactersList = new List<BaseCharacter>();
+    private List<BaseCharacter> charactersList = new List<BaseCharacter>();
+    public List<BaseCharacter> playerCharacterList = new List<BaseCharacter>();
     private int indexList;
     private bool gameOver = false;
     public TurnState turnState;

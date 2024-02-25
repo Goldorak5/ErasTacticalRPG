@@ -23,7 +23,6 @@ public class RangeFinder
             {
             surrendingTiles.AddRange(MapManager.Instance.GetNeighbourTiles(tile, new List<OverlayTile>()));           
             }
-
             inRangeTile.AddRange(surrendingTiles);
             tileForPreviousTiles = surrendingTiles.Distinct().ToList();
             stepCount++;

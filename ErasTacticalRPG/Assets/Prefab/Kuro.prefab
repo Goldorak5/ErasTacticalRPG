@@ -279,7 +279,7 @@ GameObject:
   - component: {fileID: 8185655820464528831}
   - component: {fileID: 710630850328349510}
   - component: {fileID: 8302119099890925289}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: TextTotalDamage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -360,8 +360,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.4
-  m_fontSizeBase: 0.4
+  m_fontSize: 0.5
+  m_fontSizeBase: 0.5
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -451,7 +451,7 @@ GameObject:
   - component: {fileID: 2500905852575738387}
   - component: {fileID: 1993507285210309645}
   - component: {fileID: 5955560161792112220}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: TextArmor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -474,8 +474,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.258, y: -0.035}
-  m_SizeDelta: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: -0.375, y: 0}
+  m_SizeDelta: {x: 0.75, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1993507285210309645
 CanvasRenderer:
@@ -736,7 +736,7 @@ RectTransform:
   m_GameObject: {fileID: 2278090478180851836}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 30, y: 30, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9151434625047655063}
@@ -747,7 +747,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.94}
+  m_AnchoredPosition: {x: 1, y: 75}
   m_SizeDelta: {x: 0.6522, y: 0.6052}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &2860442833961613712
@@ -975,7 +975,7 @@ RectTransform:
   m_GameObject: {fileID: 3893778978129050173}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 30, y: 30, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2647014626778772627}
@@ -983,7 +983,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1, y: 75}
   m_SizeDelta: {x: 0.6522, y: 0.6052}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1950610508615083681
@@ -1061,7 +1061,7 @@ GameObject:
   - component: {fileID: 4624551690676229327}
   - component: {fileID: 1550469009008945560}
   - component: {fileID: 8687656815632348201}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: TotalDamageCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1077,7 +1077,7 @@ RectTransform:
   m_GameObject: {fileID: 3911744519690425596}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: -1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 30, y: 30, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8185655820464528831}
@@ -1085,7 +1085,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -0.018, y: 1.543}
+  m_AnchoredPosition: {x: -2, y: 100}
   m_SizeDelta: {x: 1.5, y: 1.22}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &4624551690676229327
@@ -1339,7 +1339,7 @@ GameObject:
   - component: {fileID: 2647014626778772627}
   - component: {fileID: 8594433386408478229}
   - component: {fileID: 3199766002532887316}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: TextBox1Click1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1758,7 +1758,7 @@ RectTransform:
   m_GameObject: {fileID: 5770708986304011223}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 30, y: 30, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4662995968112302622}
@@ -1768,7 +1768,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.94}
+  m_AnchoredPosition: {x: 1, y: 75}
   m_SizeDelta: {x: 0.6522, y: 0.6052}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1604777185287856612
@@ -1845,12 +1845,12 @@ GameObject:
   - component: {fileID: 3027157724882600349}
   - component: {fileID: 5286332115063537969}
   - component: {fileID: 3698905594660350065}
-  - component: {fileID: 6186035404870679715}
+  - component: {fileID: 675901716322303537}
   - component: {fileID: 1405025574364615550}
   - component: {fileID: 9062808070784940934}
   - component: {fileID: -2754750541375034806}
   m_Layer: 6
-  m_Name: Paolo
+  m_Name: Kuro
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1865,8 +1865,8 @@ Transform:
   m_GameObject: {fileID: 5819772921733543721}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.2499, z: 1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -2, y: -1.7499, z: 1}
+  m_LocalScale: {x: 0.02, y: 0.02, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7383197362936582715}
@@ -1919,7 +1919,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: -20846985, guid: 12daa095100b57d4a990a70ff2668489, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b70c115bfc19c6843b6f1261ba955325, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -1962,10 +1962,10 @@ CapsuleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0.33}
-  m_Size: {x: 0.38, y: 0.66}
+  m_Offset: {x: 0, y: 30}
+  m_Size: {x: 20, y: 60}
   m_Direction: 0
---- !u!114 &6186035404870679715
+--- !u!114 &675901716322303537
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1974,17 +1974,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 5819772921733543721}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 276278899de495d40b04506add614ec3, type: 3}
+  m_Script: {fileID: 11500000, guid: fae58214ea6eb95448383faf636b7f04, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   health: 30
   armor: 30
   maxArmor: 30
   maxHealth: 30
-  movementPoints: 5
-  maxMovementPoints: 5
+  movementPoints: 7
+  maxMovementPoints: 7
   characterMovementSpeed: 5
-  turnSpeed: 6
+  turnSpeed: 10
   characterState: 0
   dexterity: 1
   activeTile: {fileID: 0}
@@ -2009,7 +2009,7 @@ MonoBehaviour:
   tMP_TextsHealthBox: {fileID: 6359807765652946441}
   tMP_TextsArmorBox: {fileID: 5955560161792112220}
   isHuman: 1
-  endTurn: 1
+  endTurn: 0
   canMove: 0
   hasAttack: 0
   healthArmorCanvas: {fileID: 4831460114259694103}
@@ -2086,7 +2086,7 @@ RectTransform:
   m_GameObject: {fileID: 6403870300994841563}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 30, y: 30, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5686956376536531856}
@@ -2095,7 +2095,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.94}
+  m_AnchoredPosition: {x: 1, y: 75}
   m_SizeDelta: {x: 0.6522, y: 0.6052}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &1049860368185990667
@@ -2457,7 +2457,7 @@ RectTransform:
   m_GameObject: {fileID: 8326712551906808978}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 30, y: 30, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5576564218561473258}
@@ -2468,7 +2468,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0.003, y: 0.992}
+  m_AnchoredPosition: {x: 1, y: 75}
   m_SizeDelta: {x: 1, y: 1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!223 &4831460114259694103
@@ -2679,7 +2679,7 @@ GameObject:
   - component: {fileID: 1423823374195152990}
   - component: {fileID: 3560007331250883415}
   - component: {fileID: 6359807765652946441}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: TextHealth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2702,8 +2702,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.285, y: -0.035}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0.225, y: 0}
+  m_SizeDelta: {x: -0.45, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3560007331250883415
 CanvasRenderer:

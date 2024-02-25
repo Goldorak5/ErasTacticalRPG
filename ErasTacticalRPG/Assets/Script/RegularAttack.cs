@@ -107,8 +107,6 @@ public class RegularAttack: MonoBehaviour
             coroutine = CountCoroutineManager.Instance.StartCoroutine(CountCoroutine(listOfClicker[indexText]));
             weaponScript.ClickerIntermidiaire--;
             numClicker--;
-//             Debug.Log("Clicker intermediaire selected");
-//             Debug.Log(isRandomWaitRunning);
         }
         else if (weaponScript.ClickerExpert >= 1)
         {
@@ -226,6 +224,12 @@ public class RegularAttack: MonoBehaviour
 
             if(targetedEnemy != null)
             {
+                //Healing
+                if(characterScript.isHuman && targetedEnemy.isHuman) 
+                {
+                    targetedEnemy.HandleHealing(totalDamage);
+                }else
+                //Damaging
                 targetedEnemy.handleDamage(totalDamage, targetedEnemy);
             }
             if (!characterScript.isHuman)

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -11,18 +12,20 @@ using UnityEngine.UI;
 public class MouseController : MonoBehaviour
 {
     //private
-    public PaoloCharacter character;
+    public BaseCharacter character;
+    public PaoloCharacter paoloCharacter;
+    public KuroCharacter kuroCharacter;
     private PathFinder pathFinder;
     private RangeFinder rangeFinder;
     private OverlayTile overlayTile;
-    private new SpriteRenderer renderer;
     private List<OverlayTile> path = new List<OverlayTile>();
     private RegularAttack regularAttack;
     private BaseCharacter targetedEnemy;
+    private List<BaseCharacter> playerList = new List<BaseCharacter>();
 
     //public
     /*public static CharacterState characterState;*/
-    public GameObject characterPrefab;
+    public List<GameObject> characterPrefabList;
     public TurnManager turnManager;
     public List<OverlayTile> inRangeTiles = new List<OverlayTile>();
     public float movementSpeed;
@@ -51,17 +54,6 @@ public class MouseController : MonoBehaviour
             }
         }
     }
-//     private void SetEnemySpriteWhite()
-//     {
-//         if (targetedEnemy != null)
-//         {
-//             targetedEnemy.GetComponent<SpriteRenderer>().color = Color.white;
-//             if (!targetedEnemy.isReceivingDamage)
-//             {
-//             targetedEnemy.HideHealthArmor();
-//             }
-//         }
-//     }
 
     void LateUpdate()
     {
@@ -91,26 +83,37 @@ public class MouseController : MonoBehaviour
             SetCharacterSpriteWhite(character);
             SetCharacterSpriteWhite(targetedEnemy);
 
-
-        /*    SetEnemySpriteWhite();*/
-
-            //When mouse is clicked
+            //When mouse is clicked on a tile 
             if (Input.GetMouseButtonDown(0))
             {
-                //if there is no character in the game
-                if (character == null && canSpawn)
+                if(characterPrefabList!= null && characterPrefabList.Count > 0)
                 {
-                    character = Instantiate(characterPrefab).GetComponent<PaoloCharacter>();
-                    PositionCharacterOnTile(overlayTile);
-                    character.characterState = CharacterState.Ideling;
-                    character.GetComponent<SpriteRenderer>().sortingOrder = 5;
-                    GameObject spawningZone = GameObject.Find("SpawningZone");
-                    Destroy(spawningZone.gameObject);
-                    StartCoroutine(turnManager.PlayGame());
-                }
-                else if (character != null)
-                {
+                         character = turnManager.playerCharacterList[0];
+//                     if (turnManager.playerCharacterList[0] == paoloCharacter && canSpawn)
+//                     {
+//                         paoloCharacter = Instantiate(characterPrefabList[0]).GetComponent<PaoloCharacter>();
+//                         character = paoloCharacter;
+//                         PositionCharacterOnTile(overlayTile);
+//                         character.characterState = CharacterState.Ideling;
+//                         character.GetComponent<SpriteRenderer>().sortingOrder = 5;
+//                         characterPrefabList.RemoveAt(0);
+//                         turnManager.playerCharacterList.RemoveAt(0);
+//                     }
+                   if (turnManager.playerCharacterList[0] == kuroCharacter && canSpawn)
+                    {
+                        kuroCharacter = Instantiate(characterPrefabList[0]).GetComponent<KuroCharacter>();
+                        character = kuroCharacter;
+                        PositionCharacterOnTile(overlayTile);
+                        character.characterState = CharacterState.Ideling;
+                        character.GetComponent<SpriteRenderer>().sortingOrder = 5;
+                        characterPrefabList.RemoveAt(0);
+                        turnManager.playerCharacterList.RemoveAt(0);
+                    }
 
+                }
+
+                else if (character != null && turnManager.playerCharacterList.Count == 0)
+                {
                     if (character.characterState == CharacterState.Moving)
                     {
                         //hiding canvas
@@ -119,6 +122,13 @@ public class MouseController : MonoBehaviour
                         //initialize the path 
                         path = pathFinder.FindPath(character.activeTile, overlayTile, inRangeTiles);
                     }
+                }
+                if(characterPrefabList != null && characterPrefabList.Count == 0  )
+                {
+                    GameObject spawningZone = GameObject.Find("SpawningZone");
+                    Destroy(spawningZone.gameObject);
+                    StartCoroutine(turnManager.PlayGame());
+                    characterPrefabList = null;
                 }
             }
         }
@@ -216,8 +226,9 @@ public class MouseController : MonoBehaviour
                                 //if clicked on the character
                 if (Input.GetMouseButtonDown(0))
                 {
-                    /*Debug.Log("Paolo!");*/
                     canvas.gameObject.SetActive(true);
+                    character = hit.collider.gameObject.GetComponent<BaseCharacter>();
+                    Debug.Log("character Selected: " + character);
                 }
                 return null;
             }                           //hover an enemy
@@ -232,9 +243,12 @@ public class MouseController : MonoBehaviour
                     if (!character.HasAttack)
                     {
                      canvas.gameObject.SetActive(false);
-                     character.characterState = CharacterState.Clickers;
-                     regularAttack = character.GetComponent<RegularAttack>();
-                     regularAttack.StartClickersBoxe(targetedEnemy);
+                            if(character != null)
+                            {
+                                character.characterState = CharacterState.Clickers;
+                                regularAttack = character.GetComponent<RegularAttack>();
+                                regularAttack.StartClickersBoxe(targetedEnemy);
+                            }
                     }
                     else Debug.Log("Already Attack");
                     }
@@ -244,21 +258,8 @@ public class MouseController : MonoBehaviour
             {
                 return hit;
             }
-                                        //Hide Health Canvas
         }
-
-//             if (hit.collider.gameObject.layer != LayerMask.NameToLayer("NME") && targetedEnemy != null)
-//             {
-//                 targetedEnemy.HideHealthArmor();
-//                 return null;
-//             }
-//             else if (hit.collider.gameObject.layer != LayerMask.NameToLayer("Character") && character != null)
-//             {
-//                 character.HideHealthArmor();
-//                 return null;
-//             }
-
-        //if don't touch anything return nothing
+       //if don't touch anything return nothing
         return null;
     }
 

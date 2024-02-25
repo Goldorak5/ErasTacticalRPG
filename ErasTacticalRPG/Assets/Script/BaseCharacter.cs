@@ -25,14 +25,22 @@ public class BaseCharacter : MonoBehaviour
     public int characterMovementSpeed;
     public int turnSpeed;
     public CharacterState characterState;
-    [HideInInspector] public bool endTurn = false;
     public int dexterity;
-    public bool isHuman = true;
     public OverlayTile activeTile;
-    [HideInInspector] public bool canMove = false;
     public Transform healthArmorCanvasTransform;
     public Image healthImage;
     public Image armorImage;
+    public List<TMP_Text> tMP_Texts1Clicker;
+    public List<TMP_Text> tMP_Texts2Clicker;
+    public List<TMP_Text> tMP_Texts3Clicker;
+    public List<TMP_Text> tMP_Texts4Clicker;
+    public TMP_Text tMP_TextsTotalDamage;
+    public TMP_Text tMP_TextsHealthBox;
+    public TMP_Text tMP_TextsArmorBox;
+
+    public bool isHuman = true;
+    [HideInInspector] public bool endTurn = false;
+    [HideInInspector] public bool canMove = false;
     private bool isMyTurn = false;
     public bool IsMyTurn
     {
@@ -45,21 +53,47 @@ public class BaseCharacter : MonoBehaviour
         get { return hasAttack; }
         set { hasAttack = value; }
     }
-    public List<TMP_Text> tMP_Texts1Clicker;
-    public List<TMP_Text> tMP_Texts2Clicker;
-    public List<TMP_Text> tMP_Texts3Clicker;
-    public List<TMP_Text> tMP_Texts4Clicker;
-    public TMP_Text tMP_TextsTotalDamage;
-    public TMP_Text tMP_TextsHealth;
-    public TMP_Text tMP_TextsArmor;
-
     public Canvas healthArmorCanvas;
     public bool isReceivingDamage;
 
 
+    public void HandleHealing(int totalHealing)
+    {
+        tMP_TextsTotalDamage.color = Color.green;
+        int overHealing = 0;
+        //if character have no more armor and missing health
+        if (health < maxHealth)
+        {
+            health += totalHealing;
+            if (health > maxHealth) 
+            {
+                overHealing = maxHealth - health;
+                health = maxHealth;
+            }
+        }
+        // if character is max health and missing armor
+        else
+        {
+            armor += totalHealing;
+            if(armor > maxArmor)
+            {
+                armor = maxArmor;
+            }
+        }
+        if (overHealing > 0)
+        {
+            armor += overHealing;
+            if (armor > maxArmor)
+            {
+                armor = maxArmor;
+            }
+        }
+        StartCoroutine(ShowDamage(totalHealing));
+    }
 
     public void handleDamage(int damage, BaseCharacter damagedCharacter)
     {
+        tMP_TextsTotalDamage.color = Color.red;
         int overDamage = 0;
         if (armor > 0)
         {
@@ -88,13 +122,11 @@ public class BaseCharacter : MonoBehaviour
             Destroy(damagedCharacter.gameObject);
         }
         StartCoroutine(ShowDamage(damage));
-        /*UpdateFillAmountHealthArmor();*/
     }
 
     private IEnumerator ShowDamage(int totalDamage)
     {
         isReceivingDamage = true;
-        /*int.TryParse(tMP_TextsTotalDamage.text, out totalDamage);*/
         tMP_TextsTotalDamage.text = totalDamage.ToString();
         ShowHealthArmor();
         yield return new WaitForSeconds(.5f);
@@ -108,8 +140,8 @@ public class BaseCharacter : MonoBehaviour
 
     public void UpdateHealthArmorText()
     {
-        tMP_TextsHealth.text = health.ToString();
-        tMP_TextsArmor.text = armor.ToString();
+        tMP_TextsHealthBox.text = health.ToString();
+        tMP_TextsArmorBox.text = armor.ToString();
     }
 
     public void UpdateFillAmountHealthArmor()
@@ -119,7 +151,7 @@ public class BaseCharacter : MonoBehaviour
 
         if(healthImage != null && armorImage != null)
         {
-            //make sure that they dont go under or over the limit floor to int cut decimal
+            //make sure that they don't go under or over the limit floor to int cut decimal
             health = Mathf.Clamp(health, 0, Mathf.FloorToInt(maxHealth));
             armor = Mathf.Clamp(armor, 0, Mathf.FloorToInt(maxArmor));
 
@@ -140,10 +172,5 @@ public class BaseCharacter : MonoBehaviour
     {
         healthArmorCanvas.enabled = false;
     }
-    private IEnumerator ShowHealthArmorCoroutine()
-    {
-        ShowHealthArmor();
-        yield return new WaitForSeconds(3);
-        HideHealthArmor();
-    }
+
 }
