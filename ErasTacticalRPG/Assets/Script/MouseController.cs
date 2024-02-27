@@ -12,19 +12,19 @@ using UnityEngine.UI;
 public class MouseController : MonoBehaviour
 {
     //private
-    public BaseCharacter character;
-    public PaoloCharacter paoloCharacter;
-    public KuroCharacter kuroCharacter;
     private PathFinder pathFinder;
     private RangeFinder rangeFinder;
     private OverlayTile overlayTile;
     private List<OverlayTile> path = new List<OverlayTile>();
     private RegularAttack regularAttack;
     private BaseCharacter targetedEnemy;
-    private List<BaseCharacter> playerList = new List<BaseCharacter>();
+    private List<GameObject> playerList = new List<GameObject>();
+    private BaseCharacter hightlightCharacter;
 
     //public
     /*public static CharacterState characterState;*/
+    public GameObject spawningZone;
+    public BaseCharacter character;
     public List<GameObject> characterPrefabList;
     public TurnManager turnManager;
     public List<OverlayTile> inRangeTiles = new List<OverlayTile>();
@@ -32,10 +32,17 @@ public class MouseController : MonoBehaviour
     public Canvas canvas;
     [HideInInspector]public bool canSpawn = false;
 
+    private void Awake()
+    {
+        playerList = characterPrefabList;
+    }
+
     private void Start()
     {
+ 
         pathFinder = new PathFinder();
         rangeFinder = new RangeFinder();
+
     }
 
     private bool FocusIsOnTile(ref RaycastHit2D? focusedTileHit)
@@ -45,12 +52,12 @@ public class MouseController : MonoBehaviour
 
     private void SetCharacterSpriteWhite(BaseCharacter character)
     {
-        if (character != null)
+        if (hightlightCharacter != null)
         {
-            character.GetComponent<SpriteRenderer>().color = Color.white;
-            if (!character.isReceivingDamage)
+            hightlightCharacter.GetComponent<SpriteRenderer>().color = Color.white;
+            if (!hightlightCharacter.isReceivingDamage)
             {
-              character.HideHealthArmor();
+              hightlightCharacter.HideHealthArmor();
             }
         }
     }
@@ -80,40 +87,27 @@ public class MouseController : MonoBehaviour
             }
 
             //put the color of the player back to normal after cursor is not on it
-            SetCharacterSpriteWhite(character);
-            SetCharacterSpriteWhite(targetedEnemy);
+            SetCharacterSpriteWhite(hightlightCharacter);
 
             //When mouse is clicked on a tile 
             if (Input.GetMouseButtonDown(0))
             {
-                if(characterPrefabList!= null && characterPrefabList.Count > 0)
+                if(playerList != null && playerList.Count > 0)
                 {
-                         character = turnManager.playerCharacterList[0];
-//                     if (turnManager.playerCharacterList[0] == paoloCharacter && canSpawn)
-//                     {
-//                         paoloCharacter = Instantiate(characterPrefabList[0]).GetComponent<PaoloCharacter>();
-//                         character = paoloCharacter;
-//                         PositionCharacterOnTile(overlayTile);
-//                         character.characterState = CharacterState.Ideling;
-//                         character.GetComponent<SpriteRenderer>().sortingOrder = 5;
-//                         characterPrefabList.RemoveAt(0);
-//                         turnManager.playerCharacterList.RemoveAt(0);
-//                     }
-                   if (turnManager.playerCharacterList[0] == kuroCharacter && canSpawn)
+                         character = playerList[0].GetComponent<BaseCharacter>() ;
+                    if (canSpawn)
                     {
-                        kuroCharacter = Instantiate(characterPrefabList[0]).GetComponent<KuroCharacter>();
-                        character = kuroCharacter;
+                        character = Instantiate(playerList[0]).GetComponent<BaseCharacter>();
                         PositionCharacterOnTile(overlayTile);
                         character.characterState = CharacterState.Ideling;
                         character.GetComponent<SpriteRenderer>().sortingOrder = 5;
-                        characterPrefabList.RemoveAt(0);
-                        turnManager.playerCharacterList.RemoveAt(0);
+                        playerList.RemoveAt(0);
                     }
-
                 }
-
-                else if (character != null && turnManager.playerCharacterList.Count == 0)
+                //if all players are spawn when click on tile = moving
+                else if (character != null && playerList == null)
                 {
+                    
                     if (character.characterState == CharacterState.Moving)
                     {
                         //hiding canvas
@@ -123,12 +117,13 @@ public class MouseController : MonoBehaviour
                         path = pathFinder.FindPath(character.activeTile, overlayTile, inRangeTiles);
                     }
                 }
-                if(characterPrefabList != null && characterPrefabList.Count == 0  )
+
+                // destroy spawning zone after all players are placed 
+                if(playerList != null && playerList.Count == 0)
                 {
-                    GameObject spawningZone = GameObject.Find("SpawningZone");
                     Destroy(spawningZone.gameObject);
                     StartCoroutine(turnManager.PlayGame());
-                    characterPrefabList = null;
+                    playerList = null;
                 }
             }
         }
@@ -203,79 +198,142 @@ public class MouseController : MonoBehaviour
             }
         }
     }
-    
     public RaycastHit2D? GetFocusOnTile()
     {
         Vector3 mousPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 mousePos2d = new Vector2(mousPos.x, mousPos.y - 0.2f);
         RaycastHit2D[] hits = new RaycastHit2D[10];
-        int numsHits = Physics2D.RaycastNonAlloc(mousePos2d,Vector2.zero,hits);
+        int numsHits = Physics2D.RaycastNonAlloc(mousePos2d, Vector2.zero, hits);
 
         RaycastHit2D hit;
 
         for (int i = 0; i < numsHits; i++)
         {
             hit = hits[i];
-                                        //hover Characters
+            //hover Characters
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Character"))
             {
-                                 //if it hits the character
-                character.GetComponent<SpriteRenderer>().color = Color.red;
-                character.ShowHealthArmor();
-
-                                //if clicked on the character
-                if (Input.GetMouseButtonDown(0))
+                //if it hits the character
+                hightlightCharacter = hit.collider.gameObject.GetComponent<BaseCharacter>();
+                hit.collider.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+                hightlightCharacter.ShowHealthArmor();
+                    //if clicked on the character
+                if (Input.GetMouseButtonDown(0) && hit.collider.gameObject.GetComponent<BaseCharacter>().isHuman && character.characterState != CharacterState.Attacking)
                 {
                     canvas.gameObject.SetActive(true);
                     character = hit.collider.gameObject.GetComponent<BaseCharacter>();
-                    Debug.Log("character Selected: " + character);
+                    Debug.Log("character Selected: " + character.name);
+                    character.characterState = CharacterState.Ideling;
                 }
-                return null;
-            }                           //hover an enemy
-            else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("NME"))
-            {
-                targetedEnemy = hit.collider.gameObject.GetComponent<BaseCharacter>();
-                targetedEnemy.GetComponent<SpriteRenderer>().color = Color.red;
-                targetedEnemy.ShowHealthArmor();
-                                      //if clicked on an enemy
-                 if (character != null && Input.GetMouseButtonDown(0) && character.characterState == CharacterState.Attacking)
-                  {
+
+                //attacking enemy or healing ally
+                if (Input.GetMouseButtonDown(0) && character.characterState == CharacterState.Attacking)
+                {
+                    canvas.gameObject.SetActive(true);
                     if (!character.HasAttack)
                     {
-                     canvas.gameObject.SetActive(false);
-                            if(character != null)
-                            {
-                                character.characterState = CharacterState.Clickers;
-                                regularAttack = character.GetComponent<RegularAttack>();
-                                regularAttack.StartClickersBoxe(targetedEnemy);
-                            }
+                        canvas.gameObject.SetActive(false);
+                        if (character != null)
+                        {
+                            targetedEnemy = hit.collider.gameObject.GetComponent<BaseCharacter>();
+                            character.characterState = CharacterState.Clickers;
+                            regularAttack = character.GetComponent<RegularAttack>();
+                            regularAttack.StartClickersBoxe(targetedEnemy);
+                        }
                     }
-                    else Debug.Log("Already Attack");
-                    }
+                    else Debug.Log(character.name + " As Already Attack");
+                }
                 return null;
-            }                    //if it hits the tile
+            }                        
+               //if it hits the tile
             else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Tile"))
             {
                 return hit;
             }
         }
-       //if don't touch anything return nothing
+        //if don't touch anything return nothing
         return null;
     }
+//     public RaycastHit2D? GetFocusOnTile()
+//     {
+//         Vector3 mousPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+//         Vector2 mousePos2d = new Vector2(mousPos.x, mousPos.y - 0.2f);
+//         RaycastHit2D[] hits = new RaycastHit2D[10];
+//         int numsHits = Physics2D.RaycastNonAlloc(mousePos2d,Vector2.zero,hits);
+// 
+//         RaycastHit2D hit;
+// 
+//         for (int i = 0; i < numsHits; i++)
+//         {
+//             hit = hits[i];
+//                                         //hover Characters
+//             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Character"))
+//             {
+//                 //if it hits the character
+//                 hightlightCharacter = hit.collider.gameObject.GetComponent<BaseCharacter>();
+//                 hit.collider.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+//                 /*character.GetComponent<SpriteRenderer>().color = Color.red;*/
+//                 hightlightCharacter.ShowHealthArmor();
+//                /* character.ShowHealthArmor();*/
+// 
+//                                 //if clicked on the character
+//                 if (Input.GetMouseButtonDown(0))
+//                 {
+//                     canvas.gameObject.SetActive(true);
+//                     /*selectedCharacter = hit.collider.gameObject.GetComponent<BaseCharacter>();*/
+//                     character = hit.collider.gameObject.GetComponent<BaseCharacter>();
+//                     Debug.Log("character Selected: " + character.name);
+//                 }
+//                 return null;
+//             }                           //hover an enemy
+//             else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("NME"))
+//             {
+//                 hightlightCharacter = hit.collider.gameObject.GetComponent<BaseCharacter>();
+//                 hightlightCharacter.GetComponent<SpriteRenderer>().color = Color.red;
+//                 hightlightCharacter.ShowHealthArmor();
+//                                       //if clicked on an enemy
+//                  if (character != null && Input.GetMouseButtonDown(0) && character.characterState == CharacterState.Attacking)
+//                   {
+//                     if (!character.HasAttack)
+//                     {
+//                             canvas.gameObject.SetActive(false);
+//                             if(character != null)
+//                             {
+//                                 targetedEnemy = hit.collider.gameObject.GetComponent<BaseCharacter>();
+//                                 character.characterState = CharacterState.Clickers;
+//                                 regularAttack = character.GetComponent<RegularAttack>();
+//                                 regularAttack.StartClickersBoxe(targetedEnemy);
+//                             }
+//                     }
+//                     else Debug.Log(character.name + " As Already Attack");
+//                     }
+//                 return null;
+//             }                    //if it hits the tile
+//             else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Tile"))
+//             {
+//                 return hit;
+//             }
+//         }
+//        //if don't touch anything return nothing
+//         return null;
+//     }
 
     public void OnMoveButtonClick()
     {
-        if (character != null)
+
+        if (character != null && character.IsMyTurn)
         {
             GetInRangeTiles();
             SetCharacterMoveState();
         }
-        SetCharacterMoveState();
+        else Debug.Log("Can't Move Now!");
+            /*SetCharacterMoveState();*/
     }
 
     public void EndTurnButton()
     {
-        character.movementPoints = 4;
+
+        /*character.movementPoints = character.maxMovementPoints;*/
         canvas.gameObject.SetActive(false);
         HideMovementTiles();
         SetCharacterIdleState();
@@ -283,9 +341,12 @@ public class MouseController : MonoBehaviour
 
     public void AttackButton()
     {
+        if (character.IsMyTurn)
+        {
         HideMovementTiles();
         canvas.gameObject.SetActive(false);
         SetCharacterAttackState();
+        }else Debug.Log("Not the turn of: " +  character.name);
     }
 
     private void SetCharacterAttackState()

@@ -9,7 +9,7 @@ public class PaoloCharacter : BaseCharacter
 {
     private void Start()
     {
-        movementPoints = 7;
+        movementPoints = maxMovementPoints;
         dexterity = 1;
         activeTile.isBlocked = true;
         healthArmorCanvasTransform = transform.Find("HealthArmorCanvas");
@@ -18,5 +18,6 @@ public class PaoloCharacter : BaseCharacter
         HideHealthArmor();
         tMP_TextsArmorBox.text = maxArmor.ToString();
         tMP_TextsHealthBox.text = maxHealth.ToString();
+        endTurn = false;
     }
 }

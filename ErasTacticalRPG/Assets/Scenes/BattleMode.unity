@@ -138,6 +138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 109473800}
   - component: {fileID: 109473801}
+  - component: {fileID: 109473802}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -172,9 +173,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e585049df223dc341b746d7f02009ffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCharacterList:
-  - {fileID: 675901716322303537, guid: caed355299c7b0a498adec6c6f6e6374, type: 3}
   turnState: 0
+--- !u!114 &109473802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 109473799}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ecfb4905c983d7240b1e67fd8972e3c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &204932885
 GameObject:
   m_ObjectHideFlags: 0
@@ -3148,6 +3159,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8247068148711270257, guid: 21516373fc9c2024ab779da7840af803, type: 3}
+      propertyPath: name
+      value: Bot 2
+      objectReference: {fileID: 0}
+    - target: {fileID: -8247068148711270257, guid: 21516373fc9c2024ab779da7840af803, type: 3}
       propertyPath: armor
       value: 50
       objectReference: {fileID: 0}
@@ -3505,7 +3520,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e585049df223dc341b746d7f02009ffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCharacterList: []
   turnState: 0
 --- !u!114 &1093336627 stripped
 MonoBehaviour:
@@ -4386,6 +4400,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8247068148711270257, guid: 21516373fc9c2024ab779da7840af803, type: 3}
+      propertyPath: name
+      value: Bot 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -8247068148711270257, guid: 21516373fc9c2024ab779da7840af803, type: 3}
       propertyPath: armor
       value: 10
       objectReference: {fileID: 0}
@@ -4555,6 +4573,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 109473801}
     - target: {fileID: 821667366544274518, guid: ad29bdf50f4201a4aa2f6cc56ccf3093, type: 3}
+      propertyPath: spawningZone
+      value: 
+      objectReference: {fileID: 1469030042}
+    - target: {fileID: 821667366544274518, guid: ad29bdf50f4201a4aa2f6cc56ccf3093, type: 3}
       propertyPath: kuroCharacter
       value: 
       objectReference: {fileID: 675901716322303537, guid: caed355299c7b0a498adec6c6f6e6374, type: 3}
@@ -4564,16 +4586,16 @@ PrefabInstance:
       objectReference: {fileID: 6186035404870679715, guid: 5eca144cfed9b7840b29a3d7b3efa9d8, type: 3}
     - target: {fileID: 821667366544274518, guid: ad29bdf50f4201a4aa2f6cc56ccf3093, type: 3}
       propertyPath: characterPrefabList.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 821667366544274518, guid: ad29bdf50f4201a4aa2f6cc56ccf3093, type: 3}
       propertyPath: characterPrefabList.Array.data[0]
       value: 
-      objectReference: {fileID: 5819772921733543721, guid: caed355299c7b0a498adec6c6f6e6374, type: 3}
+      objectReference: {fileID: 5819772921733543721, guid: 5eca144cfed9b7840b29a3d7b3efa9d8, type: 3}
     - target: {fileID: 821667366544274518, guid: ad29bdf50f4201a4aa2f6cc56ccf3093, type: 3}
       propertyPath: characterPrefabList.Array.data[1]
       value: 
-      objectReference: {fileID: 5819772921733543721, guid: 5eca144cfed9b7840b29a3d7b3efa9d8, type: 3}
+      objectReference: {fileID: 5819772921733543721, guid: caed355299c7b0a498adec6c6f6e6374, type: 3}
     - target: {fileID: 5630109956544382651, guid: ad29bdf50f4201a4aa2f6cc56ccf3093, type: 3}
       propertyPath: m_Name
       value: Cursor

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6645472808605397032}
   - component: {fileID: 8935303424303509642}
   - component: {fileID: 1363928188169561968}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: TextArmor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,7 +147,7 @@ GameObject:
   - component: {fileID: 5248226243829428067}
   - component: {fileID: -8247068148711270257}
   - component: {fileID: -5689314284342515956}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: JunkYardWorkBot
   m_TagString: NME
   m_Icon: {fileID: 0}
@@ -308,6 +308,7 @@ MonoBehaviour:
   isHuman: 0
   endTurn: 0
   canMove: 0
+  name: 
   hasAttack: 0
   healthArmorCanvas: {fileID: 443837721853107222}
   isReceivingDamage: 0
@@ -1084,7 +1085,7 @@ GameObject:
   - component: {fileID: 443837721853107222}
   - component: {fileID: 7514403747077515458}
   - component: {fileID: 6567170770173618651}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: HealthArmorCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1188,7 +1189,7 @@ GameObject:
   - component: {fileID: 3659383107702084061}
   - component: {fileID: 3812851805455658041}
   - component: {fileID: 8230281882024397158}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: TextHealth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2064,7 +2065,7 @@ GameObject:
   - component: {fileID: 226329808629050336}
   - component: {fileID: 8174509795884740040}
   - component: {fileID: 8611059043569836072}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: TextTotalDamage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2199,7 +2200,7 @@ GameObject:
   - component: {fileID: 4637899121348549745}
   - component: {fileID: 7111838405979089252}
   - component: {fileID: 696982113959856346}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: TotalDamageCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2300,7 +2301,7 @@ GameObject:
   - component: {fileID: 6921898818899586206}
   - component: {fileID: 3375498682739455367}
   - component: {fileID: 7091026619178661441}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: HealthImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2643,7 +2644,7 @@ GameObject:
   - component: {fileID: 8794068068192165914}
   - component: {fileID: 1537303420007254895}
   - component: {fileID: 5281808553083890893}
-  m_Layer: 8
+  m_Layer: 6
   m_Name: ArmorImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}

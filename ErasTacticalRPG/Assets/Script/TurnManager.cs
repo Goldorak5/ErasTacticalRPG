@@ -14,7 +14,6 @@ EnemiesTurn
 public class TurnManager : MonoBehaviour
 {
     private List<BaseCharacter> charactersList = new List<BaseCharacter>();
-    public List<BaseCharacter> playerCharacterList = new List<BaseCharacter>();
     private int indexList;
     private bool gameOver = false;
     public TurnState turnState;
@@ -46,13 +45,16 @@ public class TurnManager : MonoBehaviour
         {
             turnState = TurnState.PlayersTurn;
             currentPlayerTurn.hasAttack = false;
-            Debug.Log("Paolo Turn!");
+            Debug.Log("Player Turn: " + currentPlayerTurn.name);
+
+            currentPlayerTurn.movementPoints = currentPlayerTurn.maxMovementPoints;
             while (!currentPlayerTurn.endTurn)
             {
                 //Player Turn
                 yield return null;
             }
         currentPlayerTurn.endTurn = false;
+        currentPlayerTurn.IsMyTurn = false;
             
         }
         else
@@ -61,7 +63,7 @@ public class TurnManager : MonoBehaviour
             turnState = TurnState.EnemiesTurn;
             if(enemie != null)
             {
-                Debug.Log("Enemies Turn!");
+                Debug.Log("Enemies Turn: " + currentPlayerTurn.name);
                 enemie.IsMyTurn = true;
                 currentPlayerTurn.hasAttack = false;
 
@@ -70,7 +72,7 @@ public class TurnManager : MonoBehaviour
                 enemie.movementPoints = enemie.maxMovementPoints;
                 enemie.HasMoveFlagFalse();
 
-                if (enemie.FindTarget())
+                if (enemie.FindClosestTarget())
                 {
                     /*Debug.Log("Attacking");*/
                     enemie.EnemyAttacking();

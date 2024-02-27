@@ -8,7 +8,7 @@ public class KuroCharacter : BaseCharacter
 {
     private void Start()
     {
-        movementPoints = 4;
+        movementPoints = maxMovementPoints;
         dexterity = 1;
         activeTile.isBlocked = true;
         healthArmorCanvasTransform = transform.Find("HealthArmorCanvas");

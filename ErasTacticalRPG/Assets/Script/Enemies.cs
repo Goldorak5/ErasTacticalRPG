@@ -13,7 +13,7 @@ using UnityEngine.UI;
 public class Enemies : BaseCharacter
 {
     private PathFinder pathFinder;
-    private BaseCharacter playerTarget;
+    private List<BaseCharacter> playerTargets;
     private RangeFinder rangeFinder;
     private List<OverlayTile> path = new List<OverlayTile>();
     private List<OverlayTile> inRangeTiles = new List<OverlayTile>();
@@ -33,7 +33,6 @@ public class Enemies : BaseCharacter
         regularAttackScript = GetComponent<RegularAttack>();
         HideHealthArmor();
         tMP_TextsHealthBox = tMP_TextsHealthBox.GetComponent<TMP_Text>();
-
         tMP_TextsArmorBox.text = maxArmor.ToString();
         tMP_TextsHealthBox.text = maxHealth.ToString();
     }
@@ -116,7 +115,9 @@ public class Enemies : BaseCharacter
     }
     private OverlayTile GetTargetTiles()
     {
-        playerTile = FindObjectOfType<BaseCharacter>().activeTile;
+        FindClosestTarget();
+        playerTile = playerTargets[0].activeTile;
+
         //find the tiles around the player
         inRangeTiles = rangeFinder.GetTilesInRange(playerTile, 1);
 
@@ -173,9 +174,24 @@ public class Enemies : BaseCharacter
         activeTile.isBlocked = true;
     }
 
-    public bool FindTarget()
+    //find all player Character put it in a list and order the list with the closest one 
+    public bool FindClosestTarget()
     {
-        playerTarget = FindObjectOfType<BaseCharacter>();
+        BaseCharacter[] characterArray = FindObjectsOfType<BaseCharacter>();
+        playerTargets = new List<BaseCharacter>(characterArray);
+
+        //if the BaseCharacter is Enemy delete from the list
+        for (int i = playerTargets.Count() - 1; i >= 0 ; i--)
+        {
+            /*BaseCharacter target = playerTargets[i];*/
+            if (!playerTargets[i].isHuman)
+            {
+                playerTargets.RemoveAt(i);
+            }
+        }
+
+        playerTargets = playerTargets.OrderBy(x => Vector2.Distance(activeTile.grid2DLocation, new Vector2(x.activeTile.grid2DLocation.x, x.activeTile.grid2DLocation.y))).ToList();
+
         if (cacPlayerTile != null)
         {
              foreach (var tile in cacPlayerTile)
@@ -183,7 +199,6 @@ public class Enemies : BaseCharacter
                 if(activeTile == tile)
                 {
                 return true;
-                    
                 }
             }
         }
@@ -192,9 +207,9 @@ public class Enemies : BaseCharacter
 
     public void EnemyAttacking()
     {
-        if(playerTarget != null)
+        if(playerTargets != null)
         {
-           regularAttackScript.StartClickersBoxe(playerTarget);
+            regularAttackScript.StartClickersBoxe(playerTargets[0]);
         }
     }
 

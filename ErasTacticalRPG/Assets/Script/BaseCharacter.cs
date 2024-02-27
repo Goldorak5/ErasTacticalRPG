@@ -39,9 +39,10 @@ public class BaseCharacter : MonoBehaviour
     public TMP_Text tMP_TextsArmorBox;
 
     public bool isHuman = true;
-    [HideInInspector] public bool endTurn = false;
-    [HideInInspector] public bool canMove = false;
+    /*[HideInInspector] */public bool endTurn = false;
+    /*[HideInInspector] */public bool canMove = false;
     private bool isMyTurn = false;
+    public new string name;
     public bool IsMyTurn
     {
         get { return isMyTurn; }

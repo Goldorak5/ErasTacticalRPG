@@ -1847,11 +1847,10 @@ GameObject:
   - component: {fileID: 3698905594660350065}
   - component: {fileID: 675901716322303537}
   - component: {fileID: 1405025574364615550}
-  - component: {fileID: 9062808070784940934}
   - component: {fileID: -2754750541375034806}
   m_Layer: 6
   m_Name: Kuro
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2011,6 +2010,7 @@ MonoBehaviour:
   isHuman: 1
   endTurn: 0
   canMove: 0
+  name: Kuro
   hasAttack: 0
   healthArmorCanvas: {fileID: 4831460114259694103}
   isReceivingDamage: 0
@@ -2029,18 +2029,6 @@ MonoBehaviour:
   attackButton: {fileID: 2004365570765257916, guid: bb78484438f149d468d39ea951d93745, type: 3}
   moveButton: {fileID: 3919072953557146936, guid: 60cc782ed3f243841b911c966f86f057, type: 3}
   abilityButton: {fileID: 1636525192205490592, guid: 9aa19ae066b78384ebd45c57a1eaa3ef, type: 3}
---- !u!114 &9062808070784940934
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5819772921733543721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ecfb4905c983d7240b1e67fd8972e3c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-2754750541375034806
 MonoBehaviour:
   m_ObjectHideFlags: 0
