@@ -1848,6 +1848,8 @@ GameObject:
   - component: {fileID: 6186035404870679715}
   - component: {fileID: 1405025574364615550}
   - component: {fileID: -2754750541375034806}
+  - component: {fileID: -93399610847789053}
+  - component: {fileID: -2940433049845833136}
   m_Layer: 6
   m_Name: Paolo
   m_TagString: Player
@@ -1864,7 +1866,7 @@ Transform:
   m_GameObject: {fileID: 5819772921733543721}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.2499, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1980,10 +1982,10 @@ MonoBehaviour:
   armor: 30
   maxArmor: 30
   maxHealth: 30
-  movementPoints: 4
-  maxMovementPoints: 4
+  movementPoints: 10
+  maxMovementPoints: 10
   characterMovementSpeed: 5
-  turnSpeed: 6
+  turnSpeed: 15
   characterState: 0
   dexterity: 1
   activeTile: {fileID: 0}
@@ -2008,12 +2010,13 @@ MonoBehaviour:
   tMP_TextsHealthBox: {fileID: 6359807765652946441}
   tMP_TextsArmorBox: {fileID: 5955560161792112220}
   isHuman: 1
-  endTurn: 1
+  endTurn: 0
   canMove: 0
   name: Paolo
   hasAttack: 0
   healthArmorCanvas: {fileID: 4831460114259694103}
   isReceivingDamage: 0
+  mouseController: {fileID: 0}
 --- !u!114 &1405025574364615550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2046,6 +2049,34 @@ MonoBehaviour:
   rollingSpeed: 0.2
   weaponPrefab: {fileID: 6327910693405876580, guid: b0291b26284e23c4f86122793dc1879d, type: 3}
   turnManager: {fileID: 0}
+--- !u!114 &-93399610847789053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5819772921733543721}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cdb1c2e7a63f7d40b6e2df5f6963e84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  howFar: 2
+  rowsTestOddNumOnly: 030000000100000003000000
+--- !u!114 &-2940433049845833136
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5819772921733543721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e02b2ce9942db3e49940ed376968225d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  testMaxRange: 5
+  testZoneRange: 2
 --- !u!1 &6403870300994841563
 GameObject:
   m_ObjectHideFlags: 0

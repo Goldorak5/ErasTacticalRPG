@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,6 +39,8 @@ public class BaseCharacter : MonoBehaviour
     public TMP_Text tMP_TextsHealthBox;
     public TMP_Text tMP_TextsArmorBox;
 
+
+
     public bool isHuman = true;
     /*[HideInInspector] */public bool endTurn = false;
     /*[HideInInspector] */public bool canMove = false;
@@ -56,6 +59,20 @@ public class BaseCharacter : MonoBehaviour
     }
     public Canvas healthArmorCanvas;
     public bool isReceivingDamage;
+    public MouseController mouseController;
+
+    private void Awake()
+    {
+        mouseController = FindObjectOfType<MouseController>();
+    }
+
+    private void Update()
+    {
+        if (activeTile != null && activeTile.isAttackingTile)
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+        }
+    }
 
 
     public void HandleHealing(int totalHealing)
@@ -117,7 +134,7 @@ public class BaseCharacter : MonoBehaviour
             }else if (health <= 0) 
         { 
             health = 0;
-            Debug.Log(damagedCharacter + "is Dead!!!");
+            Debug.Log(damagedCharacter.name + " is Dead!!!");
             damagedCharacter.characterState = CharacterState.Dead;
             damagedCharacter.activeTile.isBlocked = false;
             Destroy(damagedCharacter.gameObject);
@@ -137,6 +154,8 @@ public class BaseCharacter : MonoBehaviour
         isReceivingDamage = false;
         HideHealthArmor();
         tMP_TextsTotalDamage.text = " ";
+      
+       mouseController.debugCanvas.gameObject.SetActive(true);
     }
 
     public void UpdateHealthArmorText()

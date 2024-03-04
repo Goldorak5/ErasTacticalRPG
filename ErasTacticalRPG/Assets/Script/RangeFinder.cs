@@ -6,22 +6,22 @@ using UnityEngine;
 
 public class RangeFinder
 {
-    public List<OverlayTile> GetTilesInRange(OverlayTile startingTile, int movePoints)
+    public List<OverlayTile> GetTilesInRange(OverlayTile startingTile, int movePoints, bool forAttack)
     {
-        var inRangeTile = new List<OverlayTile>();
+        List<OverlayTile> inRangeTile = new List<OverlayTile>();
         int stepCount = 0;
 
         inRangeTile.Add(startingTile);
 
-        var tileForPreviousTiles = new List<OverlayTile>{ startingTile };
+        List<OverlayTile> tileForPreviousTiles = new List<OverlayTile>{ startingTile };
 
         while (stepCount < movePoints)
         {
-            var surrendingTiles = new List<OverlayTile>();
+            List<OverlayTile> surrendingTiles = new List<OverlayTile>();
 
-            foreach (var tile in tileForPreviousTiles) 
+            foreach (OverlayTile tile in tileForPreviousTiles) 
             {
-            surrendingTiles.AddRange(MapManager.Instance.GetNeighbourTiles(tile, new List<OverlayTile>()));           
+            surrendingTiles.AddRange(MapManager.Instance.GetNeighbourTiles(tile, new List<OverlayTile>(), forAttack));           
             }
             inRangeTile.AddRange(surrendingTiles);
             tileForPreviousTiles = surrendingTiles.Distinct().ToList();

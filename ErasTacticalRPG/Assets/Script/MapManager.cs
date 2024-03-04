@@ -32,7 +32,7 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         mouseController = GetComponent<MouseController>();
-        var tileMap = gameObject.GetComponentInChildren<Tilemap>();
+        Tilemap tileMap = gameObject.GetComponentInChildren<Tilemap>();
         map = new Dictionary<Vector2Int, OverlayTile> ();
         BoundsInt bounds = tileMap.cellBounds;
 
@@ -44,14 +44,14 @@ public class MapManager : MonoBehaviour
                 for (int x = bounds.min.x; x < bounds.max.x; x++)
                 {
                     //the tile where we are in the loop
-                    var tileLocation = new Vector3Int(x, y, z);
+                    Vector3Int tileLocation = new Vector3Int(x, y, z);
                     //tile key for the map
-                    var tileKey = new Vector2Int(x, y);
+                    Vector2Int tileKey = new Vector2Int(x, y);
 
                     if (tileMap.HasTile(tileLocation) && !map.ContainsKey(tileKey))
                     {
-                        var overlayTile = Instantiate(overlayTilePrefab, overlayContainer.transform);
-                        var cellWorldPosition = tileMap.GetCellCenterWorld(tileLocation);
+                        OverlayTile overlayTile = Instantiate(overlayTilePrefab, overlayContainer.transform);
+                        Vector3 cellWorldPosition = tileMap.GetCellCenterWorld(tileLocation);
 
                         overlayTile.transform.position = new Vector3(cellWorldPosition.x,cellWorldPosition.y, cellWorldPosition.z + 1);
                         overlayTile.GetComponent<SpriteRenderer>().sortingOrder = tileMap.GetComponent<TilemapRenderer>().sortingOrder;
@@ -64,50 +64,50 @@ public class MapManager : MonoBehaviour
 
     }
 
-    //gives the four neighbourg
+    //gives the four neighbors
     //if limitList is new list 
-    public List<OverlayTile> GetNeighbourTiles(OverlayTile currentOverlayTile, List<OverlayTile> limitList)
+    public List<OverlayTile> GetNeighbourTiles(OverlayTile currentOverlayTile, List<OverlayTile> limitList, bool forAttack)
     {
         List<OverlayTile> neighbourList = new List<OverlayTile>();
          
         //top neighbour
-        Vector2Int locationCheck = new Vector2Int(
+            Vector2Int locationCheck = new Vector2Int(
             currentOverlayTile.gridLocation.x,
             currentOverlayTile.gridLocation.y + 1);
 
-        AddTileToNeighbourList(currentOverlayTile, map, neighbourList, locationCheck, limitList);
+        AddTileToNeighbourList(currentOverlayTile, map, neighbourList, locationCheck, limitList, forAttack);
 
         //down neighbour
-        locationCheck = new Vector2Int(
+            locationCheck = new Vector2Int(
             currentOverlayTile.gridLocation.x,
             currentOverlayTile.gridLocation.y - 1);
 
-        AddTileToNeighbourList(currentOverlayTile, map, neighbourList, locationCheck, limitList);
+        AddTileToNeighbourList(currentOverlayTile, map, neighbourList, locationCheck, limitList, forAttack);
 
         //right neighbour
-        locationCheck = new Vector2Int(
+            locationCheck = new Vector2Int(
             currentOverlayTile.gridLocation.x + 1,
             currentOverlayTile.gridLocation.y);
 
-        AddTileToNeighbourList(currentOverlayTile, map, neighbourList, locationCheck, limitList);
+        AddTileToNeighbourList(currentOverlayTile, map, neighbourList, locationCheck, limitList, forAttack);
 
         //left neighbour
-        locationCheck = new Vector2Int(
+            locationCheck = new Vector2Int(
             currentOverlayTile.gridLocation.x - 1,
             currentOverlayTile.gridLocation.y);
 
-        AddTileToNeighbourList(currentOverlayTile, map, neighbourList, locationCheck, limitList);
+        AddTileToNeighbourList(currentOverlayTile, map, neighbourList, locationCheck, limitList, forAttack);
 
         return neighbourList;
     }
 
     /*if tiles have a particular spec adding it here
      * add 4 tiles around the character,
-     * if an empty list is giving here it will search the entire map but still gonna give the 4 neighbourgs
+     * if an empty list is giving here it will search the entire map but still gonna give the 4 neighbors
      * The limitList is for when the character run out of movement.
      * this function also gives the probability of going higher if the character can.
      */
-    private void AddTileToNeighbourList(OverlayTile currentOverlayTile, Dictionary<Vector2Int, OverlayTile> map, List<OverlayTile> neighbour, Vector2Int locationCheck, List<OverlayTile> limiteTiles)
+    private void AddTileToNeighbourList(OverlayTile currentOverlayTile, Dictionary<Vector2Int, OverlayTile> map, List<OverlayTile> neighbour, Vector2Int locationCheck, List<OverlayTile> limiteTiles, bool forAttack)
     {
 /*        BaseCharacter playerCharacter = mouseController.character;*/
 /*        PaoloCharacter character = GameObject.Find("Paolo(Clone)").GetComponent<PaoloCharacter>();*/
@@ -115,7 +115,7 @@ public class MapManager : MonoBehaviour
 
         if (limiteTiles.Count > 0)
         {
-        foreach (var tile in limiteTiles)
+        foreach (OverlayTile tile in limiteTiles)
             {
                 tilesToSearch.Add(tile.grid2DLocation, tile);
             }
@@ -124,11 +124,28 @@ public class MapManager : MonoBehaviour
         {
             tilesToSearch = map;
         }
+
         if (tilesToSearch.ContainsKey(locationCheck))
         {
+            if (!tilesToSearch[locationCheck].isBlocked || forAttack)
+            {
+             neighbour.Add(tilesToSearch[locationCheck]);
+            }
 //             //Dexterity = the max z that the character could climb
 //             if (Mathf.Abs(currentOverlayTile.gridLocation.z - tilesToSearch[locationCheck].gridLocation.z) <= playerCharacter.dexterity)
-             neighbour.Add(tilesToSearch[locationCheck]);
          }
     }
+
+    public bool IsTileInMap(OverlayTile tile = null, Vector2Int gridLocation = default)
+    {
+        if (!gridLocation.Equals(default(Vector2Int)) &&  map.ContainsKey(gridLocation))
+        {
+            return true;
+        }else if(tile != null && map.ContainsValue(tile))
+        {
+            return true;
+        }
+        return false;
+    }
+
 }

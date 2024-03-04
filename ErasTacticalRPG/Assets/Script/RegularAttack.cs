@@ -40,8 +40,7 @@ public class RegularAttack: MonoBehaviour
 
     void Awake()
     {
-//         turnManager = GetComponent<TurnManager>();
-//         attackTurnState = turnManager.turnState;
+
     }
 
     private IEnumerator CountCoroutine(TMP_Text countDownText)
@@ -177,7 +176,6 @@ public class RegularAttack: MonoBehaviour
             }
         }
      
-        /*listOfClicker = null;*/
         indexText = 0;
         stopCountDown = false;
         totalDamage = 0;
@@ -188,7 +186,7 @@ public class RegularAttack: MonoBehaviour
         {
             characterScript.HasAttack = true;
         }
-        /*coroutine = null;*/
+
         isReinitializingVariables = true;
     }
 
@@ -228,16 +226,19 @@ public class RegularAttack: MonoBehaviour
                 if(characterScript.isHuman && targetedEnemy.isHuman) 
                 {
                     targetedEnemy.HandleHealing(totalDamage);
-                }else
+                    Debug.Log(totalDamage + " Healing To " + targetedEnemy.name);
+                }
+                else
                 //Damaging
                 targetedEnemy.handleDamage(totalDamage, targetedEnemy);
+                Debug.Log(totalDamage + " Damage To " + targetedEnemy.name);
             }
             if (!characterScript.isHuman)
             {
                 Enemies enemie = characterScript as Enemies;
                 enemie.hasAttack = true; 
             }
-            Debug.Log(totalDamage);
+            
             ReinitializeValue();
             yield return new WaitUntil(() => isReinitializingVariables);
             isReinitializingVariables = false;

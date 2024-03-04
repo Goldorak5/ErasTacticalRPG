@@ -100,7 +100,7 @@ public class Enemies : BaseCharacter
         numTilesToSearch = MapManager.Instance.map.Count;
 
         //search trough all the tiles with the movement points
-        inRangeTiles = rangeFinder.GetTilesInRange(activeTile, numTilesToSearch);
+        inRangeTiles = rangeFinder.GetTilesInRange(activeTile, numTilesToSearch, false);
 
         path = pathFinder.FindPath(activeTile, targetTile, inRangeTiles);
 
@@ -119,14 +119,16 @@ public class Enemies : BaseCharacter
         playerTile = playerTargets[0].activeTile;
 
         //find the tiles around the player
-        inRangeTiles = rangeFinder.GetTilesInRange(playerTile, 1);
+        inRangeTiles = rangeFinder.GetTilesInRange(playerTile, 1,true);
 
         //initialize the four tile around the player
         cacPlayerTile = inRangeTiles;
 
+
+
         //make a list of tiles around the target and chose the closest one
         List<OverlayTile> listOfClosestTiles = new List<OverlayTile>();
-        listOfClosestTiles = MapManager.Instance.GetNeighbourTiles(playerTile, inRangeTiles)
+        listOfClosestTiles = MapManager.Instance.GetNeighbourTiles(playerTile, inRangeTiles, true)
                                 .OrderBy(x => Vector2.Distance(activeTile.grid2DLocation, new Vector2(x.grid2DLocation.x, x.grid2DLocation.y))).ToList();
 
         targetTile = listOfClosestTiles.First();
@@ -143,7 +145,9 @@ public class Enemies : BaseCharacter
                 listOfClosestTiles.RemoveAt(0);
                 if (listOfClosestTiles.Count == 0)
                 {
+                    Debug.Log("Cant go near character");
                     return targetTile = null;
+
                 }
                 targetTile = listOfClosestTiles.First();
             }
@@ -164,11 +168,11 @@ public class Enemies : BaseCharacter
 
             path.RemoveAt(0);
             movementPoints--;
-            inRangeTiles = rangeFinder.GetTilesInRange(activeTile, movementPoints);
+            inRangeTiles = rangeFinder.GetTilesInRange(activeTile, movementPoints, false);
         }
         if (path.Count == 0)
         {
-            inRangeTiles = rangeFinder.GetTilesInRange(activeTile, movementPoints);
+            inRangeTiles = rangeFinder.GetTilesInRange(activeTile, movementPoints, false);
 
         }
         activeTile.isBlocked = true;
@@ -183,7 +187,7 @@ public class Enemies : BaseCharacter
         //if the BaseCharacter is Enemy delete from the list
         for (int i = playerTargets.Count() - 1; i >= 0 ; i--)
         {
-            /*BaseCharacter target = playerTargets[i];*/
+            BaseCharacter target = playerTargets[0];
             if (!playerTargets[i].isHuman)
             {
                 playerTargets.RemoveAt(i);
@@ -192,6 +196,7 @@ public class Enemies : BaseCharacter
 
         playerTargets = playerTargets.OrderBy(x => Vector2.Distance(activeTile.grid2DLocation, new Vector2(x.activeTile.grid2DLocation.x, x.activeTile.grid2DLocation.y))).ToList();
 
+        //if enemy is on the cac of the player to attack
         if (cacPlayerTile != null)
         {
              foreach (var tile in cacPlayerTile)

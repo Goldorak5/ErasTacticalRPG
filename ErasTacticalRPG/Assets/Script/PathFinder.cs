@@ -7,7 +7,8 @@ using UnityEngine;
 
 public class PathFinder
 {
-  
+    public bool PathPossible;
+
     public List<OverlayTile> FindPath(OverlayTile start, OverlayTile end, List<OverlayTile> limitList)
     {
         List<OverlayTile> openList = new List<OverlayTile>();
@@ -25,13 +26,16 @@ public class PathFinder
 
             if (currentOverlayTile == end)
             {
+                PathPossible = true;
             //finalize Path
             return GetFinishList(start, end);
+
+
             }
             //list of neighbourg Tiles so the 4 tiles around the current tiles
-            var neighbourTiles = MapManager.Instance.GetNeighbourTiles(currentOverlayTile, limitList);
+            List<OverlayTile> neighbourTiles = MapManager.Instance.GetNeighbourTiles(currentOverlayTile, limitList, false);
 
-            foreach (var neighbour in neighbourTiles) 
+            foreach (OverlayTile neighbour in neighbourTiles) 
             {
                 
             if (neighbour.isBlocked || closeList.Contains(neighbour))
@@ -53,6 +57,7 @@ public class PathFinder
                 }
             }
         }
+        PathPossible = false;
         return new List<OverlayTile>();
     }
 

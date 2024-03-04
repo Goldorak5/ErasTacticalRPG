@@ -14,7 +14,7 @@ public class MouseController : MonoBehaviour
     //private
     private PathFinder pathFinder;
     private RangeFinder rangeFinder;
-    private OverlayTile overlayTile;
+    public OverlayTile overlayTile;
     private List<OverlayTile> path = new List<OverlayTile>();
     private RegularAttack regularAttack;
     private BaseCharacter targetedEnemy;
@@ -29,7 +29,7 @@ public class MouseController : MonoBehaviour
     public TurnManager turnManager;
     public List<OverlayTile> inRangeTiles = new List<OverlayTile>();
     public float movementSpeed;
-    public Canvas canvas;
+    public Canvas debugCanvas;
     [HideInInspector]public bool canSpawn = false;
 
     private void Awake()
@@ -70,8 +70,8 @@ public class MouseController : MonoBehaviour
             //raycast funtion to check if mouse controler is over spanwning zone;
             FindSpawningZone();
         }
-        
-        var focusedTileHit = GetFocusOnTile();
+
+        RaycastHit2D? focusedTileHit = GetFocusOnTile();
 
         if (focusedTileHit.HasValue)
         {
@@ -92,10 +92,10 @@ public class MouseController : MonoBehaviour
             //When mouse is clicked on a tile 
             if (Input.GetMouseButtonDown(0))
             {
-                if(playerList != null && playerList.Count > 0)
+                if(playerList != null && playerList.Count > 0 )
                 {
                          character = playerList[0].GetComponent<BaseCharacter>() ;
-                    if (canSpawn)
+                    if (canSpawn && !overlayTile.isBlocked)
                     {
                         character = Instantiate(playerList[0]).GetComponent<BaseCharacter>();
                         PositionCharacterOnTile(overlayTile);
@@ -111,7 +111,7 @@ public class MouseController : MonoBehaviour
                     if (character.characterState == CharacterState.Moving)
                     {
                         //hiding canvas
-                        canvas.gameObject.SetActive(false);
+                        debugCanvas.gameObject.SetActive(false);
 
                         //initialize the path 
                         path = pathFinder.FindPath(character.activeTile, overlayTile, inRangeTiles);
@@ -146,19 +146,24 @@ public class MouseController : MonoBehaviour
     {
         HideMovementTiles();
 
-        inRangeTiles = rangeFinder.GetTilesInRange(character.activeTile, character.movementPoints);
+        inRangeTiles = rangeFinder.GetTilesInRange(character.activeTile, character.movementPoints, false);
 
-        foreach(var tile in inRangeTiles)
+        foreach(OverlayTile tile in inRangeTiles)
         {
+            //calculer le nombre de mouvement pour chaque tuile
+            pathFinder.FindPath(character.activeTile, tile, inRangeTiles);
+            if(pathFinder.PathPossible)
+            {
             tile.ShowTile();
+            }
         }
     }
 
     private void MoveAlongPath()
     {
-        var step = character.characterMovementSpeed * Time.deltaTime;
+        float step = character.characterMovementSpeed * Time.deltaTime;
         character.activeTile.isBlocked = false;
-        var zIndex = path[0].transform.position.z;
+        float zIndex = path[0].transform.position.z;
         character.transform.position = Vector2.MoveTowards(character.transform.position, path[0].transform.position , step);
         character.transform.position = new Vector3 (character.transform.position.x, character.transform.position.y, zIndex);
 
@@ -174,7 +179,7 @@ public class MouseController : MonoBehaviour
         {
             GetInRangeTiles();
             //make debug menu appear
-            canvas.gameObject.SetActive(true);
+            debugCanvas.gameObject.SetActive(true);
         }
        character.activeTile.isBlocked = true;
     }
@@ -198,6 +203,7 @@ public class MouseController : MonoBehaviour
             }
         }
     }
+
     public RaycastHit2D? GetFocusOnTile()
     {
         Vector3 mousPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -213,26 +219,27 @@ public class MouseController : MonoBehaviour
             //hover Characters
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Character"))
             {
-                //if it hits the character
+                //if it hits a character
                 hightlightCharacter = hit.collider.gameObject.GetComponent<BaseCharacter>();
                 hit.collider.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
                 hightlightCharacter.ShowHealthArmor();
-                    //if clicked on the character
+
+                    //if clicked on a character
                 if (Input.GetMouseButtonDown(0) && hit.collider.gameObject.GetComponent<BaseCharacter>().isHuman && character.characterState != CharacterState.Attacking)
                 {
-                    canvas.gameObject.SetActive(true);
+                    debugCanvas.gameObject.SetActive(true);
                     character = hit.collider.gameObject.GetComponent<BaseCharacter>();
-                    Debug.Log("character Selected: " + character.name);
+                    /*Debug.Log("character Selected: " + character.name);*/
                     character.characterState = CharacterState.Ideling;
                 }
 
                 //attacking enemy or healing ally
                 if (Input.GetMouseButtonDown(0) && character.characterState == CharacterState.Attacking)
                 {
-                    canvas.gameObject.SetActive(true);
+                    debugCanvas.gameObject.SetActive(true);
                     if (!character.HasAttack)
                     {
-                        canvas.gameObject.SetActive(false);
+                        debugCanvas.gameObject.SetActive(false);
                         if (character != null)
                         {
                             targetedEnemy = hit.collider.gameObject.GetComponent<BaseCharacter>();
@@ -334,7 +341,7 @@ public class MouseController : MonoBehaviour
     {
 
         /*character.movementPoints = character.maxMovementPoints;*/
-        canvas.gameObject.SetActive(false);
+        debugCanvas.gameObject.SetActive(false);
         HideMovementTiles();
         SetCharacterIdleState();
     }
@@ -344,9 +351,19 @@ public class MouseController : MonoBehaviour
         if (character.IsMyTurn)
         {
         HideMovementTiles();
-        canvas.gameObject.SetActive(false);
+        debugCanvas.gameObject.SetActive(false);
         SetCharacterAttackState();
         }else Debug.Log("Not the turn of: " +  character.name);
+    }
+
+    public void AbilitiesButton()
+    {
+        if (character.IsMyTurn)
+        {
+            HideMovementTiles();
+            debugCanvas.gameObject.SetActive(true);
+            character.characterState = CharacterState.Abilities;
+        }else Debug.Log("Not the turn of: " + character.name);
     }
 
     private void SetCharacterAttackState()
@@ -364,7 +381,7 @@ public class MouseController : MonoBehaviour
 
     public void HideMovementTiles()
     {
-        foreach (var tile in inRangeTiles)
+        foreach (OverlayTile tile in inRangeTiles)
         {
             tile.HideTile();
         }

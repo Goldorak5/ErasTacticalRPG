@@ -18,6 +18,11 @@ public class Weapons: MonoBehaviour
     public int ClickerMaitre;
     public int numBoxClicker;
 
+    //array first number = first zone width etc...
+    public int[] attackZone;
+    // 0 equal CAC than numbers equal empty space between character and the zone
+    public int attackRange;
+
     void Awake()
     {
          numBoxClicker = ClickerNovice + ClickerIntermidiaire + ClickerExpert + ClickerMaitre;
