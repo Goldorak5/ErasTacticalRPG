@@ -19,6 +19,7 @@ public class OverlayTile : MonoBehaviour
     //initialize in pathfinder for movement purposes
     public OverlayTile previousTile;
 
+    public bool isMovingTile = false;
     public bool isAttackingTile = false;
 
     //it is initialize in the map manager in the 3 nested loop

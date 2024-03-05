@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4888074253919903840}
+  - component: {fileID: -7878707326761266344}
+  - component: {fileID: -8110672783322747737}
   m_Layer: 0
   m_Name: EngrenageAbilities
   m_TagString: Untagged
@@ -31,3 +33,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-7878707326761266344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6471736378926430467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e02b2ce9942db3e49940ed376968225d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  testMaxRange: 5
+  testZoneRange: 2
+--- !u!114 &-8110672783322747737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6471736378926430467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b9673f21345c574ca33a352b00719c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: 
+  maxRange: 0
+  howManyTarget: 0
+  allTarget: 0
+  clickerNovice: 1
+  clickerIntermidiaire: 0
+  clickerExpert: 0
+  clickerMaitre: 1
+  numBoxClicker: 0

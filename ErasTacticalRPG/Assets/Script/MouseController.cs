@@ -9,40 +9,50 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
+public enum ShowCursorState
+{
+    Hide,
+    Show
+}
+
 public class MouseController : MonoBehaviour
 {
     //private
     private PathFinder pathFinder;
     private RangeFinder rangeFinder;
-    public OverlayTile overlayTile;
     private List<OverlayTile> path = new List<OverlayTile>();
     private RegularAttack regularAttack;
-    private BaseCharacter targetedEnemy;
+    private List<BaseCharacter> targetedEnemies = new List<BaseCharacter>();
+    private BaseCharacter enemyHit;
     private List<GameObject> playerList = new List<GameObject>();
     private BaseCharacter hightlightCharacter;
+    private ShowCursorState showCursorState = ShowCursorState.Hide;
 
     //public
-    /*public static CharacterState characterState;*/
     public GameObject spawningZone;
+    public OverlayTile overlayTile;
+    //cursor image
+    public SpriteRenderer cursorSprite;
     public BaseCharacter character;
     public List<GameObject> characterPrefabList;
     public TurnManager turnManager;
     public List<OverlayTile> inRangeTiles = new List<OverlayTile>();
     public float movementSpeed;
     public Canvas debugCanvas;
+    public Canvas abilityCanvas;
     [HideInInspector]public bool canSpawn = false;
+
 
     private void Awake()
     {
         playerList = characterPrefabList;
+        cursorSprite = gameObject.GetComponent<SpriteRenderer>();
     }
 
     private void Start()
     {
- 
         pathFinder = new PathFinder();
         rangeFinder = new RangeFinder();
-
     }
 
     private bool FocusIsOnTile(ref RaycastHit2D? focusedTileHit)
@@ -64,8 +74,7 @@ public class MouseController : MonoBehaviour
 
     void LateUpdate()
     {
-        
-        if(character == null)
+        if(playerList != null)
         {
             //raycast funtion to check if mouse controler is over spanwning zone;
             FindSpawningZone();
@@ -81,15 +90,37 @@ public class MouseController : MonoBehaviour
                 overlayTile = focusedTileHit.Value.collider.gameObject.GetComponent<OverlayTile>();
                 if (overlayTile != null)
                 {
+                
+                    if (showCursorState == ShowCursorState.Show)
+                    {
+                        cursorSprite.enabled = true;
+                    }
+                    else if(showCursorState == ShowCursorState.Hide)
+                    {
+                        cursorSprite.enabled = false;
+                    }
+
                     transform.position = overlayTile.transform.position;
                     gameObject.GetComponent<SpriteRenderer>().sortingOrder = overlayTile.GetComponent<SpriteRenderer>().sortingOrder;
+
+                    //if cursor is on a movable tile show cursor else hide
+                    if (inRangeTiles != null && character != null && character.characterState == CharacterState.Moving)
+                    {
+                        if (inRangeTiles.Contains(overlayTile))
+                        {
+                            showCursorState = ShowCursorState.Show;
+                        }
+                        else
+                        {
+                            showCursorState = ShowCursorState.Hide;
+                        }
+                    }
                 }
             }
-
-            //put the color of the player back to normal after cursor is not on it
+                    //put the color of the player back to normal after cursor is not on it
             SetCharacterSpriteWhite(hightlightCharacter);
 
-            //When mouse is clicked on a tile 
+                         //When mouse is clicked on a tile 
             if (Input.GetMouseButtonDown(0))
             {
                 if(playerList != null && playerList.Count > 0 )
@@ -102,12 +133,12 @@ public class MouseController : MonoBehaviour
                         character.characterState = CharacterState.Ideling;
                         character.GetComponent<SpriteRenderer>().sortingOrder = 5;
                         playerList.RemoveAt(0);
+                        showCursorState = ShowCursorState.Hide;
                     }
                 }
                 //if all players are spawn when click on tile = moving
                 else if (character != null && playerList == null)
                 {
-                    
                     if (character.characterState == CharacterState.Moving)
                     {
                         //hiding canvas
@@ -117,14 +148,20 @@ public class MouseController : MonoBehaviour
                         path = pathFinder.FindPath(character.activeTile, overlayTile, inRangeTiles);
                     }
                 }
-
                 // destroy spawning zone after all players are placed 
                 if(playerList != null && playerList.Count == 0)
                 {
                     Destroy(spawningZone.gameObject);
                     StartCoroutine(turnManager.PlayGame());
                     playerList = null;
+
                 }
+            }
+        }else
+        {
+            if (showCursorState == ShowCursorState.Hide)
+            {
+            cursorSprite.enabled = false;
             }
         }
         if (path.Count > 0 && character.movementPoints > 0 && character.characterState == CharacterState.Moving)
@@ -187,18 +224,19 @@ public class MouseController : MonoBehaviour
     public void FindSpawningZone()
     {
         Vector3 mousPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 mousePos2d = new Vector2(mousPos.x, mousPos.y - 0.2f);
+        Vector2 mousePos2d = new Vector2(mousPos.x, mousPos.y);
         RaycastHit2D[] spawningPoints = Physics2D.RaycastAll(mousePos2d, Vector2.zero);
 
         foreach(RaycastHit2D hit  in spawningPoints)
         {
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Spawning"))
             {
+                showCursorState = ShowCursorState.Show;
                 canSpawn = true;
-                break;
             }
             else
             {
+                showCursorState = ShowCursorState.Hide;
                 canSpawn = false;
             }
         }
@@ -216,15 +254,14 @@ public class MouseController : MonoBehaviour
         for (int i = 0; i < numsHits; i++)
         {
             hit = hits[i];
-            //hover Characters
+                                //hover Characters
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Character"))
-            {
-                //if it hits a character
+            { 
+                                //if it hits a character
                 hightlightCharacter = hit.collider.gameObject.GetComponent<BaseCharacter>();
                 hit.collider.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
                 hightlightCharacter.ShowHealthArmor();
-
-                    //if clicked on a character
+                            //if clicked on a character
                 if (Input.GetMouseButtonDown(0) && hit.collider.gameObject.GetComponent<BaseCharacter>().isHuman && character.characterState != CharacterState.Attacking)
                 {
                     debugCanvas.gameObject.SetActive(true);
@@ -232,8 +269,7 @@ public class MouseController : MonoBehaviour
                     /*Debug.Log("character Selected: " + character.name);*/
                     character.characterState = CharacterState.Ideling;
                 }
-
-                //attacking enemy or healing ally
+                            //attacking enemy or healing ally
                 if (Input.GetMouseButtonDown(0) && character.characterState == CharacterState.Attacking)
                 {
                     debugCanvas.gameObject.SetActive(true);
@@ -242,17 +278,17 @@ public class MouseController : MonoBehaviour
                         debugCanvas.gameObject.SetActive(false);
                         if (character != null)
                         {
-                            targetedEnemy = hit.collider.gameObject.GetComponent<BaseCharacter>();
+                            enemyHit = hit.collider.gameObject.GetComponent<BaseCharacter>();
+                            targetedEnemies.Add(enemyHit);
                             character.characterState = CharacterState.Clickers;
                             regularAttack = character.GetComponent<RegularAttack>();
-                            regularAttack.StartClickersBoxe(targetedEnemy);
+                            regularAttack.StartClickersBoxe(targetedEnemies);
                         }
                     }
                     else Debug.Log(character.name + " As Already Attack");
                 }
                 return null;
-            }                        
-               //if it hits the tile
+            }  //if it hits the tile
             else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Tile"))
             {
                 return hit;
@@ -261,80 +297,16 @@ public class MouseController : MonoBehaviour
         //if don't touch anything return nothing
         return null;
     }
-//     public RaycastHit2D? GetFocusOnTile()
-//     {
-//         Vector3 mousPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-//         Vector2 mousePos2d = new Vector2(mousPos.x, mousPos.y - 0.2f);
-//         RaycastHit2D[] hits = new RaycastHit2D[10];
-//         int numsHits = Physics2D.RaycastNonAlloc(mousePos2d,Vector2.zero,hits);
-// 
-//         RaycastHit2D hit;
-// 
-//         for (int i = 0; i < numsHits; i++)
-//         {
-//             hit = hits[i];
-//                                         //hover Characters
-//             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Character"))
-//             {
-//                 //if it hits the character
-//                 hightlightCharacter = hit.collider.gameObject.GetComponent<BaseCharacter>();
-//                 hit.collider.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
-//                 /*character.GetComponent<SpriteRenderer>().color = Color.red;*/
-//                 hightlightCharacter.ShowHealthArmor();
-//                /* character.ShowHealthArmor();*/
-// 
-//                                 //if clicked on the character
-//                 if (Input.GetMouseButtonDown(0))
-//                 {
-//                     canvas.gameObject.SetActive(true);
-//                     /*selectedCharacter = hit.collider.gameObject.GetComponent<BaseCharacter>();*/
-//                     character = hit.collider.gameObject.GetComponent<BaseCharacter>();
-//                     Debug.Log("character Selected: " + character.name);
-//                 }
-//                 return null;
-//             }                           //hover an enemy
-//             else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("NME"))
-//             {
-//                 hightlightCharacter = hit.collider.gameObject.GetComponent<BaseCharacter>();
-//                 hightlightCharacter.GetComponent<SpriteRenderer>().color = Color.red;
-//                 hightlightCharacter.ShowHealthArmor();
-//                                       //if clicked on an enemy
-//                  if (character != null && Input.GetMouseButtonDown(0) && character.characterState == CharacterState.Attacking)
-//                   {
-//                     if (!character.HasAttack)
-//                     {
-//                             canvas.gameObject.SetActive(false);
-//                             if(character != null)
-//                             {
-//                                 targetedEnemy = hit.collider.gameObject.GetComponent<BaseCharacter>();
-//                                 character.characterState = CharacterState.Clickers;
-//                                 regularAttack = character.GetComponent<RegularAttack>();
-//                                 regularAttack.StartClickersBoxe(targetedEnemy);
-//                             }
-//                     }
-//                     else Debug.Log(character.name + " As Already Attack");
-//                     }
-//                 return null;
-//             }                    //if it hits the tile
-//             else if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Tile"))
-//             {
-//                 return hit;
-//             }
-//         }
-//        //if don't touch anything return nothing
-//         return null;
-//     }
+
 
     public void OnMoveButtonClick()
     {
-
         if (character != null && character.IsMyTurn)
         {
             GetInRangeTiles();
             SetCharacterMoveState();
         }
         else Debug.Log("Can't Move Now!");
-            /*SetCharacterMoveState();*/
     }
 
     public void EndTurnButton()
@@ -362,6 +334,8 @@ public class MouseController : MonoBehaviour
         {
             HideMovementTiles();
             debugCanvas.gameObject.SetActive(true);
+            abilityCanvas.gameObject.SetActive(true);
+
             character.characterState = CharacterState.Abilities;
         }else Debug.Log("Not the turn of: " + character.name);
     }

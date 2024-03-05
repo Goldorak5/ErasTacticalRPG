@@ -8,8 +8,10 @@ public class ZoneFromMouse : MonoBehaviour
 {
     private OverlayTile startingTile;
 
+    //test variables
     public int testMaxRange;
     public int testZoneRange;
+
 
     private List<OverlayTile> abilityZone = new List<OverlayTile>();
     private MapManager mapManager;
@@ -276,6 +278,8 @@ public class ZoneFromMouse : MonoBehaviour
         {
         startingTile = mouseController.overlayTile;
         }
+
+        //testing
         //SquareZone(testMaxRange,testZoneRange);
        // RangeZone(testMaxRange, testZoneRange);
        //TZone(testMaxRange, testZoneRange);

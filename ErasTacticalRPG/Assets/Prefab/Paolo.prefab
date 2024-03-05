@@ -1982,8 +1982,8 @@ MonoBehaviour:
   armor: 30
   maxArmor: 30
   maxHealth: 30
-  movementPoints: 10
-  maxMovementPoints: 10
+  movementPoints: 4
+  maxMovementPoints: 4
   characterMovementSpeed: 5
   turnSpeed: 15
   characterState: 0
@@ -2017,6 +2017,7 @@ MonoBehaviour:
   healthArmorCanvas: {fileID: 4831460114259694103}
   isReceivingDamage: 0
   mouseController: {fileID: 0}
+  turnManager: {fileID: 0}
 --- !u!114 &1405025574364615550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2056,13 +2057,14 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5819772921733543721}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3cdb1c2e7a63f7d40b6e2df5f6963e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  howFar: 2
-  rowsTestOddNumOnly: 030000000100000003000000
+  howFar: 0
+  rowsTestOddNumOnly: 0300000001000000
+  mouseController: {fileID: 0}
 --- !u!114 &-2940433049845833136
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2070,7 +2072,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5819772921733543721}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e02b2ce9942db3e49940ed376968225d, type: 3}
   m_Name: 

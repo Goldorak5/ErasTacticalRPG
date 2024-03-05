@@ -50,3 +50,5 @@ MonoBehaviour:
   ClickerExpert: 1
   ClickerMaitre: 1
   numBoxClicker: 0
+  attackZone: 01000000
+  attackRange: 0

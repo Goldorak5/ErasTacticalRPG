@@ -106,8 +106,9 @@ public class TurnManager : MonoBehaviour
         charactersList.Sort((a,b) => b.turnSpeed.CompareTo(a.turnSpeed));
     }
 
-    private void StillRemainsPlayer()
+    public void StillRemainsPlayer()
     {
+
         if(charactersList.Any(character => character.isHuman))
         {
             gameOver = false;

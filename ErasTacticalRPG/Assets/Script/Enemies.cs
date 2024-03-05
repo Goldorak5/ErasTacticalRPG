@@ -195,8 +195,12 @@ public class Enemies : BaseCharacter
         }
 
         playerTargets = playerTargets.OrderBy(x => Vector2.Distance(activeTile.grid2DLocation, new Vector2(x.activeTile.grid2DLocation.x, x.activeTile.grid2DLocation.y))).ToList();
+            for (int i = playerTargets.Count - 1; playerTargets.Count > 1; i--)
+        {
+            playerTargets.Remove(playerTargets[i]);
+        }
 
-        //if enemy is on the cac of the player to attack
+        //if enemy is on the CAC of the player to attack
         if (cacPlayerTile != null)
         {
              foreach (var tile in cacPlayerTile)
@@ -214,7 +218,7 @@ public class Enemies : BaseCharacter
     {
         if(playerTargets != null)
         {
-            regularAttackScript.StartClickersBoxe(playerTargets[0]);
+            regularAttackScript.StartClickersBoxe(playerTargets);
         }
     }
 

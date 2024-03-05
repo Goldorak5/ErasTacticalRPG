@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3740284253977507079}
+  - component: {fileID: -3209086155256379983}
+  - component: {fileID: -5653171689577722705}
   m_Layer: 0
   m_Name: CleAMolletteAbilities
   m_TagString: Untagged
@@ -31,3 +33,38 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &-3209086155256379983
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6250107617916264084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b9673f21345c574ca33a352b00719c4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  name: Cle A Molette
+  maxRange: 0
+  howManyTarget: 0
+  allTarget: 0
+  clickerNovice: 0
+  clickerIntermidiaire: 0
+  clickerExpert: 1
+  clickerMaitre: 1
+  numBoxClicker: 0
+--- !u!114 &-5653171689577722705
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6250107617916264084}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cdb1c2e7a63f7d40b6e2df5f6963e84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  howFar: 0
+  rowsTestOddNumOnly: 0300000001000000

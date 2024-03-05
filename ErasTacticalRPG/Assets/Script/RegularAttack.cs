@@ -8,7 +8,7 @@ public class RegularAttack: MonoBehaviour
 {
     
     public BaseCharacter characterScript;
-    public BaseCharacter targetedEnemy;
+    public List<BaseCharacter> targetedEnemy;
     [SerializeField]private float rollingSpeed = 0.2f;
     private int totalDamage;
     private int count = 1;
@@ -125,10 +125,9 @@ public class RegularAttack: MonoBehaviour
         }
     }
 
-    public void StartClickersBoxe(BaseCharacter target)
+    public void StartClickersBoxe(List<BaseCharacter> targets)
     {
-        
-        targetedEnemy = target;
+        targetedEnemy = targets;
         if (!listInitialize)
         {
             InitializeCharacterAndList();
@@ -222,16 +221,21 @@ public class RegularAttack: MonoBehaviour
 
             if(targetedEnemy != null)
             {
-                //Healing
-                if(characterScript.isHuman && targetedEnemy.isHuman) 
+                foreach(BaseCharacter target in targetedEnemy)
                 {
-                    targetedEnemy.HandleHealing(totalDamage);
-                    Debug.Log(totalDamage + " Healing To " + targetedEnemy.name);
+                    //Healing
+                   if(characterScript.isHuman && target.isHuman) 
+                   {
+                        target.HandleHealing(totalDamage);
+                        Debug.Log(totalDamage + " Healing To " + target.name);
+                   }
+                   else
+                   {
+                        //Damaging
+                        target.handleDamage(totalDamage, target);
+                        Debug.Log(totalDamage + " Damage To " + target.name);
+                   }
                 }
-                else
-                //Damaging
-                targetedEnemy.handleDamage(totalDamage, targetedEnemy);
-                Debug.Log(totalDamage + " Damage To " + targetedEnemy.name);
             }
             if (!characterScript.isHuman)
             {

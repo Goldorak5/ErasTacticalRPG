@@ -60,6 +60,7 @@ public class BaseCharacter : MonoBehaviour
     public Canvas healthArmorCanvas;
     public bool isReceivingDamage;
     public MouseController mouseController;
+    public TurnManager turnManager;
 
     private void Awake()
     {
@@ -68,9 +69,13 @@ public class BaseCharacter : MonoBehaviour
 
     private void Update()
     {
-        if (activeTile != null && activeTile.isAttackingTile)
+        if (activeTile != null && activeTile.isAttackingTile && !isHuman)
         {
             gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+        }
+        else if (activeTile != null && !activeTile.isAttackingTile)
+        {
+            gameObject.GetComponent<SpriteRenderer>().color = Color.white;
         }
     }
 
@@ -138,6 +143,8 @@ public class BaseCharacter : MonoBehaviour
             damagedCharacter.characterState = CharacterState.Dead;
             damagedCharacter.activeTile.isBlocked = false;
             Destroy(damagedCharacter.gameObject);
+            //turnManager.StillRemainsPlayer();
+            
         }
         StartCoroutine(ShowDamage(damage));
     }

@@ -2,6 +2,7 @@ using Cinemachine.Utility;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public enum MouseQuadran
 {
@@ -14,7 +15,7 @@ public enum MouseQuadran
 
 public class ZoneFromCharacter : MonoBehaviour
 {
-
+    //test purpose
     public int howFar;
     public int[] rowsTestOddNumOnly;
 
@@ -23,322 +24,325 @@ public class ZoneFromCharacter : MonoBehaviour
     private RangeFinder rangeFinder;
     private BaseCharacter character;
     private List<OverlayTile> abilityZone = new List<OverlayTile>();
-    private List<Vector2Int> locationList = new List<Vector2Int>();
+
+    //first initialize vectors
+    private bool rightVectorInitialize;
+    private bool leftVectorInitialize;
+    private bool startingTileVectorInitialize;
+
+    //vector on each side of character CAC
     private Vector2Int playerFrontTileGridLocationTopRight;
     private Vector2Int playerFrontTileGridLocationTopLeft;
     private Vector2Int playerFrontTileGridLocationBottomRight;
     private Vector2Int playerFrontTileGridLocationBottomLeft;
-    private OverlayTile startingTile;
-    private OverlayTile leftSideTile;
-    private OverlayTile rightSideTile;
+
+    //vectors for the Zone Tiles
+    private Vector2Int rightSideVector;
+    private Vector2Int leftSideVector;
+    private Vector2Int startingTileVector;
 
     void Start()
     {
         rangeFinder = new RangeFinder();
         mapManager = MapManager.Instance;
         character = GetComponent<BaseCharacter>();
-        startingTile = character.activeTile;
     }
 
     public List<OverlayTile> GetZoneAbility(int howFarInFront, int[] rows)
     {
-        playerFrontTileGridLocationTopRight = new Vector2Int(character.activeTile.grid2DLocation.x + 1, character.activeTile.grid2DLocation.y);
-        playerFrontTileGridLocationTopLeft = new Vector2Int(character.activeTile.grid2DLocation.x, character.activeTile.grid2DLocation.y + 1);
-        playerFrontTileGridLocationBottomRight = new Vector2Int(character.activeTile.grid2DLocation.x, character.activeTile.grid2DLocation.y - 1);
-        playerFrontTileGridLocationBottomLeft = new Vector2Int(character.activeTile.grid2DLocation.x - 1, character.activeTile.grid2DLocation.y);
+        InitializeVectorCAC();
         OverlayTile playerTile = character.activeTile;
-                       // Top Right Quadrant
+        List<Vector2Int> locationToCheck = new List<Vector2Int>();
+
+        // Top Right Quadrant
         if (mouseQuadran == MouseQuadran.TopRight)
         {
-
             foreach (OverlayTile tile in abilityZone)
             {
+                tile.isAttackingTile = false;
                 tile.HideTile();
             }
             abilityZone = new List<OverlayTile>();
 
-            if (mapManager.map.ContainsKey(new Vector2Int(playerFrontTileGridLocationTopRight.x + howFarInFront, playerFrontTileGridLocationTopRight.y)))
-            {
-                //adjusting the starting tile by what the game designer want the ability range to start
-                startingTile = mapManager.map[new Vector2Int(playerFrontTileGridLocationTopRight.x + howFarInFront, playerFrontTileGridLocationTopRight.y)];
-                abilityZone.Add(startingTile);
-            }
             //add a tile for each elements in the array in front
             for (int i = 0; i < rows.Length; i++)
             {
-                if (mapManager.map.ContainsKey(new Vector2Int(playerFrontTileGridLocationTopRight.x + howFarInFront + i, playerFrontTileGridLocationTopRight.y)))
-                {
-                    //adjusting the starting tile by what the game designer want the ability range to start
-                    if (!abilityZone.Contains(mapManager.map[new Vector2Int(playerFrontTileGridLocationTopRight.x + howFarInFront + i, playerFrontTileGridLocationTopRight.y)]))
-                    {
-                        startingTile = mapManager.map[new Vector2Int(playerFrontTileGridLocationTopRight.x + howFarInFront + i, playerFrontTileGridLocationTopRight.y)];
-                        abilityZone.Add(startingTile);
-                    }
-                }
+                //                     //adjusting the starting tile by what the game designer want the ability range to start
+                startingTileVector = new Vector2Int(playerFrontTileGridLocationTopRight.x + howFarInFront + i, playerFrontTileGridLocationTopRight.y);
+                locationToCheck.Add(new Vector2Int(playerFrontTileGridLocationTopRight.x + howFarInFront + i, playerFrontTileGridLocationTopRight.y));
+                startingTileVectorInitialize = true;
                 for (int j = 1; j < rows[i]; j += 2)
                 {
                     //if already a tile on the right of startingTile add another one
-                    if (rightSideTile != null)
+                    if (rightVectorInitialize)
                     {
-                        if (mapManager.map.ContainsKey(new Vector2Int(rightSideTile.grid2DLocation.x, rightSideTile.grid2DLocation.y - 1)))
-                        {
-                            rightSideTile = mapManager.map[new Vector2Int(rightSideTile.grid2DLocation.x, rightSideTile.grid2DLocation.y - 1)];
-                            abilityZone.Add(rightSideTile);
-                        }
+                        rightSideVector = new Vector2Int(rightSideVector.x, rightSideVector.y - 1);
+                        locationToCheck.Add(rightSideVector);
+
                     }
                     //if there are no tile on the right ad one and put it in the variable rightside
-                    else if (startingTile != null && mapManager.map.ContainsKey(new Vector2Int(startingTile.grid2DLocation.x, startingTile.grid2DLocation.y - 1)))
+                    else if (startingTileVectorInitialize)
                     {
-                            rightSideTile = mapManager.map[new Vector2Int(startingTile.grid2DLocation.x, startingTile.grid2DLocation.y - 1)];
-                            abilityZone.Add(rightSideTile);
+                        rightSideVector = new Vector2Int(startingTileVector.x, startingTileVector.y - 1);
+                        locationToCheck.Add(rightSideVector);
+                        rightVectorInitialize = true;
                     }
+
                     //if already a tile on the right of startingTile add another one
-                    if (leftSideTile != null)
+                    if (leftVectorInitialize)
                     {
-                        if (mapManager.map.ContainsKey(new Vector2Int(leftSideTile.grid2DLocation.x, leftSideTile.grid2DLocation.y + 1)))
-                        {
-                            leftSideTile = mapManager.map[new Vector2Int(leftSideTile.grid2DLocation.x, leftSideTile.grid2DLocation.y + 1)];
-                            abilityZone.Add(leftSideTile);
-                        }
+                        leftSideVector = new Vector2Int(leftSideVector.x, leftSideVector.y + 1);
+                        locationToCheck.Add(leftSideVector);
                     }
+
                     //if there are no tile on the Left add one and put it in the variable Leftside
-                    else if (startingTile != null && mapManager.map.ContainsKey(new Vector2Int(startingTile.grid2DLocation.x, startingTile.grid2DLocation.y + 1)))
+                    else if (startingTileVectorInitialize)
                     {
-                            leftSideTile = mapManager.map[new Vector2Int(startingTile.grid2DLocation.x, startingTile.grid2DLocation.y + 1)];
-                            abilityZone.Add(leftSideTile);
+                        leftSideVector = new Vector2Int(startingTileVector.x, startingTileVector.y + 1);
+                        locationToCheck.Add(leftSideVector);
+                        leftVectorInitialize = true;
                     }
                 }
-            startingTile = null;
-            rightSideTile = null;
-            leftSideTile = null;
+                ReinitializingVectors();
+
             }
+            foreach (Vector2Int vec in locationToCheck)
+            {
+                if (mapManager.map.ContainsKey(vec) && !abilityZone.Contains(mapManager.map[vec]))
+                {
+                    abilityZone.Add(mapManager.map[vec]);
+                }
+            }
+
             foreach (OverlayTile tile in abilityZone)
             {
                 tile.ShowAttackTile();
+                tile.isAttackingTile = true;
             }
+            
         }
-                      // Top left Quadrant
+        // Top left Quadrant
         else if (mouseQuadran == MouseQuadran.TopLeft)
         {
-
             foreach (OverlayTile tile in abilityZone)
             {
                 tile.HideTile();
+                tile.isAttackingTile = false;
             }
             abilityZone = new List<OverlayTile>();
-
-            if (mapManager.map.ContainsKey(new Vector2Int(playerFrontTileGridLocationTopLeft.x, playerFrontTileGridLocationTopLeft.y + howFarInFront)))
-            {
-                //adjusting the starting tile by what the game designer want the ability range to start
-                startingTile = mapManager.map[new Vector2Int(playerFrontTileGridLocationTopLeft.x, playerFrontTileGridLocationTopLeft.y + howFarInFront)];
-                abilityZone.Add(startingTile);
-            }
             //add a tile for each elements in the array in front
             for (int i = 0; i < rows.Length; i++)
             {
-                if (mapManager.map.ContainsKey(new Vector2Int(playerFrontTileGridLocationTopLeft.x, playerFrontTileGridLocationTopLeft.y + howFarInFront + i)))
-                {
-                    //adjusting the starting tile by what the game designer want the ability range to start
-                    if (!abilityZone.Contains(mapManager.map[new Vector2Int(playerFrontTileGridLocationTopLeft.x, playerFrontTileGridLocationTopLeft.y + howFarInFront + i)]))
-                    {
-                        startingTile = mapManager.map[new Vector2Int(playerFrontTileGridLocationTopLeft.x, playerFrontTileGridLocationTopLeft.y + howFarInFront + i)];
-                        abilityZone.Add(startingTile);
-                    }
-                }
+                //                     //adjusting the starting tile by what the game designer want the ability range to start
+                startingTileVector = new Vector2Int(playerFrontTileGridLocationTopLeft.x, playerFrontTileGridLocationTopLeft.y + howFarInFront + i);
+                locationToCheck.Add(startingTileVector);
+                startingTileVectorInitialize = true;
                 for (int j = 1; j < rows[i]; j += 2)
                 {
                     //if already a tile on the right of startingTile add another one
-                    if (rightSideTile != null)
+                    if (rightVectorInitialize)
                     {
-                        if (mapManager.map.ContainsKey(new Vector2Int(rightSideTile.grid2DLocation.x + 1, rightSideTile.grid2DLocation.y)))
-                        {
-                            rightSideTile = mapManager.map[new Vector2Int(rightSideTile.grid2DLocation.x + 1, rightSideTile.grid2DLocation.y)];
-                            abilityZone.Add(rightSideTile);
-                        }
+                        rightSideVector = new Vector2Int(rightSideVector.x + 1, rightSideVector.y);
+                        locationToCheck.Add(rightSideVector);
                     }
                     //if there are no tile on the right ad one and put it in the variable rightside
-                    else if (startingTile != null && mapManager.map.ContainsKey(new Vector2Int(startingTile.grid2DLocation.x + 1, startingTile.grid2DLocation.y)))
+                    else if (startingTileVectorInitialize)
                     {
-                            rightSideTile = mapManager.map[new Vector2Int(startingTile.grid2DLocation.x + 1, startingTile.grid2DLocation.y)];
-                            abilityZone.Add(rightSideTile);
+                        rightSideVector = new Vector2Int(startingTileVector.x + 1, startingTileVector.y);
+                        locationToCheck.Add(rightSideVector);
+                        rightVectorInitialize = true;
                     }
                     //if already a tile on the right of startingTile add another one
-                    if (leftSideTile != null)
+                    if (leftVectorInitialize)
                     {
-                        if (mapManager.map.ContainsKey(new Vector2Int(leftSideTile.grid2DLocation.x - 1, leftSideTile.grid2DLocation.y)))
-                        {
-                            leftSideTile = mapManager.map[new Vector2Int(leftSideTile.grid2DLocation.x - 1, leftSideTile.grid2DLocation.y)];
-                            abilityZone.Add(leftSideTile);
-                        }
+                        leftSideVector = new Vector2Int(leftSideVector.x - 1, leftSideVector.y);
+                        locationToCheck.Add(leftSideVector);
                     }
                     //if there are no tile on the Left add one and put it in the variable Leftside
-                    else if(startingTile != null && mapManager.map.ContainsKey(new Vector2Int(startingTile.grid2DLocation.x - 1, startingTile.grid2DLocation.y)))
+                    else if (startingTileVectorInitialize)
                     {
-                            leftSideTile = mapManager.map[new Vector2Int(startingTile.grid2DLocation.x - 1, startingTile.grid2DLocation.y)];
-                            abilityZone.Add(leftSideTile);
+                        leftSideVector = new Vector2Int(startingTileVector.x - 1, startingTileVector.y);
+                        locationToCheck.Add(leftSideVector);
+                        leftVectorInitialize = true;
                     }
                 }
-                startingTile = null;
-                rightSideTile = null;
-                leftSideTile = null;
+                ReinitializingVectors();
+            }
+            foreach (Vector2Int vec in locationToCheck)
+            {
+                if (mapManager.map.ContainsKey(vec) && !abilityZone.Contains(mapManager.map[vec]))
+                {
+                    abilityZone.Add(mapManager.map[vec]);
+                }
             }
             foreach (OverlayTile tile in abilityZone)
             {
                 tile.ShowAttackTile();
+                tile.isAttackingTile = true;
             }
         }
-                    // Bottom left Quadrant
+        // Bottom left Quadrant
         else if (mouseQuadran == MouseQuadran.BottomLeft)
         {
             foreach (OverlayTile tile in abilityZone)
             {
+                tile.isAttackingTile = false;
                 tile.HideTile();
             }
             abilityZone = new List<OverlayTile>();
-
-            if (mapManager.map.ContainsKey(new Vector2Int(playerFrontTileGridLocationBottomLeft.x - howFarInFront, playerFrontTileGridLocationBottomLeft.y)))
-            {
-                //adjusting the starting tile by what the game designer want the ability range to start
-                startingTile = mapManager.map[new Vector2Int(playerFrontTileGridLocationBottomLeft.x - howFarInFront, playerFrontTileGridLocationBottomLeft.y)];
-                abilityZone.Add(startingTile);
-            }
             //add a tile for each elements in the array in front
             for (int i = 0; i < rows.Length; i++)
             {
-                if (mapManager.map.ContainsKey(new Vector2Int(playerFrontTileGridLocationBottomLeft.x - howFarInFront - i, playerFrontTileGridLocationBottomLeft.y)))
-                {
-                    //adjusting the starting tile by what the game designer want the ability range to start
-                    if (!abilityZone.Contains(mapManager.map[new Vector2Int(playerFrontTileGridLocationBottomLeft.x - howFarInFront - i, playerFrontTileGridLocationBottomLeft.y)]))
-                    {
-                        startingTile = mapManager.map[new Vector2Int(playerFrontTileGridLocationBottomLeft.x - howFarInFront - i, playerFrontTileGridLocationBottomLeft.y)];
-                        abilityZone.Add(startingTile);
-                    }
-                }
+                //                     //adjusting the starting tile by what the game designer want the ability range to start
+                startingTileVector = new Vector2Int(playerFrontTileGridLocationBottomLeft.x - howFarInFront - i, playerFrontTileGridLocationBottomLeft.y);
+                locationToCheck.Add(startingTileVector);
+                startingTileVectorInitialize = true;
                 for (int j = 1; j < rows[i]; j += 2)
                 {
                     //if already a tile on the right of startingTile add another one
-                    if (rightSideTile != null)
+                    if (rightVectorInitialize)
                     {
-                        if (mapManager.map.ContainsKey(new Vector2Int(rightSideTile.grid2DLocation.x, rightSideTile.grid2DLocation.y + 1)))
-                        {
-                            rightSideTile = mapManager.map[new Vector2Int(rightSideTile.grid2DLocation.x, rightSideTile.grid2DLocation.y + 1)];
-                            abilityZone.Add(rightSideTile);
-                        }
+                        rightSideVector = new Vector2Int(rightSideVector.x, rightSideVector.y - 1);
+                        locationToCheck.Add(rightSideVector);
                     }
-                    //if there are no tile on the right ad one and put it in the variable rightside
-                    else if (startingTile != null && mapManager.map.ContainsKey(new Vector2Int(startingTile.grid2DLocation.x, startingTile.grid2DLocation.y + 1)))
+                    //                     //if there are no tile on the right ad one and put it in the variable rightside
+                    else if (startingTileVectorInitialize)
                     {
-                            rightSideTile = mapManager.map[new Vector2Int(startingTile.grid2DLocation.x, startingTile.grid2DLocation.y + 1)];
-                            abilityZone.Add(rightSideTile);
+                        rightSideVector = new Vector2Int(startingTileVector.x, startingTileVector.y - 1);
+                        locationToCheck.Add(rightSideVector);
+                        rightVectorInitialize = true;
                     }
-                    //if already a tile on the right of startingTile add another one
-                    if (leftSideTile != null)
+                    //                     //if there are no tile on the Left add one and put it in the variable Leftside
+                    if (leftVectorInitialize)
                     {
-                        if (mapManager.map.ContainsKey(new Vector2Int(leftSideTile.grid2DLocation.x, leftSideTile.grid2DLocation.y - 1)))
-                        {
-                            leftSideTile = mapManager.map[new Vector2Int(leftSideTile.grid2DLocation.x, leftSideTile.grid2DLocation.y - 1)];
-                            abilityZone.Add(leftSideTile);
-                        }
+                        leftSideVector = new Vector2Int(leftSideVector.x, leftSideVector.y + 1);
+                        locationToCheck.Add(leftSideVector);
                     }
-                    //if there are no tile on the Left add one and put it in the variable Leftside
-                    else if(startingTile != null && mapManager.map.ContainsKey(new Vector2Int(startingTile.grid2DLocation.x, startingTile.grid2DLocation.y - 1)))
+                    //if there are no tile on the left ad one and put it in the variable Leftside
+                    else if (startingTileVectorInitialize)
                     {
-                            leftSideTile = mapManager.map[new Vector2Int(startingTile.grid2DLocation.x, startingTile.grid2DLocation.y - 1 )];
-                            abilityZone.Add(leftSideTile);
+                        leftSideVector = new Vector2Int(startingTileVector.x, startingTileVector.y + 1);
+                        locationToCheck.Add(leftSideVector);
+                        leftVectorInitialize = true;
                     }
                 }
-                startingTile = null;
-                rightSideTile = null;
-                leftSideTile = null;
+                ReinitializingVectors();
+            }
+            foreach (Vector2Int vec in locationToCheck)
+            {
+                if (mapManager.map.ContainsKey(vec) && !abilityZone.Contains(mapManager.map[vec]))
+                {
+                    abilityZone.Add(mapManager.map[vec]);
+                }
             }
             foreach (OverlayTile tile in abilityZone)
             {
                 tile.ShowAttackTile();
+                tile.isAttackingTile = true;
             }
         }
-                    //Bottom Right Quadrant                                
+        //Bottom Right Quadrant                                
         else if (mouseQuadran == MouseQuadran.BottomRight)
         {
             foreach (OverlayTile tile in abilityZone)
             {
+                tile.isAttackingTile = false;
                 tile.HideTile();
             }
             abilityZone = new List<OverlayTile>();
 
-            if (mapManager.map.ContainsKey(new Vector2Int(playerFrontTileGridLocationBottomRight.x, playerFrontTileGridLocationBottomRight.y - howFarInFront)))
-            {
-                //adjusting the starting tile by what the game designer want the ability range to start
-                startingTile = mapManager.map[new Vector2Int(playerFrontTileGridLocationBottomRight.x, playerFrontTileGridLocationBottomRight.y - howFarInFront)];
-                abilityZone.Add(startingTile);
-            }
-            //add a tile for each elements in the array in front
             for (int i = 0; i < rows.Length; i++)
             {
-//                 Vector2Int locationFront;
-//                 Vector2Int locationBack;
-//                 Vector2Int locationRight;
-//                 Vector2Int locationLeft;
-// 
-//                 locationFront = new Vector2Int(playerFrontTileGridLocationBottomRight.x, playerFrontTileGridLocationBottomRight.y - howFarInFront - i);
-                if (mapManager.map.ContainsKey(new Vector2Int(playerFrontTileGridLocationBottomRight.x, playerFrontTileGridLocationBottomRight.y - howFarInFront - i)))
-                {
-                    //adjusting the starting tile by what the game designer want the ability range to start
-                    if (!abilityZone.Contains(mapManager.map[new Vector2Int(playerFrontTileGridLocationBottomRight.x, playerFrontTileGridLocationBottomRight.y - howFarInFront - i)]))
-                    {
-                        startingTile = mapManager.map[new Vector2Int(playerFrontTileGridLocationBottomRight.x, playerFrontTileGridLocationBottomRight.y - howFarInFront - i)];
-                        abilityZone.Add(startingTile);
-                    }
-                }
+                //                     //adjusting the starting tile by what the game designer want the ability range to start
+                startingTileVector = new Vector2Int(playerFrontTileGridLocationBottomRight.x, playerFrontTileGridLocationBottomRight.y - howFarInFront - i);
+                locationToCheck.Add(startingTileVector);
+                startingTileVectorInitialize = true;
                 for (int j = 1; j < rows[i]; j += 2)
                 {
                     //if already a tile on the right of startingTile add another one
-                    if (rightSideTile != null)
+                    if (rightVectorInitialize)
                     {
-                        if (mapManager.map.ContainsKey(new Vector2Int(rightSideTile.grid2DLocation.x - 1, rightSideTile.grid2DLocation.y)))
-                        {
-                            rightSideTile = mapManager.map[new Vector2Int(rightSideTile.grid2DLocation.x - 1, rightSideTile.grid2DLocation.y)];
-                            abilityZone.Add(rightSideTile);
-                        }
+                        rightSideVector = new Vector2Int(rightSideVector.x - 1, rightSideVector.y);
+                        locationToCheck.Add(rightSideVector);
                     }
-                    //if there are no tile on the right ad one and put it in the variable rightside
-                    else if (startingTile != null && mapManager.map.ContainsKey(new Vector2Int(startingTile.grid2DLocation.x - 1, startingTile.grid2DLocation.y)))
+                    //                     //if there are no tile on the right ad one and put it in the variable rightside
+                    else if (startingTileVectorInitialize)
                     {
-                     
-                            rightSideTile = mapManager.map[new Vector2Int(startingTile.grid2DLocation.x - 1, startingTile.grid2DLocation.y)];
-                            abilityZone.Add(rightSideTile);
+                        rightSideVector = new Vector2Int(startingTileVector.x - 1, startingTileVector.y);
+                        locationToCheck.Add(rightSideVector);
+                        rightVectorInitialize = true;
                     }
-                    //if already a tile on the right of startingTile add another one
-                    if (leftSideTile != null)
+                    //                     //if there are no tile on the Left add one and put it in the variable Leftside
+                    if (leftVectorInitialize)
                     {
-                        if (mapManager.map.ContainsKey(new Vector2Int(leftSideTile.grid2DLocation.x + 1, leftSideTile.grid2DLocation.y)))
-                        {
-                            leftSideTile = mapManager.map[new Vector2Int(leftSideTile.grid2DLocation.x + 1, leftSideTile.grid2DLocation.y)];
-                            abilityZone.Add(leftSideTile);
-                        }
+                        leftSideVector = new Vector2Int(leftSideVector.x + 1, leftSideVector.y);
+                        locationToCheck.Add(leftSideVector);
                     }
-                    //if there are no tile on the Left add one and put it in the variable Leftside
-                    else if (startingTile != null && mapManager.map.ContainsKey(new Vector2Int(startingTile.grid2DLocation.x + 1, startingTile.grid2DLocation.y)))
+                    //if there are no tile on the left ad one and put it in the variable Leftside
+                    else if (startingTileVectorInitialize)
                     {
-                            leftSideTile = mapManager.map[new Vector2Int(startingTile.grid2DLocation.x + 1, startingTile.grid2DLocation.y)];
-                            abilityZone.Add(leftSideTile);
+                        leftSideVector = new Vector2Int(startingTileVector.x + 1, startingTileVector.y);
+                        locationToCheck.Add(leftSideVector);
+                        leftVectorInitialize = true;
                     }
+
                 }
-                startingTile = null;
-                rightSideTile = null;
-                leftSideTile = null;
+                ReinitializingVectors();
             }
+            foreach (Vector2Int vec in locationToCheck)
+            {
+                if (mapManager.map.ContainsKey(vec) && !abilityZone.Contains(mapManager.map[vec]))
+                {
+                    abilityZone.Add(mapManager.map[vec]);
+                }
+            }
+
             foreach (OverlayTile tile in abilityZone)
             {
                 tile.ShowAttackTile();
+                tile.isAttackingTile = true;
             }
         }
 
         return abilityZone;
     }
 
+    private void InitializeVectorCAC()
+    {
+        playerFrontTileGridLocationTopRight = new Vector2Int(character.activeTile.grid2DLocation.x + 1, character.activeTile.grid2DLocation.y);
+        playerFrontTileGridLocationTopLeft = new Vector2Int(character.activeTile.grid2DLocation.x, character.activeTile.grid2DLocation.y + 1);
+        playerFrontTileGridLocationBottomRight = new Vector2Int(character.activeTile.grid2DLocation.x, character.activeTile.grid2DLocation.y - 1);
+        playerFrontTileGridLocationBottomLeft = new Vector2Int(character.activeTile.grid2DLocation.x - 1, character.activeTile.grid2DLocation.y);
+    }
+
+    private void ReinitializingVectors()
+    {
+        rightSideVector = default(Vector2Int);
+        leftSideVector = default(Vector2Int);
+        startingTileVector = default(Vector2Int);
+        rightVectorInitialize = false;
+        leftVectorInitialize = false;
+        startingTileVectorInitialize = false;
+    }
+
     public List<OverlayTile> SingleTargetZone(OverlayTile startingTile, int range)
     {
+        foreach (OverlayTile targetTile in abilityZone)
+        {
+            targetTile.HideTile();
+            targetTile.isAttackingTile = false;
+        }
+
+        abilityZone = new List<OverlayTile>();
         abilityZone = rangeFinder.GetTilesInRange(startingTile, range, true);
+        foreach (OverlayTile tile in abilityZone)
+        {
+            if (tile != character.activeTile)
+            {
+            tile.ShowAttackTile();
+            tile.isAttackingTile = true;
+            }
+        }
 
         return abilityZone;
     }
@@ -374,6 +378,7 @@ public class ZoneFromCharacter : MonoBehaviour
         if (character.characterState == CharacterState.Abilities)
         {
              GetZoneAbility(howFar, rowsTestOddNumOnly);
+            /*SingleTargetZone(character.activeTile, 1);*/
         }
 
     }
