@@ -2045,10 +2045,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a108768195ca44a45b93c1fbe5adf70e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponScript: {fileID: -6869471722025555382, guid: b0291b26284e23c4f86122793dc1879d, type: 3}
   characterScript: {fileID: 0}
-  targetedEnemy: {fileID: 0}
+  targetedEnemies: []
   rollingSpeed: 0.2
-  weaponPrefab: {fileID: 6327910693405876580, guid: b0291b26284e23c4f86122793dc1879d, type: 3}
   turnManager: {fileID: 0}
 --- !u!114 &-93399610847789053
 MonoBehaviour:
@@ -2063,8 +2063,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   howFar: 0
-  rowsTestOddNumOnly: 0300000001000000
-  mouseController: {fileID: 0}
+  rowsTestOddNumOnly: 010000000300000005000000
+  turnManager: {fileID: 0}
 --- !u!114 &-2940433049845833136
 MonoBehaviour:
   m_ObjectHideFlags: 0

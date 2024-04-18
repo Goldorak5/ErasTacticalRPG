@@ -7,11 +7,11 @@ using UnityEngine.UI;
 
 public enum CharacterState
 {
-    Ideling,
+    Ideling, 
+    Moving,
     Attacking,
     Clickers,
     Abilities,
-    Moving,
     Dead
 }
 

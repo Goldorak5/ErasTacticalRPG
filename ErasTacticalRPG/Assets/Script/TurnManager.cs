@@ -13,7 +13,8 @@ EnemiesTurn
 
 public class TurnManager : MonoBehaviour
 {
-    private List<BaseCharacter> charactersList = new List<BaseCharacter>();
+    public List<BaseCharacter> charactersList = new List<BaseCharacter>();
+    public BaseCharacter currentPlayerTurn;
     private int indexList;
     private bool gameOver = false;
     public TurnState turnState;
@@ -39,7 +40,7 @@ public class TurnManager : MonoBehaviour
 
     IEnumerator PlayTurn(int playerNumber)
     {
-        BaseCharacter currentPlayerTurn = charactersList[playerNumber];
+        currentPlayerTurn = charactersList[playerNumber];
         currentPlayerTurn.IsMyTurn = true;
         if (currentPlayerTurn.isHuman)
         {
@@ -92,7 +93,8 @@ public class TurnManager : MonoBehaviour
     private void InitializeVariables()
     {
        //find all object that can play
-       BaseCharacter[] listCharacterInScene = GameObject.FindObjectsOfType<BaseCharacter>();
+       BaseCharacter[] listCharacterInScene = FindObjectsOfType<BaseCharacter>();
+        //removed game object
 
             //add them to the list of character
         foreach (BaseCharacter elem in listCharacterInScene)

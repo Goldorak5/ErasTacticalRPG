@@ -1848,6 +1848,7 @@ GameObject:
   - component: {fileID: 675901716322303537}
   - component: {fileID: 1405025574364615550}
   - component: {fileID: -2754750541375034806}
+  - component: {fileID: 1982716501726282968}
   m_Layer: 6
   m_Name: Kuro
   m_TagString: Player
@@ -2015,6 +2016,7 @@ MonoBehaviour:
   healthArmorCanvas: {fileID: 4831460114259694103}
   isReceivingDamage: 0
   mouseController: {fileID: 0}
+  turnManager: {fileID: 0}
 --- !u!114 &1405025574364615550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2042,10 +2044,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a108768195ca44a45b93c1fbe5adf70e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponScript: {fileID: -6869471722025555382, guid: b0291b26284e23c4f86122793dc1879d, type: 3}
   characterScript: {fileID: 0}
-  targetedEnemy: {fileID: 0}
+  targetedEnemy:
+  - {fileID: 0}
   rollingSpeed: 0.2
-  weaponPrefab: {fileID: 6327910693405876580, guid: b0291b26284e23c4f86122793dc1879d, type: 3}
+  turnManager: {fileID: 0}
+--- !u!114 &1982716501726282968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5819772921733543721}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cdb1c2e7a63f7d40b6e2df5f6963e84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  howFar: 0
+  rowsTestOddNumOnly: 0300000001000000
   turnManager: {fileID: 0}
 --- !u!1 &6403870300994841563
 GameObject:

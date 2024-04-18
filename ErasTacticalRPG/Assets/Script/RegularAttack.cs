@@ -5,42 +5,48 @@ using TMPro;
 using Unity.VisualScripting;
 
 public class RegularAttack: MonoBehaviour
-{
-    
+{    
+    public Weapons weaponScript;
+
     public BaseCharacter characterScript;
-    public List<BaseCharacter> targetedEnemy;
+    public List<BaseCharacter> targetedEnemies;
     [SerializeField]private float rollingSpeed = 0.2f;
     private int totalDamage;
+
     private int count = 1;
     private int endCount;
     private int startCountNovice = 1;
     private int startCountIntermediaire = 2;
     private int startCountExpert = 4;
     private int startCountMaitre = 8;
+
     private int numClicker;
     private string clickerSelected;
     private string clickerNoviceSelected = "Novice";
     private string clickerIntermediaireSelected = "Intermediaire";
     private string clickerExpertSelected = "Expert";
     private string clickerMaitreSelected = "Maitre";
+    private int numClickerNovice;
+    private int numClickerIntermediaire;
+    private int numClickerExpert;
+    private int numClickerMaitre;
+
+
     private List<TMP_Text> listOfClicker;
     private bool listInitialize = false;
     private int indexText = 0;
     private bool stopCountDown = false;
-    private Weapons weaponScript;
-    private GameObject weaponInstance = null;
-    public GameObject weaponPrefab;
+
     private Coroutine coroutine;
     private int boxValue;
     private bool isRandomWaitRunning = true;
     private bool isReinitializingVariables = false;
-    private TurnState attackTurnState;
     public TurnManager turnManager;
 
 
     void Awake()
     {
-
+        turnManager = FindAnyObjectByType<TurnManager>();
     }
 
     private IEnumerator CountCoroutine(TMP_Text countDownText)
@@ -91,43 +97,43 @@ public class RegularAttack: MonoBehaviour
     private void ChooseClickerList()
     {
         
-        if (weaponScript.ClickerNovice >= 1)
+        if (numClickerNovice >= 1)
         {
             endCount = 4;
             clickerSelected = clickerNoviceSelected; 
             coroutine = CountCoroutineManager.Instance.StartCoroutine(CountCoroutine(listOfClicker[indexText]));
-            weaponScript.ClickerNovice--;
+            numClickerNovice--;
             numClicker--;
         }
-        else if (weaponScript.ClickerIntermidiaire >= 1)
+        else if (numClickerIntermediaire >= 1)
         {
             endCount = 6;
             clickerSelected = clickerIntermediaireSelected;
             coroutine = CountCoroutineManager.Instance.StartCoroutine(CountCoroutine(listOfClicker[indexText]));
-            weaponScript.ClickerIntermidiaire--;
+            numClickerIntermediaire--;
             numClicker--;
         }
-        else if (weaponScript.ClickerExpert >= 1)
+        else if (numClickerExpert >= 1)
         {
             endCount = 10;
             clickerSelected = clickerExpertSelected;
             coroutine = CountCoroutineManager.Instance.StartCoroutine(CountCoroutine(listOfClicker[indexText]));
-            weaponScript.ClickerExpert--;
+            numClickerExpert--;
             numClicker--;
         }
-        else if (weaponScript.ClickerMaitre >= 1)
+        else if (numClickerMaitre >= 1)
         {
             endCount = 12;
             clickerSelected = clickerMaitreSelected;
             coroutine = CountCoroutineManager.Instance.StartCoroutine(CountCoroutine(listOfClicker[indexText]));
-            weaponScript.ClickerMaitre--;
+            numClickerMaitre--;
             numClicker--;
         }
     }
 
     public void StartClickersBoxe(List<BaseCharacter> targets)
     {
-        targetedEnemy = targets;
+        targetedEnemies = targets;
         if (!listInitialize)
         {
             InitializeCharacterAndList();
@@ -142,12 +148,15 @@ public class RegularAttack: MonoBehaviour
         characterScript = GetComponent<BaseCharacter>();
         stopCountDown = false;
         isRandomWaitRunning = true;
-        if(weaponInstance == null)
-        {
-            weaponInstance = Instantiate(weaponPrefab);
-            weaponScript = weaponInstance.GetComponent<Weapons>();
-        }
-        switch (weaponScript.numBoxClicker)
+
+        //weaponScript.character = GetComponent<BaseCharacter>();
+        numClicker = weaponScript.ClickerNovice + weaponScript.ClickerIntermidiaire + weaponScript.ClickerExpert + weaponScript.ClickerMaitre;
+        numClickerNovice = weaponScript.ClickerNovice;
+        numClickerIntermediaire = weaponScript.ClickerIntermidiaire;
+        numClickerExpert = weaponScript.ClickerExpert;
+        numClickerMaitre = weaponScript.ClickerMaitre;
+        // }
+        switch (numClicker)
                 {
                     case 1:
                         listOfClicker = characterScript.tMP_Texts1Clicker; break;
@@ -160,7 +169,6 @@ public class RegularAttack: MonoBehaviour
                 default:
                         break;
                 }
-        numClicker = weaponScript.numBoxClicker;
     }
 
     private void ReinitializeValue()
@@ -179,8 +187,7 @@ public class RegularAttack: MonoBehaviour
         stopCountDown = false;
         totalDamage = 0;
          listInitialize = false;
-        Destroy(weaponInstance);
-        weaponInstance = null;
+        targetedEnemies.Clear();
         if (characterScript.isHuman) 
         {
             characterScript.HasAttack = true;
@@ -202,7 +209,7 @@ public class RegularAttack: MonoBehaviour
             totalDamage += boxValue;
             indexText++;
             stopCountDown = false;
-            StartClickersBoxe(targetedEnemy);
+            StartClickersBoxe(targetedEnemies);
             isRandomWaitRunning = true;
         }
         else
@@ -219,9 +226,9 @@ public class RegularAttack: MonoBehaviour
                 }
             totalDamage += boxValue;
 
-            if(targetedEnemy != null)
+            if(targetedEnemies != null)
             {
-                foreach(BaseCharacter target in targetedEnemy)
+                foreach(BaseCharacter target in targetedEnemies)
                 {
                     //Healing
                    if(characterScript.isHuman && target.isHuman) 

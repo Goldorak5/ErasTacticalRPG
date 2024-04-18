@@ -29,6 +29,7 @@ public class ZoneFromMouse : MonoBehaviour
     {
         List<OverlayTile> maxRangeStartingTile = new List<OverlayTile>();
         List<Vector2Int> locationToCheck = new List<Vector2Int>();
+
         if (mouseController.character != null)
         {
             maxRangeStartingTile = rangeFinder.GetTilesInRange(mouseController.character.activeTile, maxRange, true);

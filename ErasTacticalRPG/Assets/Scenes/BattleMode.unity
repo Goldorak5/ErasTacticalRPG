@@ -154,9 +154,9 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 109473799}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.147626, y: 1.0493275, z: 857.39136}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -173,6 +173,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e585049df223dc341b746d7f02009ffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  charactersList: []
+  currentPlayerTurn: {fileID: 0}
   turnState: 0
 --- !u!114 &109473802
 MonoBehaviour:
@@ -216,8 +218,9 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1850254145}
+  m_Children:
+  - {fileID: 883455367}
+  m_Father: {fileID: 222166919}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!483693784 &204932887
 TilemapRenderer:
@@ -772,6 +775,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 924567792}
+  - {fileID: 204932886}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &222166920
@@ -1363,7 +1367,7 @@ Transform:
   m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 204932886}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 6.16}
 --- !u!1 &893622738
 GameObject:
@@ -3598,10 +3602,10 @@ RectTransform:
   - {fileID: 347713514}
   m_Father: {fileID: 2142594029}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 14.177502, y: -2.9209163}
-  m_SizeDelta: {x: 28.355003, y: 5.8418326}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &995331506
 MonoBehaviour:
@@ -4055,6 +4059,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e585049df223dc341b746d7f02009ffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  charactersList: []
+  currentPlayerTurn: {fileID: 0}
   turnState: 0
 --- !u!114 &1093336627 stripped
 MonoBehaviour:
@@ -4101,10 +4107,10 @@ RectTransform:
   - {fileID: 758981630}
   m_Father: {fileID: 2142594029}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 14.177502, y: -8.762749}
-  m_SizeDelta: {x: 28.355003, y: 5.8418326}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1187286124
 MonoBehaviour:
@@ -4622,7 +4628,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1557592201
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4635,6 +4641,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e585049df223dc341b746d7f02009ffb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  charactersList: []
+  currentPlayerTurn: {fileID: 0}
   turnState: 0
 --- !u!114 &1557592202
 MonoBehaviour:
@@ -4729,7 +4737,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1675741746}
   m_Layer: 0
-  m_Name: OverlayContainer
+  m_Name: OverlayTileContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4795,10 +4803,10 @@ RectTransform:
   - {fileID: 961375312}
   m_Father: {fileID: 2142594029}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 14.177502, y: -14.604582}
-  m_SizeDelta: {x: 28.355003, y: 5.8418326}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1781050813
 MonoBehaviour:
@@ -4882,51 +4890,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1781050811}
   m_CullTransparentMesh: 1
---- !u!1 &1850254143
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1850254145}
-  - component: {fileID: 1850254144}
-  m_Layer: 0
-  m_Name: Grid
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!156049354 &1850254144
-Grid:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1850254143}
-  m_Enabled: 1
-  m_CellSize: {x: 1, y: 0.5, z: 1}
-  m_CellGap: {x: 0, y: 0, z: 0}
-  m_CellLayout: 3
-  m_CellSwizzle: 0
---- !u!4 &1850254145
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1850254143}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 204932886}
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1947115924
 GameObject:
   m_ObjectHideFlags: 0
@@ -5311,7 +5274,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: -593.99176, y: 163.47502}
+  m_AnchoredPosition: {x: -593.99176, y: 163.47504}
   m_SizeDelta: {x: 28.355003, y: 17.525497}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2142594030
@@ -5616,7 +5579,7 @@ PrefabInstance:
       objectReference: {fileID: 5819772921733543721, guid: caed355299c7b0a498adec6c6f6e6374, type: 3}
     - target: {fileID: 5630109956544382651, guid: ad29bdf50f4201a4aa2f6cc56ccf3093, type: 3}
       propertyPath: m_Name
-      value: Cursor
+      value: MouseCursor
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5628,15 +5591,13 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 430217403}
+  - {fileID: 109473800}
   - {fileID: 222166919}
   - {fileID: 1675741746}
   - {fileID: 4942968776380807413}
-  - {fileID: 1850254145}
-  - {fileID: 883455367}
   - {fileID: 1947115927}
   - {fileID: 1056581944}
   - {fileID: 1557592205}
   - {fileID: 1469030045}
-  - {fileID: 109473800}
   - {fileID: 4098164262274599278}
   - {fileID: 1015192927}

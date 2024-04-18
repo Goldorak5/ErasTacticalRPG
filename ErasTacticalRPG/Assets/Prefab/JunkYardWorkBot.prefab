@@ -312,6 +312,8 @@ MonoBehaviour:
   hasAttack: 0
   healthArmorCanvas: {fileID: 443837721853107222}
   isReceivingDamage: 0
+  mouseController: {fileID: 0}
+  turnManager: {fileID: 0}
 --- !u!114 &-5689314284342515956
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -324,10 +326,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a108768195ca44a45b93c1fbe5adf70e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterScript: {fileID: 0}
-  targetedEnemy: {fileID: 0}
-  rollingSpeed: 0.2
+  weaponScript: {fileID: -6869471722025555382, guid: b0291b26284e23c4f86122793dc1879d, type: 3}
   weaponPrefab: {fileID: 6327910693405876580, guid: b0291b26284e23c4f86122793dc1879d, type: 3}
+  characterScript: {fileID: 0}
+  targetedEnemy:
+  - {fileID: 0}
+  rollingSpeed: 0.2
   turnManager: {fileID: 0}
 --- !u!1 &1005879708906423722
 GameObject:

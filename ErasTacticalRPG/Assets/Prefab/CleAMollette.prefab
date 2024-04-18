@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1466515346747539186}
   - component: {fileID: -6261211150432658761}
+  - component: {fileID: 3927986845255963620}
   m_Layer: 0
   m_Name: CleAMollette
   m_TagString: Untagged
@@ -52,3 +53,18 @@ MonoBehaviour:
   numBoxClicker: 0
   attackZone: 01000000
   attackRange: 0
+--- !u!114 &3927986845255963620
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1410776666429497267}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3cdb1c2e7a63f7d40b6e2df5f6963e84, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  howFar: 0
+  rowsTestOddNumOnly: 00000000
+  turnManager: {fileID: 0}

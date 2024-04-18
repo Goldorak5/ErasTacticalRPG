@@ -11,6 +11,7 @@ public enum WeaponState
 };
 public class Weapons: MonoBehaviour
 {
+    public BaseCharacter character;
     public new string name;
     public int ClickerNovice;
     public int ClickerIntermidiaire;
@@ -26,5 +27,6 @@ public class Weapons: MonoBehaviour
     void Awake()
     {
          numBoxClicker = ClickerNovice + ClickerIntermidiaire + ClickerExpert + ClickerMaitre;
+        //character = GetComponent<BaseCharacter>();
     }
 }

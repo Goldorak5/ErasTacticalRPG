@@ -11,17 +11,18 @@ using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
 public class Enemies : BaseCharacter
-{
-    private PathFinder pathFinder;
-    private List<BaseCharacter> playerTargets;
+{ 
     private RangeFinder rangeFinder;
+    private PathFinder pathFinder;
+    private RegularAttack regularAttackScript;
+
+    private List<BaseCharacter> playerTargets;
     private List<OverlayTile> path = new List<OverlayTile>();
     private List<OverlayTile> inRangeTiles = new List<OverlayTile>();
+    private List<OverlayTile> cacPlayerTile;
     private OverlayTile targetTile = null;
     private OverlayTile playerTile;
     private bool isReady = false;
-    private List<OverlayTile> cacPlayerTile;
-    private RegularAttack regularAttackScript;
     private int numTilesToSearch;
     public bool hasMoved { get; private set; }
 

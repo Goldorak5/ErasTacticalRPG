@@ -20,10 +20,14 @@ public class ZoneFromCharacter : MonoBehaviour
     public int[] rowsTestOddNumOnly;
 
     private MouseQuadran mouseQuadran;
+    private TurnManager turnManager;
     private MapManager mapManager;
     private RangeFinder rangeFinder;
     private BaseCharacter character;
-    private List<OverlayTile> abilityZone = new List<OverlayTile>();
+    private MouseController mouseControllerScript;
+
+    //list of the tiles highlighted for the ability
+    public List<OverlayTile> abilityZone = new List<OverlayTile>();
 
     //first initialize vectors
     private bool rightVectorInitialize;
@@ -46,6 +50,49 @@ public class ZoneFromCharacter : MonoBehaviour
         rangeFinder = new RangeFinder();
         mapManager = MapManager.Instance;
         character = GetComponent<BaseCharacter>();
+        turnManager = FindAnyObjectByType<TurnManager>();
+        mouseControllerScript = FindAnyObjectByType<MouseController>();
+    }
+
+    void Update()
+    {
+        GetQuadran();
+        if (character.characterState == CharacterState.Abilities && 
+            turnManager.currentPlayerTurn == character && 
+            turnManager.currentPlayerTurn.IsMyTurn)
+        {
+             GetZoneAbility(howFar, rowsTestOddNumOnly);
+            /*SingleTargetZone(character.activeTile, 1);*/
+        }
+        if (character.characterState != CharacterState.Abilities &&
+            abilityZone.Count > 0 && 
+            turnManager.currentPlayerTurn == character && 
+            turnManager.currentPlayerTurn.IsMyTurn)
+        {
+            foreach (OverlayTile tile in abilityZone)
+            {
+                tile.isAttackingTile = false;
+                tile.HideTile();
+            }
+        }
+    }
+
+    private void InitializeVectorCAC()
+    {
+        playerFrontTileGridLocationTopRight = new Vector2Int(character.activeTile.grid2DLocation.x + 1, character.activeTile.grid2DLocation.y);
+        playerFrontTileGridLocationTopLeft = new Vector2Int(character.activeTile.grid2DLocation.x, character.activeTile.grid2DLocation.y + 1);
+        playerFrontTileGridLocationBottomRight = new Vector2Int(character.activeTile.grid2DLocation.x, character.activeTile.grid2DLocation.y - 1);
+        playerFrontTileGridLocationBottomLeft = new Vector2Int(character.activeTile.grid2DLocation.x - 1, character.activeTile.grid2DLocation.y);
+    }
+
+    private void ReinitializingVectors()
+    {
+        rightSideVector = default(Vector2Int);
+        leftSideVector = default(Vector2Int);
+        startingTileVector = default(Vector2Int);
+        rightVectorInitialize = false;
+        leftVectorInitialize = false;
+        startingTileVectorInitialize = false;
     }
 
     public List<OverlayTile> GetZoneAbility(int howFarInFront, int[] rows)
@@ -67,7 +114,7 @@ public class ZoneFromCharacter : MonoBehaviour
             //add a tile for each elements in the array in front
             for (int i = 0; i < rows.Length; i++)
             {
-                //                     //adjusting the starting tile by what the game designer want the ability range to start
+                  //adjusting the starting tile by what the game designer want the ability range to start
                 startingTileVector = new Vector2Int(playerFrontTileGridLocationTopRight.x + howFarInFront + i, playerFrontTileGridLocationTopRight.y);
                 locationToCheck.Add(new Vector2Int(playerFrontTileGridLocationTopRight.x + howFarInFront + i, playerFrontTileGridLocationTopRight.y));
                 startingTileVectorInitialize = true;
@@ -307,24 +354,6 @@ public class ZoneFromCharacter : MonoBehaviour
         return abilityZone;
     }
 
-    private void InitializeVectorCAC()
-    {
-        playerFrontTileGridLocationTopRight = new Vector2Int(character.activeTile.grid2DLocation.x + 1, character.activeTile.grid2DLocation.y);
-        playerFrontTileGridLocationTopLeft = new Vector2Int(character.activeTile.grid2DLocation.x, character.activeTile.grid2DLocation.y + 1);
-        playerFrontTileGridLocationBottomRight = new Vector2Int(character.activeTile.grid2DLocation.x, character.activeTile.grid2DLocation.y - 1);
-        playerFrontTileGridLocationBottomLeft = new Vector2Int(character.activeTile.grid2DLocation.x - 1, character.activeTile.grid2DLocation.y);
-    }
-
-    private void ReinitializingVectors()
-    {
-        rightSideVector = default(Vector2Int);
-        leftSideVector = default(Vector2Int);
-        startingTileVector = default(Vector2Int);
-        rightVectorInitialize = false;
-        leftVectorInitialize = false;
-        startingTileVectorInitialize = false;
-    }
-
     public List<OverlayTile> SingleTargetZone(OverlayTile startingTile, int range)
     {
         foreach (OverlayTile targetTile in abilityZone)
@@ -372,14 +401,4 @@ public class ZoneFromCharacter : MonoBehaviour
         }
     }
 
-    void Update()
-    {
-        GetQuadran();
-        if (character.characterState == CharacterState.Abilities)
-        {
-             GetZoneAbility(howFar, rowsTestOddNumOnly);
-            /*SingleTargetZone(character.activeTile, 1);*/
-        }
-
-    }
 }

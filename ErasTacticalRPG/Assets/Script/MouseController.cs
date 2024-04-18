@@ -312,7 +312,6 @@ public class MouseController : MonoBehaviour
     public void EndTurnButton()
     {
 
-        /*character.movementPoints = character.maxMovementPoints;*/
         debugCanvas.gameObject.SetActive(false);
         HideMovementTiles();
         SetCharacterIdleState();
