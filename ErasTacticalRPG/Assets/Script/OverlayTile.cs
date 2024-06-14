@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class OverlayTile : MonoBehaviour
 {
+    //BaseCharacter
+    public BaseCharacter tileCharacter;
+
     //cost from the origin point
     public int G;
 

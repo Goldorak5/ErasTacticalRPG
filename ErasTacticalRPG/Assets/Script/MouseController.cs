@@ -21,7 +21,7 @@ public class MouseController : MonoBehaviour
     private PathFinder pathFinder;
     private RangeFinder rangeFinder;
     private List<OverlayTile> path = new List<OverlayTile>();
-    private RegularAttack regularAttack;
+    private ClickerSystem regularAttack;
     private List<BaseCharacter> targetedEnemies = new List<BaseCharacter>();
     private BaseCharacter enemyHit;
     private List<GameObject> playerList = new List<GameObject>();
@@ -31,6 +31,7 @@ public class MouseController : MonoBehaviour
     //public
     public GameObject spawningZone;
     public OverlayTile overlayTile;
+
     //cursor image
     public SpriteRenderer cursorSprite;
     public BaseCharacter character;
@@ -60,9 +61,10 @@ public class MouseController : MonoBehaviour
         return focusedTileHit.Value.collider.gameObject.layer == LayerMask.NameToLayer("Tile");
     }
 
+    // in Update
     private void SetCharacterSpriteWhite(BaseCharacter character)
     {
-        if (hightlightCharacter != null)
+        if (hightlightCharacter != null && !hightlightCharacter.activeTile.isAttackingTile)
         {
             hightlightCharacter.GetComponent<SpriteRenderer>().color = Color.white;
             if (!hightlightCharacter.isReceivingDamage)
@@ -81,6 +83,7 @@ public class MouseController : MonoBehaviour
         }
 
         RaycastHit2D? focusedTileHit = GetFocusOnTile();
+
 
         if (focusedTileHit.HasValue)
         {
@@ -117,12 +120,14 @@ public class MouseController : MonoBehaviour
                     }
                 }
             }
-                    //put the color of the player back to normal after cursor is not on it
+
+            //put the color of the player back to normal after cursor is not on it
             SetCharacterSpriteWhite(hightlightCharacter);
 
-                         //When mouse is clicked on a tile 
+            //When mouse is clicked on a tile 
             if (Input.GetMouseButtonDown(0))
             {
+                //spawning characters one after another
                 if(playerList != null && playerList.Count > 0 )
                 {
                          character = playerList[0].GetComponent<BaseCharacter>() ;
@@ -136,7 +141,7 @@ public class MouseController : MonoBehaviour
                         showCursorState = ShowCursorState.Hide;
                     }
                 }
-                //if all players are spawn when click on tile = moving
+                //if all players are already spawn when click on tile = moving
                 else if (character != null && playerList == null)
                 {
                     if (character.characterState == CharacterState.Moving)
@@ -154,7 +159,6 @@ public class MouseController : MonoBehaviour
                     Destroy(spawningZone.gameObject);
                     StartCoroutine(turnManager.PlayGame());
                     playerList = null;
-
                 }
             }
         }else
@@ -178,7 +182,6 @@ public class MouseController : MonoBehaviour
         }
     }
 
-
     private void GetInRangeTiles()
     {
         HideMovementTiles();
@@ -199,6 +202,7 @@ public class MouseController : MonoBehaviour
     private void MoveAlongPath()
     {
         float step = character.characterMovementSpeed * Time.deltaTime;
+        character.activeTile.tileCharacter = null;
         character.activeTile.isBlocked = false;
         float zIndex = path[0].transform.position.z;
         character.transform.position = Vector2.MoveTowards(character.transform.position, path[0].transform.position , step);
@@ -257,10 +261,16 @@ public class MouseController : MonoBehaviour
                                 //hover Characters
             if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Character"))
             { 
-                                //if it hits a character
-                hightlightCharacter = hit.collider.gameObject.GetComponent<BaseCharacter>();
-                hit.collider.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
-                hightlightCharacter.ShowHealthArmor();
+                                //if it hits a character enemy or controller 
+
+                //if cursor over a Basecharacter and not in ability mode highlight in red
+                if(character && !character.activeTile.isAttackingTile)
+                {
+                    hightlightCharacter = hit.collider.gameObject.GetComponent<BaseCharacter>();
+                    hit.collider.gameObject.GetComponent<SpriteRenderer>().color = Color.red;
+                    hightlightCharacter.ShowHealthArmor();
+                }
+                
                             //if clicked on a character
                 if (Input.GetMouseButtonDown(0) && hit.collider.gameObject.GetComponent<BaseCharacter>().isHuman && character.characterState != CharacterState.Attacking)
                 {
@@ -281,7 +291,7 @@ public class MouseController : MonoBehaviour
                             enemyHit = hit.collider.gameObject.GetComponent<BaseCharacter>();
                             targetedEnemies.Add(enemyHit);
                             character.characterState = CharacterState.Clickers;
-                            regularAttack = character.GetComponent<RegularAttack>();
+                            regularAttack = character.GetComponent<ClickerSystem>();
                             regularAttack.StartClickersBoxe(targetedEnemies);
                         }
                     }
@@ -365,5 +375,6 @@ public class MouseController : MonoBehaviour
         character.transform.position = new Vector3(tile.transform.position.x, tile.transform.position.y + 0.0001f, tile.transform.position.z);
         character.GetComponent<SpriteRenderer>().sortingOrder = tile.GetComponent<SpriteRenderer>().sortingOrder;  
         character.activeTile = tile;
+        tile.tileCharacter = character;
     }
 }

@@ -14,7 +14,7 @@ public class Enemies : BaseCharacter
 { 
     private RangeFinder rangeFinder;
     private PathFinder pathFinder;
-    private RegularAttack regularAttackScript;
+    private ClickerSystem regularAttackScript;
 
     private List<BaseCharacter> playerTargets;
     private List<OverlayTile> path = new List<OverlayTile>();
@@ -31,7 +31,7 @@ public class Enemies : BaseCharacter
         pathFinder = new PathFinder();
         rangeFinder = new RangeFinder();
         StartCoroutine(InitializePosition());
-        regularAttackScript = GetComponent<RegularAttack>();
+        regularAttackScript = GetComponent<ClickerSystem>();
         HideHealthArmor();
         tMP_TextsHealthBox = tMP_TextsHealthBox.GetComponent<TMP_Text>();
         tMP_TextsArmorBox.text = maxArmor.ToString();
@@ -51,6 +51,10 @@ public class Enemies : BaseCharacter
         if (endTurn)
         {
             movementPoints = maxMovementPoints;
+        }
+        if (health <= 0)
+        {
+            GameObject.Destroy(gameObject);
         }
     }
 

@@ -7,10 +7,15 @@ using UnityEngine.UI;
 
 public class PaoloCharacter : BaseCharacter
 {
+    private Weapon weapon;
+
+
+
+
     private void Start()
     {
         movementPoints = maxMovementPoints;
-        dexterity = 1;
+        dexterity = 0;
         activeTile.isBlocked = true;
         healthArmorCanvasTransform = transform.Find("HealthArmorCanvas");
         healthImage = healthArmorCanvasTransform.Find("HealthImage")?.GetComponent<Image>();
@@ -19,5 +24,12 @@ public class PaoloCharacter : BaseCharacter
         tMP_TextsArmorBox.text = maxArmor.ToString();
         tMP_TextsHealthBox.text = maxHealth.ToString();
         endTurn = false;
+
+        //weapon initialize
+        weapon = new Weapon();
+        weapon.ClickerNovice = clickerNovice;
+        weapon.ClickerIntermidiaire = clickerIntermediaire;
+        weapon.ClickerExpert = clickerExpert;
+        weapon.ClickerMaitre = clickerMaitre;
     }
 }

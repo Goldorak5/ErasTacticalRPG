@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Search;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using UnityEngine.Tilemaps;
 
 public class ZoneFromMouse : MonoBehaviour
@@ -14,6 +15,7 @@ public class ZoneFromMouse : MonoBehaviour
 
 
     private List<OverlayTile> abilityZone = new List<OverlayTile>();
+    List<OverlayTile> maxRangeStartingTile = new List<OverlayTile>();
     private MapManager mapManager;
     private RangeFinder rangeFinder;
     private MouseController mouseController;
@@ -27,7 +29,7 @@ public class ZoneFromMouse : MonoBehaviour
 
     public List<OverlayTile> SquareZone(int maxRange, int radius)
     {
-        List<OverlayTile> maxRangeStartingTile = new List<OverlayTile>();
+  /*      List<OverlayTile> maxRangeStartingTile = new List<OverlayTile>();*/
         List<Vector2Int> locationToCheck = new List<Vector2Int>();
 
         if (mouseController.character != null)
@@ -37,6 +39,7 @@ public class ZoneFromMouse : MonoBehaviour
         foreach (OverlayTile tile in abilityZone)
         {
             tile.HideTile();
+            tile.isAttackingTile = false;
         }
         //show the max range of the zone
         foreach (OverlayTile tile in maxRangeStartingTile)
@@ -109,6 +112,7 @@ public class ZoneFromMouse : MonoBehaviour
             foreach (OverlayTile tile in abilityZone)
             {
                 tile.ShowAttackTile();
+                tile.isAttackingTile = true;
             }
 
             return abilityZone;
@@ -127,6 +131,7 @@ public class ZoneFromMouse : MonoBehaviour
         foreach (OverlayTile tile in abilityZone)
         {
             tile.HideTile();
+            tile.isAttackingTile = false;
         }
         //show the max range of the zone
         foreach (OverlayTile tile in maxRangeStartingTile)
@@ -176,6 +181,7 @@ public class ZoneFromMouse : MonoBehaviour
             foreach (OverlayTile tile in abilityZone)
             {
                 tile.ShowAttackTile();
+                tile.isAttackingTile = true;
             }
 
             return abilityZone;
@@ -260,6 +266,7 @@ public class ZoneFromMouse : MonoBehaviour
         foreach (OverlayTile tile in maxRangeStartingTile)
         {
             tile.ShowRangeTile();
+            tile.isAttackingTile = false;
         }
         if (maxRangeStartingTile.Contains(startingTile))
         {
@@ -267,6 +274,7 @@ public class ZoneFromMouse : MonoBehaviour
             foreach (OverlayTile tile in abilityZone)
             {
                 tile.ShowAttackTile();
+                tile.isAttackingTile = true;
             }
         }
 
@@ -279,11 +287,26 @@ public class ZoneFromMouse : MonoBehaviour
         {
         startingTile = mouseController.overlayTile;
         }
-
+        if (mouseController.character.characterState == CharacterState.Abilities &&
+           mouseController.turnManager.currentPlayerTurn == mouseController.character &&
+           mouseController.turnManager.currentPlayerTurn.IsMyTurn)
+        {
         //testing
         //SquareZone(testMaxRange,testZoneRange);
-       // RangeZone(testMaxRange, testZoneRange);
+        //RangeZone(testMaxRange, testZoneRange);
        //TZone(testMaxRange, testZoneRange);
-       //XZone(testMaxRange, testZoneRange);
+       XZone(testMaxRange, testZoneRange);
+        }else if(abilityZone != null && maxRangeStartingTile != null && mouseController.character.characterState != CharacterState.Abilities) 
+        {
+            foreach (OverlayTile tile in abilityZone)
+            {
+                tile.HideTile();
+                tile.isAttackingTile = false;
+            }
+            foreach (OverlayTile tile in maxRangeStartingTile)
+            {
+                tile.HideTile();
+            }
+        }
     }
 }

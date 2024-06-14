@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2003983529607584940}
-  - component: {fileID: -6869471722025555382}
   - component: {fileID: 1178230483368145423}
   m_Layer: 0
   m_Name: CoupDePoing
@@ -33,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-6869471722025555382
+--- !u!114 &1178230483368145423
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,30 +41,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 6327910693405876580}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7673fc4a9d7f7cc49a812f0d8f5574e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  character: {fileID: 0}
-  name: Coup de poing
-  ClickerNovice: 0
-  ClickerIntermidiaire: 1
-  ClickerExpert: 1
-  ClickerMaitre: 0
-  numBoxClicker: 0
-  attackZone: 01000000
-  attackRange: 0
---- !u!114 &1178230483368145423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6327910693405876580}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 3cdb1c2e7a63f7d40b6e2df5f6963e84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   howFar: 0
   rowsTestOddNumOnly: 0300000001000000
-  turnManager: {fileID: 0}
+  abilityZone: []

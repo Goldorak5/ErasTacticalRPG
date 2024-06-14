@@ -57,17 +57,14 @@ public class ZoneFromCharacter : MonoBehaviour
     void Update()
     {
         GetQuadran();
-        if (character.characterState == CharacterState.Abilities && 
-            turnManager.currentPlayerTurn == character && 
+        if (character.characterState == CharacterState.Abilities &&
+            turnManager.currentPlayerTurn == character &&
             turnManager.currentPlayerTurn.IsMyTurn)
         {
-             GetZoneAbility(howFar, rowsTestOddNumOnly);
+            GetZoneAbility(howFar, rowsTestOddNumOnly);
             /*SingleTargetZone(character.activeTile, 1);*/
         }
-        if (character.characterState != CharacterState.Abilities &&
-            abilityZone.Count > 0 && 
-            turnManager.currentPlayerTurn == character && 
-            turnManager.currentPlayerTurn.IsMyTurn)
+        if (IsCharacterQuitAbilityState())
         {
             foreach (OverlayTile tile in abilityZone)
             {
@@ -75,6 +72,14 @@ public class ZoneFromCharacter : MonoBehaviour
                 tile.HideTile();
             }
         }
+    }
+
+    private bool IsCharacterQuitAbilityState()
+    {
+        return character.characterState != CharacterState.Abilities &&
+                    abilityZone.Count > 0 &&
+                    turnManager.currentPlayerTurn == character &&
+                    turnManager.currentPlayerTurn.IsMyTurn;
     }
 
     private void InitializeVectorCAC()

@@ -15,6 +15,7 @@ public class MapManager : MonoBehaviour
     public OverlayTile overlayTilePrefab;
     public GameObject overlayContainer;
     public Dictionary<Vector2Int, OverlayTile> map;
+    public TurnManager turnManager;
 
     internal object instance;
     private void Awake()
@@ -32,6 +33,7 @@ public class MapManager : MonoBehaviour
     void Start()
     {
         mouseController = GetComponent<MouseController>();
+        turnManager = FindAnyObjectByType<TurnManager>();
         Tilemap tileMap = gameObject.GetComponentInChildren<Tilemap>();
         map = new Dictionary<Vector2Int, OverlayTile> ();
         BoundsInt bounds = tileMap.cellBounds;
@@ -109,8 +111,9 @@ public class MapManager : MonoBehaviour
      */
     private void AddTileToNeighbourList(OverlayTile currentOverlayTile, Dictionary<Vector2Int, OverlayTile> map, List<OverlayTile> neighbour, Vector2Int locationCheck, List<OverlayTile> limiteTiles, bool forAttack)
     {
-/*        BaseCharacter playerCharacter = mouseController.character;*/
+        BaseCharacter playerCharacter = turnManager.currentPlayerTurn;
 /*        PaoloCharacter character = GameObject.Find("Paolo(Clone)").GetComponent<PaoloCharacter>();*/
+
         Dictionary<Vector2Int, OverlayTile> tilesToSearch = new Dictionary<Vector2Int, OverlayTile>();
 
         if (limiteTiles.Count > 0)
@@ -127,12 +130,14 @@ public class MapManager : MonoBehaviour
 
         if (tilesToSearch.ContainsKey(locationCheck))
         {
-            if (!tilesToSearch[locationCheck].isBlocked || forAttack)
+            if (!tilesToSearch[locationCheck].isBlocked || forAttack == true)
             {
-             neighbour.Add(tilesToSearch[locationCheck]);
+                //Dexterity = the max z that the character could climb
+                if (Mathf.Abs(currentOverlayTile.gridLocation.z - tilesToSearch[locationCheck].gridLocation.z) <= playerCharacter.dexterity)
+                {
+                    neighbour.Add(tilesToSearch[locationCheck]);
+                }
             }
-//             //Dexterity = the max z that the character could climb
-//             if (Mathf.Abs(currentOverlayTile.gridLocation.z - tilesToSearch[locationCheck].gridLocation.z) <= playerCharacter.dexterity)
          }
     }
 

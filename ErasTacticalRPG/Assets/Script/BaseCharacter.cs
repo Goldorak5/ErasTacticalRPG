@@ -17,20 +17,40 @@ public enum CharacterState
 
 public class BaseCharacter : MonoBehaviour
 {
+    [HideInInspector] public bool isHuman = true;
+    [HideInInspector]public bool endTurn = false;
+    [HideInInspector]public bool canMove = false;
+    private bool isMyTurn = false;
+    public new string name;
+    [HideInInspector]
+    public bool IsMyTurn
+    {
+        get { return isMyTurn; }
+        set { isMyTurn = value; }
+    }
+    [HideInInspector] public bool hasAttack = false;
+    [HideInInspector] public CharacterState characterState;
+
+    [Header("Health")]
     public int health;
     public int armor;
     public int maxArmor;
     public int maxHealth;
+    public Image armorImage;
+    public Image healthImage;
+    public Canvas healthArmorCanvas;
+    public Transform healthArmorCanvasTransform;
+
+    [Header("Movement")]
     public int movementPoints;
     public int maxMovementPoints;
     public int characterMovementSpeed;
-    public int turnSpeed;
-    public CharacterState characterState;
     public int dexterity;
+    public int turnSpeed;
     public OverlayTile activeTile;
-    public Transform healthArmorCanvasTransform;
-    public Image healthImage;
-    public Image armorImage;
+
+
+    [Header("Clickers")]
     public List<TMP_Text> tMP_Texts1Clicker;
     public List<TMP_Text> tMP_Texts2Clicker;
     public List<TMP_Text> tMP_Texts3Clicker;
@@ -39,28 +59,23 @@ public class BaseCharacter : MonoBehaviour
     public TMP_Text tMP_TextsHealthBox;
     public TMP_Text tMP_TextsArmorBox;
 
+    //Basic attack
+    [Header("Regular Attack Damage")]
+    public int clickerNovice;
+    public int clickerIntermediaire;
+    public int clickerExpert;
+    public int clickerMaitre;
 
 
-    public bool isHuman = true;
-    /*[HideInInspector] */public bool endTurn = false;
-    /*[HideInInspector] */public bool canMove = false;
-    private bool isMyTurn = false;
-    public new string name;
-    public bool IsMyTurn
-    {
-        get { return isMyTurn; }
-        set { isMyTurn = value; }
-    }
-    public bool hasAttack = false;
     public bool HasAttack
     {
         get { return hasAttack; }
         set { hasAttack = value; }
     }
-    public Canvas healthArmorCanvas;
-    public bool isReceivingDamage;
-    public MouseController mouseController;
-    public TurnManager turnManager;
+
+    [HideInInspector] public bool isReceivingDamage;
+    private MouseController mouseController;
+    private TurnManager turnManager;
 
     private void Awake()
     {

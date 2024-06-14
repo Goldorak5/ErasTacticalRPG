@@ -6,6 +6,8 @@ using TMPro;
 
 public class KuroCharacter : BaseCharacter
 {
+    private Weapon weapon;
+
     private void Start()
     {
         movementPoints = maxMovementPoints;
@@ -17,5 +19,13 @@ public class KuroCharacter : BaseCharacter
         HideHealthArmor();
         tMP_TextsArmorBox.text = maxArmor.ToString();
         tMP_TextsHealthBox.text = maxHealth.ToString();
+        endTurn = false;
+
+        //weapon initialize
+        weapon = new Weapon();
+        weapon.ClickerNovice = clickerNovice;
+        weapon.ClickerIntermidiaire = clickerIntermediaire;
+        weapon.ClickerExpert = clickerExpert;
+        weapon.ClickerMaitre = clickerMaitre;
     }
 }
